@@ -1,3 +1,9 @@
+Aplikasi Absensi Mahasiswa
+
+###############
+STRUKTUR FOLDER
+###############
+
 sistem-absensi-oop/
 │
 ├── app/

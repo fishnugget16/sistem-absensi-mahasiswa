@@ -6,82 +6,84 @@ STRUKTUR FOLDER
 
 sistem-absensi-oop/
 │
-├── app/
-│ ├── core/
-│ │ ├── BaseModel.php
-│ │ ├── Database.php
-│ │ ├── Controller.php
-│ │ └── Router.php
+├── 📁 app/ # Inti aplikasi (semua logika program)
 │ │
-│ ├── interfaces/
-│ │ └── Exportable.php
+│ ├── 📁 core/ # Kelas dasar / fondasi aplikasi
+│ │ ├── 📄 BaseModel.php # Abstract class: save(), delete()
+│ │ ├── 📄 Database.php # Koneksi DB (Singleton pattern)
+│ │ ├── 📄 Controller.php # Base controller: render view, redirect
+│ │ └── 📄 Router.php # Mengatur URL ke controller
 │ │
-│ ├── models/
-│ │ ├── User.php
-│ │ ├── Dosen.php
-│ │ ├── Mahasiswa.php
-│ │ ├── MataKuliah.php
-│ │ ├── Absensi.php
-│ │ ├── RekapAbsensi.php
-│ │ └── SuratIzin.php
+│ ├── 📁 interfaces/ # Tempat interface / kontrak
+│ │ └── 📄 Exportable.php # Interface: exportPDF(), exportCSV()
 │ │
-│ ├── controllers/
-│ │ ├── AuthController.php
-│ │ ├── AdminController.php
-│ │ ├── DosenController.php
-│ │ ├── MahasiswaController.php
-│ │ └── ExportController.php
+│ ├── 📁 models/ # Kelas untuk data dan database
+│ │ ├── 📄 User.php # Login, logout, role
+│ │ ├── 📄 Dosen.php # NIDN, input absensi, rekap
+│ │ ├── 📄 Mahasiswa.php # NIM, lihat absensi, upload surat
+│ │ ├── 📄 MataKuliah.php # Kode, nama, sks, semester
+│ │ ├── 📄 Absensi.php # Status, tanggal, keterangan
+│ │ ├── 📄 RekapAbsensi.php # Generate laporan, export PDF/CSV
+│ │ └── 📄 SuratIzin.php # Upload file, path, jenis
 │ │
-│ └── views/
-│ ├── auth/
-│ │ ├── login.php
-│ │ └── dashboard.php
+│ ├── 📁 controllers/ # Jembatan user dan model
+│ │ ├── 📄 AuthController.php # Login, logout, dashboard
+│ │ ├── 📄 AdminController.php # CRUD mahasiswa, dosen, matkul
+│ │ ├── 📄 DosenController.php # Input absensi, rekap, search
+│ │ ├── 📄 MahasiswaController.php # Lihat absensi, upload surat
+│ │ └── 📄 ExportController.php # Export laporan PDF/CSV
 │ │
-│ ├── admin/
-│ │ ├── mahasiswa/
-│ │ │ ├── index.php
-│ │ │ ├── create.php
-│ │ │ └── edit.php
+│ └── 📁 views/ # Halaman tampilan (HTML)
+│ │
+│ ├── 📁 auth/ # Halaman login dan dashboard
+│ │ ├── 📄 login.php # Form login
+│ │ └── 📄 dashboard.php # Dashboard ringkasan data
+│ │
+│ ├── 📁 admin/ # Halaman untuk admin
+│ │ ├── 📁 mahasiswa/ # CRUD mahasiswa
+│ │ │ ├── 📄 index.php # Daftar mahasiswa
+│ │ │ ├── 📄 create.php # Form tambah mahasiswa
+│ │ │ └── 📄 edit.php # Form edit mahasiswa
 │ │ │
-│ │ ├── dosen/
-│ │ │ ├── index.php
-│ │ │ ├── create.php
-│ │ │ └── edit.php
+│ │ ├── 📁 dosen/ # CRUD dosen
+│ │ │ ├── 📄 index.php # Daftar dosen
+│ │ │ ├── 📄 create.php # Form tambah dosen
+│ │ │ └── 📄 edit.php # Form edit dosen
 │ │ │
-│ │ └── matakuliah/
-│ │ ├── index.php
-│ │ ├── create.php
-│ │ └── edit.php
+│ │ └── 📁 matakuliah/ # CRUD mata kuliah
+│ │ ├── 📄 index.php # Daftar mata kuliah
+│ │ ├── 📄 create.php # Form tambah matkul
+│ │ └── 📄 edit.php # Form edit matkul
 │ │
-│ ├── dosen/
-│ │ └── absensi/
-│ │ ├── input.php
-│ │ ├── rekap.php
-│ │ └── search.php
+│ ├── 📁 dosen/ # Halaman untuk dosen
+│ │ └── 📁 absensi/ # Manajemen absensi
+│ │ ├── 📄 input.php # Form input absensi
+│ │ ├── 📄 rekap.php # Tampilan rekap absensi
+│ │ └── 📄 search.php # Form search dan filter
 │ │
-│ └── mahasiswa/
-│ ├── absensi/
-│ │ └── lihat.php
-│ └── surat/
-│ └── upload.php
+│ └── 📁 mahasiswa/ # Halaman untuk mahasiswa
+│ ├── 📁 absensi/ # Lihat absensi sendiri
+│ │ └── 📄 lihat.php # Daftar absensi pribadi
+│ └── 📁 surat/ # Upload surat izin
+│ └── 📄 upload.php # Form upload file
 │
-├── config/
-│ ├── database.php
-│ └── config.php
+├── 📁 config/ # Folder konfigurasi
+│ ├── 📄 database.php # Konfigurasi DB (host, user, pass, nama)
+│ └── 📄 config.php # Konfigurasi umum (base_url, timezone)
 │
-├── public/
-│ ├── index.php
-│ ├── .htaccess
-│ ├── css/
-│ │ └── style.css
-│ ├── js/
-│ │ └── script.js
-│ └── uploads/
-│ └── surat/
+├── 📁 public/ # Folder akses publik (entry point)
+│ ├── 📄 index.php # File pertama dijalankan (inisialisasi)
+│ ├── 📄 .htaccess # Atur ulang URL (bersihkan index.php)
+│ ├── 📁 css/ # File stylesheet
+│ │ └── 📄 style.css # Tampilan (Bootstrap/custom)
+│ ├── 📁 js/ # File JavaScript
+│ │ └── 📄 script.js # Validasi form, konfirmasi hapus
+│ └── 📁 uploads/ # Tempat file upload
+│ └── 📁 surat/ # Folder khusus surat izin
 │
-├── sql/
-│ └── database.sql
+├── 📁 sql/ # Folder database
+│ └── 📄 database.sql # Perintah SQL (tabel + contoh data)
 │
-├── .gitignore
-├── README.md
-└── .env
+├── 📄 .gitignore # Daftar file yang TIDAK ke GitHub
+├── 📄 README.md # Dokumentasi proyek
+└── 📄 .env # Variabel rahasia (JANGAN upload)

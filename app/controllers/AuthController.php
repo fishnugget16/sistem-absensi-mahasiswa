@@ -2,65 +2,159 @@
 
 class AuthController extends Controller {
     
-    // Fungsi untuk menampilkan halaman login
+    // Tampilkan halaman login
     public function index() {
         $this->view('auth/login');
     }
-
-    // Fungsi untuk memproses data login admin
-    public function login() {
+    
+    // Tampilkan halaman registrasi
+    public function registerForm() {
+        $this->view('auth/register');
+    }
+    
+    // Proses registrasi
+    public function register() {
         if (isset($_POST['submit'])) {
-            $username = $_POST['username'];
-            $password = $_POST['password'];
-
-            // Memanggil User model untuk cek data dummy
+            $email = trim($_POST['email']);
+            $password = trim($_POST['password']);
+            $nama = trim($_POST['nama']);
+            $nim = isset($_POST['nim']) ? trim($_POST['nim']) : null;
+            $nidn = isset($_POST['nidn']) ? trim($_POST['nidn']) : null;
+            
+            // Validasi email format
             $userModel = $this->model('User');
-            $user = $userModel->checkAdminCredentials($username, $password);
-
-            if ($user) {
-                // Simpan data umum ke session
-                $_SESSION['admin_logged_in'] = true;
-                $_SESSION['admin_id'] = $user['id'];
-                $_SESSION['username'] = $user['username'];
-                $_SESSION['role'] = $user['role']; // Menyimpan status role ('admin', 'dosen', 'mahasiswa')
-
-                // DI SINI KUNCINYA: Tilang/Alirkan halaman sesuai dengan ROLE masing-masing
-                if ($user['role'] === 'admin') {
-                    // Jika admin, masuk ke dashboard admin milik Anda
-                    header('Location: ' . BASEURL . '/AuthController/dashboard');
-                    exit;
-                } 
-                elseif ($user['role'] === 'dosen') {
-                    // Jika dosen, lempar ke halaman controller milik teman Anda
-                    header('Location: ' . BASEURL . '/DosenController/index');
-                    exit;
-                } 
-                elseif ($user['role'] === 'mahasiswa') {
-                    // Jika mahasiswa, lempar ke halaman controller milik teman Anda
-                    header('Location: ' . BASEURL . '/MahasiswaController/index');
-                    exit;
-                }
-
+            $role = $userModel->getRoleFromEmail($email);
+            
+            if ($role === null) {
+                $_SESSION['register_error'] = 'Format email tidak valid. Gunakan domain @mhs.kampus.ac.id, @dsn.kampus.ac.id, atau @admin.kampus.ac.id';
+                header('Location: ' . BASEURL . '/AuthController/registerForm');
+                exit;
+            }
+            
+            // Validasi password
+            if (strlen($password) > 8) {
+                $_SESSION['register_error'] = 'Password maksimal 8 karakter';
+                header('Location: ' . BASEURL . '/AuthController/registerForm');
+                exit;
+            }
+            
+            if (strlen($password) < 4) {
+                $_SESSION['register_error'] = 'Password minimal 4 karakter';
+                header('Location: ' . BASEURL . '/AuthController/registerForm');
+                exit;
+            }
+            
+            // Validasi nama
+            if (strlen($nama) < 2) {
+                $_SESSION['register_error'] = 'Nama minimal 2 karakter';
+                header('Location: ' . BASEURL . '/AuthController/registerForm');
+                exit;
+            }
+            
+            // Validasi NIM untuk mahasiswa
+            if ($role === 'mahasiswa' && empty($nim)) {
+                $_SESSION['register_error'] = 'NIM wajib diisi untuk mahasiswa';
+                header('Location: ' . BASEURL . '/AuthController/registerForm');
+                exit;
+            }
+            
+            // Validasi NIDN untuk dosen
+            if ($role === 'dosen' && empty($nidn)) {
+                $_SESSION['register_error'] = 'NIDN wajib diisi untuk dosen';
+                header('Location: ' . BASEURL . '/AuthController/registerForm');
+                exit;
+            }
+            
+            // Proses registrasi
+            $result = $userModel->register($email, $password, $nama, $role, $nim, $nidn);
+            
+            if ($result['success']) {
+                $_SESSION['register_success'] = $result['message'];
+                header('Location: ' . BASEURL . '/AuthController');
+                exit;
             } else {
-                // Jika gagal login
-                echo "<script>alert('Username atau Password Salah!'); window.location='".BASEURL."/AuthController';</script>";
+                $_SESSION['register_error'] = $result['message'];
+                header('Location: ' . BASEURL . '/AuthController/registerForm');
+                exit;
             }
         }
     }
-
-    // TAMBAHAN METHOD: Fungsi untuk menampilkan halaman dashboard yang bertanda x kemarin
+    
+    // Proses login
+    public function login() {
+        if (isset($_POST['submit'])) {
+            $email = trim($_POST['email']);
+            $password = trim($_POST['password']);
+            
+            if (empty($email) || empty($password)) {
+                $_SESSION['login_error'] = 'Email dan Password harus diisi';
+                header('Location: ' . BASEURL . '/AuthController');
+                exit;
+            }
+            
+            // Validasi password maksimal 8 karakter
+            if (strlen($password) > 8) {
+                $_SESSION['login_error'] = 'Password maksimal 8 karakter';
+                header('Location: ' . BASEURL . '/AuthController');
+                exit;
+            }
+            
+            $userModel = $this->model('User');
+            $user = $userModel->checkAdminCredentials($email, $password);
+            
+            if ($user) {
+                $_SESSION['logged_in'] = true;
+                $_SESSION['user_id'] = $user['id'];
+                $_SESSION['email'] = $user['email'];
+                $_SESSION['role'] = $user['role'];
+                $_SESSION['nama'] = $user['nama'];
+                
+                // Simpan NIM atau NIDN jika ada
+                if ($user['nim']) {
+                    $_SESSION['nim'] = $user['nim'];
+                }
+                if ($user['nidn']) {
+                    $_SESSION['nidn'] = $user['nidn'];
+                }
+                
+                // Redirect berdasarkan role
+                if ($user['role'] === 'admin') {
+                    header('Location: ' . BASEURL . '/AuthController/dashboard');
+                    exit;
+                } elseif ($user['role'] === 'dosen') {
+                    header('Location: ' . BASEURL . '/DosenController/index');
+                    exit;
+                } elseif ($user['role'] === 'mahasiswa') {
+                    header('Location: ' . BASEURL . '/MahasiswaController/index');
+                    exit;
+                }
+            } else {
+                $_SESSION['login_error'] = 'Email atau Password Salah!';
+                header('Location: ' . BASEURL . '/AuthController');
+                exit;
+            }
+        }
+    }
+    
+    // Dashboard admin
     public function dashboard() {
-        // Keamanan basic: jika belum login, tidak boleh buka dashboard
-        if (!isset($_SESSION['admin_logged_in'])) {
+        if (!isset($_SESSION['logged_in']) || $_SESSION['role'] !== 'admin') {
             header('Location: ' . BASEURL . '/AuthController');
             exit;
         }
-        $this->view('auth/dashboard');
+        
+        $data = [
+            'nama' => $_SESSION['nama'],
+            'email' => $_SESSION['email'],
+            'total_users' => $this->model('User')->getTotalUsers()
+        ];
+        
+        $this->view('auth/dashboard', $data);
     }
-
-    // Fungsi untuk logout
+    
+    // Logout
     public function logout() {
-        // PERBAIKAN 3: Hapus session_start() di sini
+        session_unset();
         session_destroy();
         header('Location: ' . BASEURL . '/AuthController');
         exit;

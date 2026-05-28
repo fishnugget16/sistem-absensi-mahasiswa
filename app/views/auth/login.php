@@ -118,6 +118,11 @@
             color: #5f6368;
         }
         
+        /* Email input type style */
+        .input-group-custom input[type="email"] {
+            letter-spacing: 0.3px;
+        }
+        
         /* Button - Material Design 2 */
         .btn-login {
             width: 100%;
@@ -207,8 +212,8 @@
         <form action="<?= BASEURL; ?>/AuthController/login" method="POST">
             <div class="form-group">
                 <div class="input-group-custom">
-                    <i class="fas fa-user"></i>
-                    <input type="text" name="username" id="username" placeholder="Username" required autofocus>
+                    <i class="fas fa-envelope"></i>
+                    <input type="email" name="email" id="email" placeholder="Alamat Email" required autofocus>
                 </div>
             </div>
             

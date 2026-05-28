@@ -10,8 +10,6 @@ class User {
     
     /**
      * Cek kredensial login dari database
-     * Email: bebas (nama@domain.kampus.ac.id)
-     * Password: maksimal 8 karakter
      */
     public function checkAdminCredentials($email, $password) {
         
@@ -27,8 +25,11 @@ class User {
         $user = $this->db->single();
         
         if ($user) {
-            // Verifikasi password (MD5 karena password max 8 karakter)
+            // Verifikasi password
             if (md5($password) === $user['password']) {
+                // Ambil nama dari kolom username (karena kolom nama tidak ada)
+                $nama = $user['username'] ?? $user['email'];
+                
                 // Jika role mahasiswa, ambil data NIM dari tabel mahasiswa
                 $nim = null;
                 if ($user['role'] === 'mahasiswa') {
@@ -53,7 +54,7 @@ class User {
                     'id' => $user['id'],
                     'email' => $user['email'],
                     'role' => $user['role'],
-                    'nama' => $user['nama'],
+                    'nama' => $nama,
                     'nim' => $nim,
                     'nidn' => $nidn
                 ];
@@ -65,12 +66,10 @@ class User {
     
     /**
      * Registrasi user baru
-     * Email: bebas (nama@domain.kampus.ac.id)
-     * Password: maksimal 8 karakter
      */
     public function register($email, $password, $nama, $role, $nim = null, $nidn = null) {
         
-        // Validasi password maksimal 8 karakter
+        // Validasi password
         if (strlen($password) > 8) {
             return ['success' => false, 'message' => 'Password maksimal 8 karakter'];
         }
@@ -89,30 +88,29 @@ class User {
             return ['success' => false, 'message' => 'Email sudah terdaftar'];
         }
         
-        // Simpan user baru
+        // Simpan user baru (pakai kolom username, bukan nama)
         $hashedPassword = md5($password);
         
-        $sql = "INSERT INTO users (email, password, role, nama) VALUES (:email, :password, :role, :nama)";
+        $sql = "INSERT INTO users (email, password, role, username) VALUES (:email, :password, :role, :username)";
         $this->db->query($sql);
         $this->db->bind(':email', $email);
         $this->db->bind(':password', $hashedPassword);
         $this->db->bind(':role', $role);
-        $this->db->bind(':nama', $nama);
+        $this->db->bind(':username', $nama);
         
         if ($this->db->execute()) {
             $userId = $this->db->lastInsertId();
             
             // Jika role mahasiswa, buat entri di tabel mahasiswa
             if ($role === 'mahasiswa') {
-                // Generate NIM otomatis jika tidak diberikan
                 $defaultNim = $nim ?: 'NIM' . $userId . date('y');
-                $this->createMahasiswaRecord($userId, $defaultNim);
+                $this->createMahasiswaRecord($userId, $defaultNim, $nama);
             }
             
             // Jika role dosen, buat entri di tabel dosen
             if ($role === 'dosen') {
                 $defaultNidn = $nidn ?: 'DSN' . $userId;
-                $this->createDosenRecord($userId, $defaultNidn);
+                $this->createDosenRecord($userId, $defaultNidn, $nama);
             }
             
             return ['success' => true, 'message' => 'Registrasi berhasil'];
@@ -124,22 +122,24 @@ class User {
     /**
      * Buat record mahasiswa setelah registrasi
      */
-    private function createMahasiswaRecord($userId, $nim) {
-        $sql = "INSERT INTO mahasiswa (user_id, nim) VALUES (:user_id, :nim)";
+    private function createMahasiswaRecord($userId, $nim, $nama) {
+        $sql = "INSERT INTO mahasiswa (user_id, nim, nama) VALUES (:user_id, :nim, :nama)";
         $this->db->query($sql);
         $this->db->bind(':user_id', $userId);
         $this->db->bind(':nim', $nim);
+        $this->db->bind(':nama', $nama);
         $this->db->execute();
     }
     
     /**
      * Buat record dosen setelah registrasi
      */
-    private function createDosenRecord($userId, $nidn) {
-        $sql = "INSERT INTO dosen (user_id, nidn) VALUES (:user_id, :nidn)";
+    private function createDosenRecord($userId, $nidn, $nama) {
+        $sql = "INSERT INTO dosen (user_id, nidn, nama) VALUES (:user_id, :nidn, :nama)";
         $this->db->query($sql);
         $this->db->bind(':user_id', $userId);
         $this->db->bind(':nidn', $nidn);
+        $this->db->bind(':nama', $nama);
         $this->db->execute();
     }
     
@@ -160,7 +160,7 @@ class User {
     }
     
     /**
-     * Validasi format email (domain harus sesuai)
+     * Validasi format email
      */
     public function validateEmailFormat($email) {
         $role = $this->getRoleFromEmail($email);
@@ -171,7 +171,7 @@ class User {
      * Ambil semua user
      */
     public function getAllUsers() {
-        $sql = "SELECT id, email, role, nama, created_at FROM users ORDER BY id ASC";
+        $sql = "SELECT id, email, role, username as nama, created_at FROM users ORDER BY id ASC";
         $this->db->query($sql);
         return $this->db->resultSet();
     }

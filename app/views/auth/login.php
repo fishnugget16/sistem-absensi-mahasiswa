@@ -172,9 +172,26 @@
             color: #ef5350;
         }
         
-        /* No footer links */
-        .login-footer {
-            display: none;
+        /* Register link - Tambahan baru */
+        .register-link {
+            text-align: center;
+            margin-top: 24px;
+            padding-top: 16px;
+            border-top: 1px solid #2a2a2a;
+        }
+        
+        .register-link a {
+            color: #9aa0a6;
+            text-decoration: none;
+            font-size: 13px;
+            transition: color 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .register-link a:hover {
+            color: #4caf50;
         }
         
         /* No scroll - body sudah fixed height */
@@ -221,7 +238,7 @@
                 <div class="input-group-custom">
                     <i class="fas fa-lock"></i>
                     <i class="fas fa-eye-slash" id="togglePassword" style="right: 0; left: auto; cursor: pointer;"></i>
-                    <input type="password" name="password" id="password" placeholder="Password" required>
+                    <input type="password" name="password" id="password" placeholder="Password (4-8 karakter)" maxlength="8" required>
                 </div>
             </div>
             
@@ -231,8 +248,13 @@
             </button>
         </form>
         
-        <!-- Footer dihilangkan -->
-        <div class="login-footer"></div>
+        <!-- Link ke halaman registrasi -->
+        <div class="register-link">
+            <a href="<?= BASEURL; ?>/AuthController/registerForm">
+                <i class="fas fa-user-plus"></i>
+                Belum punya akun? Daftar di sini
+            </a>
+        </div>
     </div>
     
     <!-- Simple toggle password visibility -->

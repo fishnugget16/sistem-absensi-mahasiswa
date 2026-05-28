@@ -142,13 +142,16 @@ class AuthController extends Controller {
             header('Location: ' . BASEURL . '/AuthController');
             exit;
         }
-        
+    
         $data = [
-            'nama' => $_SESSION['nama'],
+            'nama' => $_SESSION['nama'] ?? $_SESSION['username'],
             'email' => $_SESSION['email'],
-            'total_users' => $this->model('User')->getTotalUsers()
+            'total_mahasiswa' => 0,
+            'total_dosen' => 0,
+            'total_matkul' => 0,
+            'total_absensi_hari_ini' => 0
         ];
-        
+    
         $this->view('auth/dashboard', $data);
     }
     

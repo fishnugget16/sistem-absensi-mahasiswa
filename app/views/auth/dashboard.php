@@ -395,7 +395,7 @@
                 <div class="content-area">
                     <h4><i class="fas fa-smile-wink"></i> Selamat Datang di Halaman Utama</h4>
                     <hr>
-                    <p>Anda masuk sebagai <strong style="color:#4caf50">Administrator</strong> sistem absensi. Seluruh menu kontrol data mahasiswa, dosen, dan mata kuliah telah dikonfigurasi.</p>
+                    <p>Anda masuk sebagai <strong style="color:#4caf50">Administrator</strong> sistem absensi.</p>
                     
                     <div class="alert-box">
                         <b><i class="fas fa-lightbulb"></i> Petunjuk penggunaan:</b>

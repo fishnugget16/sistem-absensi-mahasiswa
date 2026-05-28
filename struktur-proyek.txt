@@ -2,13 +2,13 @@ sistem-absensi-oop/
 │
 ├── app/
 │ ├── core/
-│ │ ├── BaseModel.php
+│ │ ├── BaseModel.php x
 │ │ ├── Database.php
 │ │ ├── Controller.php
 │ │ └── Router.php
 │ │
 │ ├── interfaces/
-│ │ └── Exportable.php
+│ │ └── Exportable.php x
 │ │
 │ ├── models/
 │ │ ├── User.php
@@ -20,22 +20,22 @@ sistem-absensi-oop/
 │ │ └── SuratIzin.php
 │ │
 │ ├── controllers/
-│ │ ├── AuthController.php
-│ │ ├── AdminController.php
+│ │ ├── AuthController.php 
+│ │ ├── AdminController.php 
 │ │ ├── DosenController.php
 │ │ ├── MahasiswaController.php
 │ │ └── ExportController.php
 │ │
 │ └── views/
 │ ├── auth/
-│ │ ├── login.php
-│ │ └── dashboard.php
+│ │ ├── login.php 
+│ │ └── dashboard.php x
 │ │
 │ ├── admin/
 │ │ ├── mahasiswa/
-│ │ │ ├── index.php
-│ │ │ ├── create.php
-│ │ │ └── edit.php
+│ │ │ ├── index.php x
+│ │ │ ├── create.php x
+│ │ │ └── edit.php x
 │ │ │
 │ │ ├── dosen/
 │ │ │ ├── index.php
@@ -60,12 +60,12 @@ sistem-absensi-oop/
 │ └── upload.php
 │
 ├── config/
-│ ├── database.php
+│ ├── database.php x
 │ └── config.php
 │
 ├── public/
 │ ├── index.php
-│ ├── .htaccess
+│ ├── .htaccess x
 │ ├── css/
 │ │ └── style.css
 │ ├── js/
@@ -74,7 +74,7 @@ sistem-absensi-oop/
 │ └── surat/
 │
 ├── sql/
-│ └── database.sql
+│ └── database.sql x
 │
 ├── .gitignore
 ├── README.md

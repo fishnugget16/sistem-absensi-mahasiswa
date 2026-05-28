@@ -2,12 +2,12 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <title>Login Admin - Sistem Absensi</title>
+    <title>Login Page - Sistem Absensi</title>
     <link rel="stylesheet" href="<?= BASEURL; ?>/css/style.css">
 </head>
 <body>
     <div class="login-container">
-        <h2>Login Admin</h2>
+        <h2>Login Page</h2>
         
         <!-- Form mengarah ke AuthController fungsi login -->
         <form action="<?= BASEURL; ?>/AuthController/login" method="POST">

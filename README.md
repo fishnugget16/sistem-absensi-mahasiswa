@@ -1,1 +1,0 @@
-Sistem Absensi Mahasiswa - Proyek UAS OOP

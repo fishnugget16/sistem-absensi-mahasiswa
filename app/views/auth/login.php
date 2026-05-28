@@ -12,7 +12,7 @@
         <!-- Form mengarah ke AuthController fungsi login -->
         <form action="<?= BASEURL; ?>/AuthController/login" method="POST">
             <div class="form-group">
-                <label for="username">Username/Email</label>
+                <label for="username">Username / Email</label>
                 <input type="text" name="username" id="username" required>
             </div>
             

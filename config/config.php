@@ -1,4 +1,5 @@
 <?php
+
 define('BASEURL', 'http://localhost/aplikasi-absensi-mahasiswa/public');
 define('DB_HOST', 'localhost');
 define('DB_USER', 'root');

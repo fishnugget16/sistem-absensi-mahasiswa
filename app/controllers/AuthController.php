@@ -153,7 +153,8 @@ class AuthController extends Controller {
             'email' => $_SESSION['email'],
             'total_mahasiswa' => $mahasiswaModel->countMahasiswa(),
             'total_dosen' => $dosenModel->countDosen(),
-            'total_matkul' => $matkulModel->countMataKuliah()
+            'total_matkul' => $matkulModel->countMataKuliah(),
+            'total_absensi_hari_ini' => 0
         ];
     
         $this->view('auth/dashboard', $data);

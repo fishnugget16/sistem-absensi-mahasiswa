@@ -195,6 +195,38 @@ if (preg_match('/AdminController\/matakuliahDelete\/(\d+)/', $url, $matches)) {
 }
 
 // ==========================================
+// ROUTING MAHASISWA CONTROLLER
+// ==========================================
+
+if ($url === 'MahasiswaController/index') {
+    require_once '../app/controllers/MahasiswaController.php';
+    $controller = new MahasiswaController();
+    $controller->index();
+    exit;
+}
+
+if ($url === 'MahasiswaController/absensi') {
+    require_once '../app/controllers/MahasiswaController.php';
+    $controller = new MahasiswaController();
+    $controller->absensi();
+    exit;
+}
+
+if ($url === 'MahasiswaController/uploadSurat') {
+    require_once '../app/controllers/MahasiswaController.php';
+    $controller = new MahasiswaController();
+    $controller->uploadSurat();
+    exit;
+}
+
+if ($url === 'MahasiswaController/logout') {
+    require_once '../app/controllers/MahasiswaController.php';
+    $controller = new MahasiswaController();
+    $controller->logout();
+    exit;
+}
+
+// ==========================================
 // DEFAULT (HALAMAN LOGIN)
 // ==========================================
 

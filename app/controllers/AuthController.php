@@ -143,13 +143,17 @@ class AuthController extends Controller {
             exit;
         }
     
+        // Load models untuk mengambil data statistik
+        $mahasiswaModel = $this->model('Mahasiswa');
+        $dosenModel = $this->model('Dosen');
+        $matkulModel = $this->model('MataKuliah');
+    
         $data = [
             'nama' => $_SESSION['nama'] ?? $_SESSION['username'],
             'email' => $_SESSION['email'],
-            'total_mahasiswa' => 0,
-            'total_dosen' => 0,
-            'total_matkul' => 0,
-            'total_absensi_hari_ini' => 0
+            'total_mahasiswa' => $mahasiswaModel->countMahasiswa(),
+            'total_dosen' => $dosenModel->countDosen(),
+            'total_matkul' => $matkulModel->countMataKuliah()
         ];
     
         $this->view('auth/dashboard', $data);

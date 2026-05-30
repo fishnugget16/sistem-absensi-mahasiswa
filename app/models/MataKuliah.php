@@ -190,7 +190,7 @@ class MataKuliah extends BaseModel {
         }
     }
     
-    public function createMataKuliah($kode, $nama, $sks, $semester) {
+    public function createMataKuliah($kode, $nama, $sks, $semester, $jumlah_pertemuan = 14) {
         try {
             // Cek apakah kode sudah terdaftar
             $sql = "SELECT COUNT(*) as total FROM mata_kuliah WHERE kode = :kode";
@@ -203,12 +203,13 @@ class MataKuliah extends BaseModel {
             }
             
             // Insert data
-            $sql = "INSERT INTO mata_kuliah (kode, nama, sks, semester) VALUES (:kode, :nama, :sks, :semester)";
+            $sql = "INSERT INTO mata_kuliah (kode, nama, sks, semester, jumlah_pertemuan) VALUES (:kode, :nama, :sks, :semester, :jumlah_pertemuan)";
             $this->db->query($sql);
             $this->db->bind(':kode', $kode);
             $this->db->bind(':nama', $nama);
             $this->db->bind(':sks', $sks);
             $this->db->bind(':semester', $semester);
+            $this->db->bind(':jumlah_pertemuan', $jumlah_pertemuan);
             
             if ($this->db->execute()) {
                 return ['success' => true, 'message' => 'Mata kuliah berhasil ditambahkan'];
@@ -220,7 +221,7 @@ class MataKuliah extends BaseModel {
         }
     }
     
-    public function updateMataKuliah($id, $kode, $nama, $sks, $semester) {
+    public function updateMataKuliah($id, $kode, $nama, $sks, $semester, $jumlah_pertemuan) {
         try {
             // Cek apakah kode sudah dipakai matkul lain
             $sql = "SELECT COUNT(*) as total FROM mata_kuliah WHERE kode = :kode AND id != :id";
@@ -234,12 +235,13 @@ class MataKuliah extends BaseModel {
             }
             
             // Update data
-            $sql = "UPDATE mata_kuliah SET kode = :kode, nama = :nama, sks = :sks, semester = :semester WHERE id = :id";
+            $sql = "UPDATE mata_kuliah SET kode = :kode, nama = :nama, sks = :sks, semester = :semester, jumlah_pertemuan = :jumlah_pertemuan WHERE id = :id";
             $this->db->query($sql);
             $this->db->bind(':kode', $kode);
             $this->db->bind(':nama', $nama);
             $this->db->bind(':sks', $sks);
             $this->db->bind(':semester', $semester);
+            $this->db->bind(':jumlah_pertemuan', $jumlah_pertemuan);
             $this->db->bind(':id', $id);
             
             if ($this->db->execute()) {

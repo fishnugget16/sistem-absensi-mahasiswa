@@ -20,7 +20,6 @@
             overflow-x: hidden;
         }
 
-        /* ========== NAVBAR ========== */
         .navbar-custom {
             background: #1e1e1e;
             padding: 12px 20px;
@@ -91,13 +90,13 @@
             display: flex;
             align-items: center;
             gap: 6px;
+            cursor: pointer;
         }
 
         .logout-link:hover {
             color: #ef5350 !important;
         }
 
-        /* ========== OVERLAY SIDEBAR ========== */
         .side-menu-overlay {
             position: fixed;
             top: 0;
@@ -152,6 +151,7 @@
             font-weight: 500;
             border-radius: 10px;
             transition: all 0.2s;
+            cursor: pointer;
         }
 
         .side-menu-overlay .nav-link i {
@@ -179,13 +179,11 @@
             color: #ef5350;
         }
 
-        /* ========== MAIN CONTENT ========== */
         .main-content {
             width: 100%;
             min-height: calc(100vh - 60px);
         }
 
-        /* Content Card */
         .content-card {
             background: #1e1e1e;
             border-radius: 12px;
@@ -211,7 +209,6 @@
             margin: 16px 0 24px 0;
         }
 
-        /* Form */
         .form-label {
             color: #e8eaed;
             font-weight: 500;
@@ -219,7 +216,7 @@
             margin-bottom: 8px;
         }
 
-        .form-control, .form-select {
+        .form-control {
             background: #2a2a2a;
             border: 1px solid #3c4043;
             color: #e8eaed;
@@ -227,9 +224,10 @@
             padding: 10px 12px;
             font-size: 14px;
             transition: all 0.2s;
+            width: 100%;
         }
 
-        .form-control:focus, .form-select:focus {
+        .form-control:focus {
             background: #2a2a2a;
             border-color: #4caf50;
             color: #e8eaed;
@@ -244,7 +242,6 @@
             display: block;
         }
 
-        /* Buttons */
         .btn-submit {
             background: #4caf50;
             border: none;
@@ -284,7 +281,6 @@
             color: white;
         }
 
-        /* Alert */
         .alert-danger {
             background: #2c1a1a;
             border: 1px solid #dc3545;
@@ -295,43 +291,264 @@
             font-size: 13px;
         }
 
-        /* ========== RESPONSIVE ========== */
+        /* ========== CUSTOM CONFIRM DIALOG ========== */
+        .custom-confirm-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(4px);
+            z-index: 1100;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .custom-confirm-overlay.show {
+            display: flex;
+        }
+
+        .custom-confirm-dialog {
+            background: #1e1e1e;
+            border-radius: 16px;
+            width: 90%;
+            max-width: 400px;
+            padding: 24px;
+            border: 1px solid #2a2a2a;
+            animation: modalFadeIn 0.2s ease;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+        }
+
+        @keyframes modalFadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .confirm-icon {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .confirm-icon i {
+            font-size: 56px;
+            color: #dc3545;
+        }
+
+        .confirm-title {
+            text-align: center;
+            color: #e8eaed;
+            font-size: 20px;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+
+        .confirm-message {
+            text-align: center;
+            color: #9aa0a6;
+            font-size: 14px;
+            margin-bottom: 24px;
+            line-height: 1.5;
+        }
+
+        .confirm-buttons {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+        }
+
+        .confirm-buttons .btn-cancel-confirm {
+            background: #3c4043;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 8px;
+            color: white;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .confirm-buttons .btn-cancel-confirm:hover {
+            background: #4a4e54;
+        }
+
+        .confirm-buttons .btn-logout-confirm {
+            background: #dc3545;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 8px;
+            color: white;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .confirm-buttons .btn-logout-confirm:hover {
+            background: #c82333;
+        }
+
+        /* ========== CUSTOM SELECT (PROGRAM STUDI) ========== */
+        .custom-select-container {
+            position: relative;
+            width: 100%;
+        }
+
+        .custom-select-trigger {
+            background: #2a2a2a;
+            border: 1px solid #3c4043;
+            border-radius: 8px;
+            padding: 10px 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: #e8eaed;
+            font-size: 14px;
+        }
+
+        .custom-select-trigger:hover {
+            border-color: #4caf50;
+        }
+
+        .custom-select-trigger i {
+            transition: transform 0.2s;
+            color: #9aa0a6;
+        }
+
+        .custom-select-trigger.open i {
+            transform: rotate(180deg);
+        }
+
+        .custom-select-options {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: #1e1e1e;
+            border: 1px solid #3c4043;
+            border-radius: 8px;
+            margin-top: 4px;
+            z-index: 100;
+            display: none;
+            max-height: 280px;
+            overflow: hidden;
+            flex-direction: column;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .custom-select-options.show {
+            display: flex;
+        }
+
+        .search-box {
+            padding: 10px;
+            border-bottom: 1px solid #3c4043;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .search-box i {
+            color: #9aa0a6;
+            font-size: 14px;
+        }
+
+        .search-box input {
+            background: #2a2a2a;
+            border: none;
+            color: #e8eaed;
+            width: 100%;
+            outline: none;
+            font-size: 13px;
+        }
+
+        .search-box input::placeholder {
+            color: #5f6368;
+        }
+
+        .options-list {
+            overflow-y: auto;
+            max-height: 220px;
+        }
+
+        .option-item {
+            padding: 10px 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: #e8eaed;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .option-item i {
+            width: 20px;
+            font-size: 14px;
+            color: #4caf50;
+        }
+
+        .option-item:hover {
+            background: rgba(76, 175, 80, 0.1);
+        }
+
+        .option-item.selected {
+            background: rgba(76, 175, 80, 0.2);
+            color: #4caf50;
+        }
+
+        .options-list::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .options-list::-webkit-scrollbar-track {
+            background: #2a2a2a;
+            border-radius: 3px;
+        }
+
+        .options-list::-webkit-scrollbar-thumb {
+            background: #4caf50;
+            border-radius: 3px;
+        }
+
         @media (max-width: 768px) {
             .navbar-custom {
                 padding: 10px 16px;
             }
-
             .content-card {
                 margin: 16px;
                 padding: 20px;
             }
-
             .content-card h3 {
                 font-size: 20px;
             }
-
             .form-label {
                 font-size: 12px;
             }
-
-            .form-control, .form-select {
+            .form-control, .custom-select-trigger {
                 padding: 8px 12px;
                 font-size: 13px;
             }
-
             .btn-submit, .btn-cancel {
                 padding: 8px 20px;
                 font-size: 13px;
             }
-
             .user-info span {
                 display: none;
             }
-
             .logout-link span {
                 display: none;
             }
-
             .navbar-brand span {
                 display: none;
             }
@@ -348,8 +565,7 @@
                 margin: 28px 40px;
                 padding: 32px;
             }
-
-            .form-control, .form-select {
+            .form-control, .custom-select-trigger {
                 padding: 12px 16px;
             }
         }
@@ -373,7 +589,7 @@
             <i class="fas fa-user-circle"></i>
             <span><?= $_SESSION['nama'] ?? 'Admin'; ?></span>
         </span>
-        <a href="<?= BASEURL; ?>/AuthController/logout" class="logout-link" onclick="return confirm('Yakin ingin keluar?')">
+        <a href="#" class="logout-link" id="logoutBtn">
             <i class="fas fa-sign-out-alt"></i>
             <span>Logout</span>
         </a>
@@ -405,11 +621,37 @@
             </a>
         </li>
         <li class="nav-item">
-            <a href="<?= BASEURL; ?>/AuthController/logout" class="nav-link logout" onclick="return confirm('Yakin ingin keluar?')">
+            <a href="<?= BASEURL; ?>/AdminController/surat_izin" class="nav-link">
+                <i class="fas fa-file-alt"></i> Surat Izin
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="#" class="nav-link logout" id="sideLogoutBtn">
                 <i class="fas fa-sign-out-alt"></i> Logout
             </a>
         </li>
     </ul>
+</div>
+
+<!-- Custom Confirm Dialog untuk LOGOUT -->
+<div class="custom-confirm-overlay" id="customConfirmOverlay">
+    <div class="custom-confirm-dialog">
+        <div class="confirm-icon">
+            <i class="fas fa-sign-out-alt"></i>
+        </div>
+        <div class="confirm-title">Konfirmasi Logout</div>
+        <div class="confirm-message" id="confirmMessage">
+            Apakah Anda yakin ingin keluar dari sistem?
+        </div>
+        <div class="confirm-buttons">
+            <button class="btn-cancel-confirm" id="confirmCancelBtn">
+                <i class="fas fa-times"></i> Batal
+            </button>
+            <button class="btn-logout-confirm" id="confirmLogoutBtn">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </button>
+        </div>
+    </div>
 </div>
 
 <!-- Main Content -->
@@ -440,17 +682,45 @@
                 </div>
                 <div class="col-12 col-md-4">
                     <label class="form-label">Program Studi</label>
-                    <select name="kelas" class="form-select">
-                        <option value="">-- Pilih Program Studi --</option>
-                        <option value="Teknik Informatika">Teknik Informatika (S1)</option>
-                        <option value="Sistem Informasi">Sistem Informasi (S1)</option>
-                        <option value="Teknik Komputer">Teknik Komputer (S1)</option>
-                        <option value="Manajemen Informatika">Manajemen Informatika (D3)</option>
-                        <option value="Komputerisasi Akuntansi">Komputerisasi Akuntansi (D3)</option>
-                        <option value="Teknik Elektro">Teknik Elektro (S1)</option>
-                        <option value="Desain Komunikasi Visual">Desain Komunikasi Visual (S1)</option>
-                        <option value="Bisnis Digital">Bisnis Digital (S1)</option>
-                    </select>
+                    <div class="custom-select-container" id="prodiSelectContainer">
+                        <div class="custom-select-trigger" id="prodiSelectTrigger">
+                            <span id="selectedProdiText">-- Pilih Program Studi --</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="custom-select-options" id="prodiSelectOptions">
+                            <div class="search-box">
+                                <i class="fas fa-search"></i>
+                                <input type="text" id="prodiSearchInput" placeholder="Cari program studi...">
+                            </div>
+                            <div class="options-list" id="prodiOptionsList">
+                                <div class="option-item" data-value="Teknik Informatika">
+                                    <i class="fas fa-laptop-code"></i> Teknik Informatika (S1)
+                                </div>
+                                <div class="option-item" data-value="Sistem Informasi">
+                                    <i class="fas fa-database"></i> Sistem Informasi (S1)
+                                </div>
+                                <div class="option-item" data-value="Teknik Komputer">
+                                    <i class="fas fa-microchip"></i> Teknik Komputer (S1)
+                                </div>
+                                <div class="option-item" data-value="Manajemen Informatika">
+                                    <i class="fas fa-chart-line"></i> Manajemen Informatika (D3)
+                                </div>
+                                <div class="option-item" data-value="Komputerisasi Akuntansi">
+                                    <i class="fas fa-calculator"></i> Komputerisasi Akuntansi (D3)
+                                </div>
+                                <div class="option-item" data-value="Teknik Elektro">
+                                    <i class="fas fa-plug"></i> Teknik Elektro (S1)
+                                </div>
+                                <div class="option-item" data-value="Desain Komunikasi Visual">
+                                    <i class="fas fa-palette"></i> Desain Komunikasi Visual (S1)
+                                </div>
+                                <div class="option-item" data-value="Bisnis Digital">
+                                    <i class="fas fa-chart-simple"></i> Bisnis Digital (S1)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <input type="hidden" name="kelas" id="selectedProdiValue" value="">
                 </div>
                 <div class="col-12 col-md-4">
                     <label class="form-label">Email <span class="text-danger">*</span></label>
@@ -476,6 +746,51 @@
 </div>
 
 <script>
+    // ========== CUSTOM CONFIRM DIALOG FOR LOGOUT ==========
+    const confirmOverlay = document.getElementById('customConfirmOverlay');
+    const confirmMessage = document.getElementById('confirmMessage');
+    const confirmCancelBtn = document.getElementById('confirmCancelBtn');
+    const confirmLogoutBtn = document.getElementById('confirmLogoutBtn');
+    const logoutBtn = document.getElementById('logoutBtn');
+    const sideLogoutBtn = document.getElementById('sideLogoutBtn');
+    let pendingLogoutUrl = null;
+
+    function showConfirmDialog(message, logoutUrl) {
+        confirmMessage.innerHTML = message;
+        pendingLogoutUrl = logoutUrl;
+        confirmOverlay.classList.add('show');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeConfirmDialog() {
+        confirmOverlay.classList.remove('show');
+        document.body.style.overflow = '';
+        pendingLogoutUrl = null;
+    }
+
+    function executeLogout() {
+        if (pendingLogoutUrl) {
+            window.location.href = pendingLogoutUrl;
+        }
+    }
+
+    confirmCancelBtn.addEventListener('click', closeConfirmDialog);
+    confirmLogoutBtn.addEventListener('click', executeLogout);
+    confirmOverlay.addEventListener('click', (e) => {
+        if (e.target === confirmOverlay) closeConfirmDialog();
+    });
+
+    logoutBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        showConfirmDialog('Apakah Anda yakin ingin keluar dari sistem?', '<?= BASEURL; ?>/AuthController/logout');
+    });
+
+    sideLogoutBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        showConfirmDialog('Apakah Anda yakin ingin keluar dari sistem?', '<?= BASEURL; ?>/AuthController/logout');
+    });
+
+    // ========== TOGGLE SIDEBAR ==========
     const toggleBtn = document.getElementById('toggleSidebar');
     const brandToggle = document.getElementById('brandToggle');
     const sideMenu = document.getElementById('sideMenuOverlay');
@@ -505,10 +820,68 @@
     brandToggle.addEventListener('click', toggleSidebar);
     backdrop.addEventListener('click', closeSidebar);
 
-    // Tutup sidebar saat resize ke desktop
     window.addEventListener('resize', function() {
         if (window.innerWidth > 768 && sideMenu.classList.contains('open')) {
             closeSidebar();
+        }
+    });
+
+    // ========== CUSTOM SELECT (PROGRAM STUDI) ==========
+    const trigger = document.getElementById('prodiSelectTrigger');
+    const optionsContainer = document.getElementById('prodiSelectOptions');
+    const selectedText = document.getElementById('selectedProdiText');
+    const selectedValue = document.getElementById('selectedProdiValue');
+    const searchInput = document.getElementById('prodiSearchInput');
+
+    function toggleDropdown() {
+        optionsContainer.classList.toggle('show');
+        trigger.classList.toggle('open');
+    }
+
+    trigger.addEventListener('click', toggleDropdown);
+
+    function selectOption(value, text) {
+        selectedText.textContent = text;
+        selectedValue.value = value;
+        
+        document.querySelectorAll('.option-item').forEach(opt => {
+            opt.classList.remove('selected');
+        });
+        
+        const selectedOpt = Array.from(document.querySelectorAll('.option-item')).find(
+            opt => opt.getAttribute('data-value') === value
+        );
+        if (selectedOpt) selectedOpt.classList.add('selected');
+        
+        optionsContainer.classList.remove('show');
+        trigger.classList.remove('open');
+    }
+
+    document.querySelectorAll('.option-item').forEach(option => {
+        option.addEventListener('click', () => {
+            const value = option.getAttribute('data-value');
+            const text = option.textContent.trim();
+            selectOption(value, text);
+        });
+    });
+
+    searchInput.addEventListener('input', function() {
+        const searchTerm = this.value.toLowerCase();
+        document.querySelectorAll('.option-item').forEach(option => {
+            const text = option.textContent.toLowerCase();
+            if (text.includes(searchTerm)) {
+                option.style.display = 'flex';
+            } else {
+                option.style.display = 'none';
+            }
+        });
+    });
+
+    document.addEventListener('click', function(event) {
+        const container = document.getElementById('prodiSelectContainer');
+        if (!container.contains(event.target)) {
+            optionsContainer.classList.remove('show');
+            trigger.classList.remove('open');
         }
     });
 </script>

@@ -20,7 +20,6 @@
             overflow-x: hidden;
         }
 
-        /* ========== NAVBAR ========== */
         .navbar-custom {
             background: #1e1e1e;
             padding: 12px 20px;
@@ -91,13 +90,13 @@
             display: flex;
             align-items: center;
             gap: 6px;
+            cursor: pointer;
         }
 
         .logout-link:hover {
             color: #ef5350 !important;
         }
 
-        /* ========== OVERLAY SIDEBAR ========== */
         .side-menu-overlay {
             position: fixed;
             top: 0;
@@ -152,6 +151,7 @@
             font-weight: 500;
             border-radius: 10px;
             transition: all 0.2s;
+            cursor: pointer;
         }
 
         .side-menu-overlay .nav-link i {
@@ -179,13 +179,11 @@
             color: #ef5350;
         }
 
-        /* ========== MAIN CONTENT ========== */
         .main-content {
             width: 100%;
             min-height: calc(100vh - 60px);
         }
 
-        /* Content Card */
         .content-card {
             background: #1e1e1e;
             border-radius: 12px;
@@ -211,7 +209,6 @@
             margin: 16px 0 24px 0;
         }
 
-        /* Form */
         .form-label {
             color: #e8eaed;
             font-weight: 500;
@@ -244,7 +241,6 @@
             display: block;
         }
 
-        /* Buttons */
         .btn-submit {
             background: #4caf50;
             border: none;
@@ -284,7 +280,6 @@
             color: white;
         }
 
-        /* Alert */
         .alert-danger {
             background: #2c1a1a;
             border: 1px solid #dc3545;
@@ -295,43 +290,149 @@
             font-size: 13px;
         }
 
-        /* ========== RESPONSIVE ========== */
+        /* ========== CUSTOM CONFIRM DIALOG ========== */
+        .custom-confirm-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(4px);
+            z-index: 1100;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .custom-confirm-overlay.show {
+            display: flex;
+        }
+
+        .custom-confirm-dialog {
+            background: #1e1e1e;
+            border-radius: 16px;
+            width: 90%;
+            max-width: 400px;
+            padding: 24px;
+            border: 1px solid #2a2a2a;
+            animation: modalFadeIn 0.2s ease;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+        }
+
+        @keyframes modalFadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .confirm-icon {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .confirm-icon.delete-icon i {
+            color: #ff9800;
+            font-size: 56px;
+        }
+
+        .confirm-icon.logout-icon i {
+            color: #dc3545;
+            font-size: 56px;
+        }
+
+        .confirm-icon i {
+            font-size: 56px;
+            color: #dc3545;
+        }
+
+        .confirm-title {
+            text-align: center;
+            color: #e8eaed;
+            font-size: 20px;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+
+        .confirm-message {
+            text-align: center;
+            color: #9aa0a6;
+            font-size: 14px;
+            margin-bottom: 24px;
+            line-height: 1.5;
+        }
+
+        .confirm-buttons {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+        }
+
+        .confirm-buttons .btn-cancel-confirm {
+            background: #3c4043;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 8px;
+            color: white;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .confirm-buttons .btn-cancel-confirm:hover {
+            background: #4a4e54;
+        }
+
+        .confirm-buttons .btn-logout-confirm {
+            background: #dc3545;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 8px;
+            color: white;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .confirm-buttons .btn-logout-confirm:hover {
+            background: #c82333;
+        }
+
         @media (max-width: 768px) {
             .navbar-custom {
                 padding: 10px 16px;
             }
-
             .content-card {
                 margin: 16px;
                 padding: 20px;
             }
-
             .content-card h3 {
                 font-size: 20px;
             }
-
             .form-label {
                 font-size: 12px;
             }
-
             .form-control, .form-select {
                 padding: 8px 12px;
                 font-size: 13px;
             }
-
             .btn-submit, .btn-cancel {
                 padding: 8px 20px;
                 font-size: 13px;
             }
-
             .user-info span {
                 display: none;
             }
-
             .logout-link span {
                 display: none;
             }
-
             .navbar-brand span {
                 display: none;
             }
@@ -348,7 +449,6 @@
                 margin: 28px 40px;
                 padding: 32px;
             }
-
             .form-control, .form-select {
                 padding: 12px 16px;
             }
@@ -373,7 +473,7 @@
             <i class="fas fa-user-circle"></i>
             <span><?= $_SESSION['nama'] ?? 'Admin'; ?></span>
         </span>
-        <a href="<?= BASEURL; ?>/AuthController/logout" class="logout-link" onclick="return confirm('Yakin ingin keluar?')">
+        <a href="#" class="logout-link" id="logoutBtn">
             <i class="fas fa-sign-out-alt"></i>
             <span>Logout</span>
         </a>
@@ -405,11 +505,37 @@
             </a>
         </li>
         <li class="nav-item">
-            <a href="<?= BASEURL; ?>/AuthController/logout" class="nav-link logout" onclick="return confirm('Yakin ingin keluar?')">
+            <a href="<?= BASEURL; ?>/AdminController/surat_izin" class="nav-link">
+                <i class="fas fa-file-alt"></i> Surat Izin
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="#" class="nav-link logout" id="sideLogoutBtn">
                 <i class="fas fa-sign-out-alt"></i> Logout
             </a>
         </li>
     </ul>
+</div>
+
+<!-- Custom Confirm Dialog untuk LOGOUT -->
+<div class="custom-confirm-overlay" id="customConfirmOverlay">
+    <div class="custom-confirm-dialog">
+        <div class="confirm-icon">
+            <i class="fas fa-sign-out-alt"></i>
+        </div>
+        <div class="confirm-title">Konfirmasi Logout</div>
+        <div class="confirm-message" id="confirmMessage">
+            Apakah Anda yakin ingin keluar dari sistem?
+        </div>
+        <div class="confirm-buttons">
+            <button class="btn-cancel-confirm" id="confirmCancelBtn">
+                <i class="fas fa-times"></i> Batal
+            </button>
+            <button class="btn-logout-confirm" id="confirmLogoutBtn">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </button>
+        </div>
+    </div>
 </div>
 
 <!-- Main Content -->
@@ -462,6 +588,51 @@
 </div>
 
 <script>
+    // ========== CUSTOM CONFIRM DIALOG FOR LOGOUT ==========
+    const confirmOverlay = document.getElementById('customConfirmOverlay');
+    const confirmMessage = document.getElementById('confirmMessage');
+    const confirmCancelBtn = document.getElementById('confirmCancelBtn');
+    const confirmLogoutBtn = document.getElementById('confirmLogoutBtn');
+    const logoutBtn = document.getElementById('logoutBtn');
+    const sideLogoutBtn = document.getElementById('sideLogoutBtn');
+    let pendingLogoutUrl = null;
+
+    function showConfirmDialog(message, logoutUrl) {
+        confirmMessage.innerHTML = message;
+        pendingLogoutUrl = logoutUrl;
+        confirmOverlay.classList.add('show');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeConfirmDialog() {
+        confirmOverlay.classList.remove('show');
+        document.body.style.overflow = '';
+        pendingLogoutUrl = null;
+    }
+
+    function executeLogout() {
+        if (pendingLogoutUrl) {
+            window.location.href = pendingLogoutUrl;
+        }
+    }
+
+    confirmCancelBtn.addEventListener('click', closeConfirmDialog);
+    confirmLogoutBtn.addEventListener('click', executeLogout);
+    confirmOverlay.addEventListener('click', (e) => {
+        if (e.target === confirmOverlay) closeConfirmDialog();
+    });
+
+    logoutBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        showConfirmDialog('Apakah Anda yakin ingin keluar dari sistem?', '<?= BASEURL; ?>/AuthController/logout');
+    });
+
+    sideLogoutBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        showConfirmDialog('Apakah Anda yakin ingin keluar dari sistem?', '<?= BASEURL; ?>/AuthController/logout');
+    });
+
+    // ========== TOGGLE SIDEBAR ==========
     const toggleBtn = document.getElementById('toggleSidebar');
     const brandToggle = document.getElementById('brandToggle');
     const sideMenu = document.getElementById('sideMenuOverlay');
@@ -491,7 +662,6 @@
     brandToggle.addEventListener('click', toggleSidebar);
     backdrop.addEventListener('click', closeSidebar);
 
-    // Tutup sidebar saat resize ke desktop
     window.addEventListener('resize', function() {
         if (window.innerWidth > 768 && sideMenu.classList.contains('open')) {
             closeSidebar();

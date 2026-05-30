@@ -91,6 +91,7 @@
             display: flex;
             align-items: center;
             gap: 6px;
+            cursor: pointer;
         }
 
         .logout-link:hover {
@@ -152,6 +153,7 @@
             font-weight: 500;
             border-radius: 10px;
             transition: all 0.2s;
+            cursor: pointer;
         }
 
         .side-menu-overlay .nav-link i {
@@ -219,7 +221,7 @@
             margin-bottom: 8px;
         }
 
-        .form-control, .form-select {
+        .form-control {
             background: #2a2a2a;
             border: 1px solid #3c4043;
             color: #e8eaed;
@@ -227,9 +229,10 @@
             padding: 10px 12px;
             font-size: 14px;
             transition: all 0.2s;
+            width: 100%;
         }
 
-        .form-control:focus, .form-select:focus {
+        .form-control:focus {
             background: #2a2a2a;
             border-color: #4caf50;
             color: #e8eaed;
@@ -288,6 +291,230 @@
             font-size: 13px;
         }
 
+        /* ========== CUSTOM CONFIRM DIALOG ========== */
+        .custom-confirm-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(4px);
+            z-index: 1100;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .custom-confirm-overlay.show {
+            display: flex;
+        }
+
+        .custom-confirm-dialog {
+            background: #1e1e1e;
+            border-radius: 16px;
+            width: 90%;
+            max-width: 400px;
+            padding: 24px;
+            border: 1px solid #2a2a2a;
+            animation: modalFadeIn 0.2s ease;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+        }
+
+        @keyframes modalFadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .confirm-icon {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .confirm-icon i {
+            font-size: 56px;
+            color: #dc3545;
+        }
+
+        .confirm-title {
+            text-align: center;
+            color: #e8eaed;
+            font-size: 20px;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+
+        .confirm-message {
+            text-align: center;
+            color: #9aa0a6;
+            font-size: 14px;
+            margin-bottom: 24px;
+            line-height: 1.5;
+        }
+
+        .confirm-buttons {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+        }
+
+        .confirm-buttons .btn-cancel-confirm {
+            background: #3c4043;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 8px;
+            color: white;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .confirm-buttons .btn-cancel-confirm:hover {
+            background: #4a4e54;
+        }
+
+        .confirm-buttons .btn-logout-confirm {
+            background: #dc3545;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 8px;
+            color: white;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .confirm-buttons .btn-logout-confirm:hover {
+            background: #c82333;
+        }
+
+        /* ========== CUSTOM SELECT ========== */
+        .custom-select-container {
+            position: relative;
+            width: 100%;
+        }
+
+        .custom-select-trigger {
+            background: #2a2a2a;
+            border: 1px solid #3c4043;
+            border-radius: 8px;
+            padding: 10px 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: #e8eaed;
+            font-size: 14px;
+        }
+
+        .custom-select-trigger:hover {
+            border-color: #4caf50;
+        }
+
+        .custom-select-trigger i {
+            transition: transform 0.2s;
+            color: #9aa0a6;
+        }
+
+        .custom-select-trigger.open i {
+            transform: rotate(180deg);
+        }
+
+        .custom-select-options {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: #1e1e1e;
+            border: 1px solid #3c4043;
+            border-radius: 8px;
+            margin-top: 4px;
+            z-index: 100;
+            display: none;
+            max-height: 280px;
+            overflow: hidden;
+            flex-direction: column;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .custom-select-options.show {
+            display: flex;
+        }
+
+        .options-list {
+            overflow-y: auto;
+            max-height: 250px;
+        }
+
+        .option-item {
+            padding: 10px 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: #e8eaed;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .option-item i {
+            width: 20px;
+            font-size: 14px;
+            color: #4caf50;
+        }
+
+        .option-item:hover {
+            background: rgba(76, 175, 80, 0.1);
+        }
+
+        .option-item.selected {
+            background: rgba(76, 175, 80, 0.2);
+            color: #4caf50;
+        }
+
+        /* Scrollbar custom */
+        .options-list::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .options-list::-webkit-scrollbar-track {
+            background: #2a2a2a;
+            border-radius: 3px;
+        }
+
+        .options-list::-webkit-scrollbar-thumb {
+            background: #4caf50;
+            border-radius: 3px;
+        }
+
+        /* Info Box */
+        .info-box {
+            background: rgba(33, 150, 243, 0.1);
+            border: 1px solid rgba(33, 150, 243, 0.3);
+            border-radius: 8px;
+            padding: 12px 16px;
+            margin-bottom: 20px;
+        }
+
+        .info-box i {
+            color: #2196f3;
+            margin-right: 8px;
+        }
+
+        .info-box span {
+            color: #9aa0a6;
+            font-size: 12px;
+        }
+
         /* ========== RESPONSIVE ========== */
         @media (max-width: 768px) {
             .navbar-custom {
@@ -307,7 +534,7 @@
                 font-size: 12px;
             }
 
-            .form-control, .form-select {
+            .form-control, .custom-select-trigger {
                 padding: 8px 12px;
                 font-size: 13px;
             }
@@ -342,7 +569,7 @@
                 padding: 32px;
             }
 
-            .form-control, .form-select {
+            .form-control, .custom-select-trigger {
                 padding: 12px 16px;
             }
         }
@@ -366,7 +593,7 @@
             <i class="fas fa-user-circle"></i>
             <span><?= $_SESSION['nama'] ?? 'Admin'; ?></span>
         </span>
-        <a href="<?= BASEURL; ?>/AuthController/logout" class="logout-link" onclick="return confirm('Yakin ingin keluar?')">
+        <a href="#" class="logout-link" id="logoutBtn">
             <i class="fas fa-sign-out-alt"></i>
             <span>Logout</span>
         </a>
@@ -398,11 +625,37 @@
             </a>
         </li>
         <li class="nav-item">
-            <a href="<?= BASEURL; ?>/AuthController/logout" class="nav-link logout" onclick="return confirm('Yakin ingin keluar?')">
+            <a href="<?= BASEURL; ?>/AdminController/surat_izin" class="nav-link">
+                <i class="fas fa-file-alt"></i> Surat Izin
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="#" class="nav-link logout" id="sideLogoutBtn">
                 <i class="fas fa-sign-out-alt"></i> Logout
             </a>
         </li>
     </ul>
+</div>
+
+<!-- Custom Confirm Dialog untuk LOGOUT -->
+<div class="custom-confirm-overlay" id="customConfirmOverlay">
+    <div class="custom-confirm-dialog">
+        <div class="confirm-icon">
+            <i class="fas fa-sign-out-alt"></i>
+        </div>
+        <div class="confirm-title">Konfirmasi Logout</div>
+        <div class="confirm-message" id="confirmMessage">
+            Apakah Anda yakin ingin keluar dari sistem?
+        </div>
+        <div class="confirm-buttons">
+            <button class="btn-cancel-confirm" id="confirmCancelBtn">
+                <i class="fas fa-times"></i> Batal
+            </button>
+            <button class="btn-logout-confirm" id="confirmLogoutBtn">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </button>
+        </div>
+    </div>
 </div>
 
 <!-- Main Content -->
@@ -418,6 +671,11 @@
         <?php unset($_SESSION['error']); endif; ?>
 
         <?php if ($data['matakuliah']): ?>
+        <div class="info-box">
+            <i class="fas fa-info-circle"></i>
+            <span>SKS adalah beban studi (1 SKS = 1 jam 50 menit per minggu). Jumlah pertemuan adalah total tatap muka dalam satu semester (minimal 1, maksimal 24).</span>
+        </div>
+
         <form action="<?= BASEURL; ?>/AdminController/matakuliahUpdate/<?= $data['matakuliah']['id']; ?>" method="POST">
             <div class="row g-3">
                 <div class="col-12 col-md-6">
@@ -430,21 +688,71 @@
                 </div>
                 <div class="col-12 col-md-4">
                     <label class="form-label">SKS</label>
-                    <select name="sks" class="form-select">
-                        <option value="1" <?= ($data['matakuliah']['sks'] ?? '') == 1 ? 'selected' : ''; ?>>1 SKS</option>
-                        <option value="2" <?= ($data['matakuliah']['sks'] ?? '') == 2 ? 'selected' : ''; ?>>2 SKS</option>
-                        <option value="3" <?= ($data['matakuliah']['sks'] ?? '') == 3 ? 'selected' : ''; ?>>3 SKS</option>
-                        <option value="4" <?= ($data['matakuliah']['sks'] ?? '') == 4 ? 'selected' : ''; ?>>4 SKS</option>
-                        <option value="6" <?= ($data['matakuliah']['sks'] ?? '') == 6 ? 'selected' : ''; ?>>6 SKS</option>
-                    </select>
+                    <div class="custom-select-container" id="sksSelectContainer">
+                        <div class="custom-select-trigger" id="sksSelectTrigger">
+                            <span id="selectedSksText"><?= ($data['matakuliah']['sks'] ?? 3); ?> SKS</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="custom-select-options" id="sksSelectOptions">
+                            <div class="options-list" id="sksOptionsList">
+                                <div class="option-item <?= ($data['matakuliah']['sks'] ?? '') == 1 ? 'selected' : ''; ?>" data-value="1">
+                                    <i class="fas fa-star"></i> 1 SKS
+                                </div>
+                                <div class="option-item <?= ($data['matakuliah']['sks'] ?? '') == 2 ? 'selected' : ''; ?>" data-value="2">
+                                    <i class="fas fa-star"></i> 2 SKS
+                                </div>
+                                <div class="option-item <?= ($data['matakuliah']['sks'] ?? '') == 3 ? 'selected' : ''; ?>" data-value="3">
+                                    <i class="fas fa-star"></i> 3 SKS
+                                </div>
+                                <div class="option-item <?= ($data['matakuliah']['sks'] ?? '') == 4 ? 'selected' : ''; ?>" data-value="4">
+                                    <i class="fas fa-star"></i> 4 SKS
+                                </div>
+                                <div class="option-item <?= ($data['matakuliah']['sks'] ?? '') == 6 ? 'selected' : ''; ?>" data-value="6">
+                                    <i class="fas fa-star"></i> 6 SKS
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <input type="hidden" name="sks" id="selectedSksValue" value="<?= $data['matakuliah']['sks'] ?? 3; ?>">
                 </div>
                 <div class="col-12 col-md-4">
                     <label class="form-label">Semester</label>
-                    <select name="semester" class="form-select">
-                        <?php for ($i = 1; $i <= 8; $i++): ?>
-                        <option value="<?= $i; ?>" <?= ($data['matakuliah']['semester'] ?? '') == $i ? 'selected' : ''; ?>>Semester <?= $i; ?></option>
-                        <?php endfor; ?>
-                    </select>
+                    <div class="custom-select-container" id="semesterSelectContainer">
+                        <div class="custom-select-trigger" id="semesterSelectTrigger">
+                            <span id="selectedSemesterText">Semester <?= $data['matakuliah']['semester'] ?? 1; ?></span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="custom-select-options" id="semesterSelectOptions">
+                            <div class="options-list" id="semesterOptionsList">
+                                <?php for ($i = 1; $i <= 8; $i++): ?>
+                                <div class="option-item <?= ($data['matakuliah']['semester'] ?? '') == $i ? 'selected' : ''; ?>" data-value="<?= $i; ?>">
+                                    <i class="fas fa-layer-group"></i> Semester <?= $i; ?>
+                                </div>
+                                <?php endfor; ?>
+                            </div>
+                        </div>
+                    </div>
+                    <input type="hidden" name="semester" id="selectedSemesterValue" value="<?= $data['matakuliah']['semester'] ?? 1; ?>">
+                </div>
+                <div class="col-12 col-md-4">
+                    <label class="form-label">Jumlah Pertemuan <span class="text-danger">*</span></label>
+                    <div class="custom-select-container" id="pertemuanSelectContainer">
+                        <div class="custom-select-trigger" id="pertemuanSelectTrigger">
+                            <span id="selectedPertemuanText"><?= ($data['matakuliah']['jumlah_pertemuan'] ?? 14); ?> Pertemuan</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="custom-select-options" id="pertemuanSelectOptions">
+                            <div class="options-list" id="pertemuanOptionsList">
+                                <?php for ($i = 1; $i <= 24; $i++): ?>
+                                <div class="option-item <?= ($data['matakuliah']['jumlah_pertemuan'] ?? 14) == $i ? 'selected' : ''; ?>" data-value="<?= $i; ?>">
+                                    <i class="fas fa-calendar-alt"></i> <?= $i; ?> Pertemuan
+                                </div>
+                                <?php endfor; ?>
+                            </div>
+                        </div>
+                    </div>
+                    <input type="hidden" name="jumlah_pertemuan" id="selectedPertemuanValue" value="<?= $data['matakuliah']['jumlah_pertemuan'] ?? 14; ?>">
+                    <div class="form-text text-muted small">Minimal 1, maksimal 24 pertemuan per semester</div>
                 </div>
             </div>
 
@@ -471,6 +779,51 @@
 </div>
 
 <script>
+    // ========== CUSTOM CONFIRM DIALOG FOR LOGOUT ==========
+    const confirmOverlay = document.getElementById('customConfirmOverlay');
+    const confirmMessage = document.getElementById('confirmMessage');
+    const confirmCancelBtn = document.getElementById('confirmCancelBtn');
+    const confirmLogoutBtn = document.getElementById('confirmLogoutBtn');
+    const logoutBtn = document.getElementById('logoutBtn');
+    const sideLogoutBtn = document.getElementById('sideLogoutBtn');
+    let pendingLogoutUrl = null;
+
+    function showConfirmDialog(message, logoutUrl) {
+        confirmMessage.innerHTML = message;
+        pendingLogoutUrl = logoutUrl;
+        confirmOverlay.classList.add('show');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeConfirmDialog() {
+        confirmOverlay.classList.remove('show');
+        document.body.style.overflow = '';
+        pendingLogoutUrl = null;
+    }
+
+    function executeLogout() {
+        if (pendingLogoutUrl) {
+            window.location.href = pendingLogoutUrl;
+        }
+    }
+
+    confirmCancelBtn.addEventListener('click', closeConfirmDialog);
+    confirmLogoutBtn.addEventListener('click', executeLogout);
+    confirmOverlay.addEventListener('click', (e) => {
+        if (e.target === confirmOverlay) closeConfirmDialog();
+    });
+
+    logoutBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        showConfirmDialog('Apakah Anda yakin ingin keluar dari sistem?', '<?= BASEURL; ?>/AuthController/logout');
+    });
+
+    sideLogoutBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        showConfirmDialog('Apakah Anda yakin ingin keluar dari sistem?', '<?= BASEURL; ?>/AuthController/logout');
+    });
+
+    // ========== TOGGLE SIDEBAR ==========
     const toggleBtn = document.getElementById('toggleSidebar');
     const brandToggle = document.getElementById('brandToggle');
     const sideMenu = document.getElementById('sideMenuOverlay');
@@ -500,12 +853,68 @@
     brandToggle.addEventListener('click', toggleSidebar);
     backdrop.addEventListener('click', closeSidebar);
 
-    // Tutup sidebar saat resize ke desktop
     window.addEventListener('resize', function() {
         if (window.innerWidth > 768 && sideMenu.classList.contains('open')) {
             closeSidebar();
         }
     });
+
+    // ========== CUSTOM SELECT FUNCTIONS ==========
+    function initCustomSelect(containerId, triggerId, optionsId, selectedTextId, selectedValueId, defaultText) {
+        const container = document.getElementById(containerId);
+        const trigger = document.getElementById(triggerId);
+        const optionsContainer = document.getElementById(optionsId);
+        const selectedText = document.getElementById(selectedTextId);
+        const selectedValue = document.getElementById(selectedValueId);
+
+        function toggleDropdown() {
+            optionsContainer.classList.toggle('show');
+            trigger.classList.toggle('open');
+        }
+
+        function selectOption(value, text) {
+            selectedText.textContent = text;
+            selectedValue.value = value;
+            
+            container.querySelectorAll('.option-item').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            
+            const selectedOpt = Array.from(container.querySelectorAll('.option-item')).find(
+                opt => opt.getAttribute('data-value') == value
+            );
+            if (selectedOpt) selectedOpt.classList.add('selected');
+            
+            optionsContainer.classList.remove('show');
+            trigger.classList.remove('open');
+        }
+
+        trigger.addEventListener('click', toggleDropdown);
+
+        container.querySelectorAll('.option-item').forEach(option => {
+            option.addEventListener('click', () => {
+                const value = option.getAttribute('data-value');
+                const text = option.textContent.trim();
+                selectOption(value, text);
+            });
+        });
+
+        document.addEventListener('click', function(event) {
+            if (!container.contains(event.target)) {
+                optionsContainer.classList.remove('show');
+                trigger.classList.remove('open');
+            }
+        });
+    }
+
+    // Init custom select untuk SKS
+    initCustomSelect('sksSelectContainer', 'sksSelectTrigger', 'sksSelectOptions', 'selectedSksText', 'selectedSksValue', '3 SKS');
+    
+    // Init custom select untuk Semester
+    initCustomSelect('semesterSelectContainer', 'semesterSelectTrigger', 'semesterSelectOptions', 'selectedSemesterText', 'selectedSemesterValue', 'Semester 1');
+    
+    // Init custom select untuk Jumlah Pertemuan
+    initCustomSelect('pertemuanSelectContainer', 'pertemuanSelectTrigger', 'pertemuanSelectOptions', 'selectedPertemuanText', 'selectedPertemuanValue', '14 Pertemuan');
 </script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>

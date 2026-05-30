@@ -91,6 +91,7 @@
             display: flex;
             align-items: center;
             gap: 6px;
+            cursor: pointer;
         }
 
         .logout-link:hover {
@@ -152,6 +153,7 @@
             font-weight: 500;
             border-radius: 10px;
             transition: all 0.2s;
+            cursor: pointer;
         }
 
         .side-menu-overlay .nav-link i {
@@ -269,6 +271,7 @@
             display: inline-flex;
             align-items: center;
             gap: 5px;
+            cursor: pointer;
         }
 
         .btn-delete:hover {
@@ -351,6 +354,12 @@
             display: inline-block;
         }
 
+        /* Kolom aksi agar tidak wrap */
+        .aksi-cell {
+            white-space: nowrap;
+            min-width: 80px;
+        }
+
         /* Alert */
         .alert-success {
             background: #1a2c1a;
@@ -370,7 +379,139 @@
             margin-bottom: 20px;
         }
 
-        /* ========== RESPONSIVE ========== */
+        /* ========== CUSTOM CONFIRM DIALOG ========== */
+        .custom-confirm-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(4px);
+            z-index: 1100;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .custom-confirm-overlay.show {
+            display: flex;
+        }
+
+        .custom-confirm-dialog {
+            background: #1e1e1e;
+            border-radius: 16px;
+            width: 90%;
+            max-width: 400px;
+            padding: 24px;
+            border: 1px solid #2a2a2a;
+            animation: modalFadeIn 0.2s ease;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+        }
+
+        @keyframes modalFadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .confirm-icon {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .confirm-icon i {
+            font-size: 56px;
+        }
+
+        .confirm-icon.delete-icon i {
+            color: #ff9800;
+        }
+
+        .confirm-icon.logout-icon i {
+            color: #dc3545;
+        }
+
+        .confirm-title {
+            text-align: center;
+            color: #e8eaed;
+            font-size: 20px;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+
+        .confirm-message {
+            text-align: center;
+            color: #9aa0a6;
+            font-size: 14px;
+            margin-bottom: 24px;
+            line-height: 1.5;
+        }
+
+        .confirm-message strong {
+            color: #e8eaed;
+        }
+
+        .confirm-buttons {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+        }
+
+        .confirm-buttons .btn-cancel-confirm {
+            background: #3c4043;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 8px;
+            color: white;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .confirm-buttons .btn-cancel-confirm:hover {
+            background: #4a4e54;
+        }
+
+        .confirm-buttons .btn-delete-confirm {
+            background: #dc3545;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 8px;
+            color: white;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .confirm-buttons .btn-delete-confirm:hover {
+            background: #c82333;
+        }
+
+        .confirm-buttons .btn-logout-confirm {
+            background: #dc3545;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 8px;
+            color: white;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .confirm-buttons .btn-logout-confirm:hover {
+            background: #c82333;
+        }
+
+        /* ========== MOBILE MODE - BUTTON ONLY ICON ========== */
         @media (max-width: 768px) {
             .navbar-custom {
                 padding: 10px 16px;
@@ -406,6 +547,28 @@
             .navbar-brand span {
                 display: none;
             }
+
+            /* Tombol edit dan hapus hanya ikon di mobile */
+            .btn-edit span, 
+            .btn-delete span {
+                display: none;
+            }
+            
+            .btn-edit, 
+            .btn-delete {
+                padding: 6px 10px !important;
+                font-size: 14px !important;
+            }
+            
+            .btn-edit i, 
+            .btn-delete i {
+                margin: 0 !important;
+            }
+            
+            .aksi-cell {
+                white-space: nowrap;
+                min-width: 70px;
+            }
         }
 
         @media (min-width: 769px) and (max-width: 992px) {
@@ -440,7 +603,7 @@
             <i class="fas fa-user-circle"></i>
             <span><?= $_SESSION['nama'] ?? $_SESSION['username'] ?? 'Admin'; ?></span>
         </span>
-        <a href="<?= BASEURL; ?>/AuthController/logout" class="logout-link" onclick="return confirm('Yakin ingin keluar?')">
+        <a href="#" class="logout-link" id="logoutBtn">
             <i class="fas fa-sign-out-alt"></i>
             <span>Logout</span>
         </a>
@@ -472,11 +635,58 @@
             </a>
         </li>
         <li class="nav-item">
-            <a href="<?= BASEURL; ?>/AuthController/logout" class="nav-link logout" onclick="return confirm('Yakin ingin keluar?')">
+            <a href="<?= BASEURL; ?>/AdminController/surat_izin" class="nav-link">
+                <i class="fas fa-file-alt"></i> Surat Izin
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="#" class="nav-link logout" id="sideLogoutBtn">
                 <i class="fas fa-sign-out-alt"></i> Logout
             </a>
         </li>
     </ul>
+</div>
+
+<!-- Custom Confirm Dialog untuk DELETE -->
+<div id="customConfirmDeleteOverlay" class="custom-confirm-overlay">
+    <div class="custom-confirm-dialog">
+        <div class="confirm-icon delete-icon">
+            <i class="fas fa-exclamation-triangle"></i>
+        </div>
+        <div class="confirm-title">Konfirmasi Hapus</div>
+        <div class="confirm-message" id="confirmDeleteMessage">
+            Apakah Anda yakin ingin menghapus data ini?
+        </div>
+        <div class="confirm-buttons">
+            <button class="btn-cancel-confirm" id="confirmDeleteCancelBtn">
+                <i class="fas fa-times"></i> Batal
+            </button>
+            <button class="btn-delete-confirm" id="confirmDeleteBtn">
+                <i class="fas fa-trash"></i> Hapus
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Custom Confirm Dialog untuk LOGOUT -->
+<div id="customConfirmLogoutOverlay" class="custom-confirm-overlay">
+    <div class="custom-confirm-dialog">
+        <div class="confirm-icon logout-icon">
+            <i class="fas fa-sign-out-alt"></i>
+        </div>
+        <div class="confirm-title">Konfirmasi Logout</div>
+        <div class="confirm-message" id="confirmLogoutMessage">
+            Apakah Anda yakin ingin keluar dari sistem?
+        </div>
+        <div class="confirm-buttons">
+            <button class="btn-cancel-confirm" id="confirmLogoutCancelBtn">
+                <i class="fas fa-times"></i> Batal
+            </button>
+            <button class="btn-logout-confirm" id="confirmLogoutBtn">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </button>
+        </div>
+    </div>
 </div>
 
 <!-- Main Content -->
@@ -522,13 +732,13 @@
                             <td><?= htmlspecialchars($mk['nama'] ?? '-'); ?></td>
                             <td><span class="badge-sks"><?= $mk['sks'] ?? '-'; ?> SKS</span></td>
                             <td>Semester <?= $mk['semester'] ?? '-'; ?></td>
-                            <td>
+                            <td class="aksi-cell">
                                 <a href="<?= BASEURL; ?>/AdminController/matakuliahEdit/<?= $mk['id']; ?>" class="btn-edit">
-                                    <i class="fas fa-edit"></i> Edit
+                                    <i class="fas fa-edit"></i> <span>Edit</span>
                                 </a>
-                                <a href="<?= BASEURL; ?>/AdminController/matakuliahDelete/<?= $mk['id']; ?>" class="btn-delete" onclick="return confirm('Yakin ingin menghapus?')">
-                                    <i class="fas fa-trash"></i> Hapus
-                                </a>
+                                <button class="btn-delete" onclick="showDeleteConfirmDialog('Apakah Anda yakin ingin menghapus mata kuliah <strong><?= htmlspecialchars($mk['nama']); ?></strong>?', '<?= BASEURL; ?>/AdminController/matakuliahDelete/<?= $mk['id']; ?>');">
+                                    <i class="fas fa-trash"></i> <span>Hapus</span>
+                                </button>
                             </td>
                         </tr>
                         <?php endforeach; ?>
@@ -544,6 +754,92 @@
 </div>
 
 <script>
+    // ========== CUSTOM CONFIRM DIALOG FOR DELETE ==========
+    const confirmDeleteOverlay = document.getElementById('customConfirmDeleteOverlay');
+    const confirmDeleteMessage = document.getElementById('confirmDeleteMessage');
+    const confirmDeleteCancelBtn = document.getElementById('confirmDeleteCancelBtn');
+    const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+
+    let pendingDeleteUrl = null;
+
+    function showDeleteConfirmDialog(message, deleteUrl) {
+        confirmDeleteMessage.innerHTML = message;
+        pendingDeleteUrl = deleteUrl;
+        confirmDeleteOverlay.classList.add('show');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeDeleteConfirmDialog() {
+        confirmDeleteOverlay.classList.remove('show');
+        document.body.style.overflow = '';
+        pendingDeleteUrl = null;
+    }
+
+    confirmDeleteCancelBtn.addEventListener('click', closeDeleteConfirmDialog);
+
+    confirmDeleteBtn.addEventListener('click', function() {
+        if (pendingDeleteUrl) {
+            window.location.href = pendingDeleteUrl;
+        }
+        closeDeleteConfirmDialog();
+    });
+
+    // ========== CUSTOM CONFIRM DIALOG FOR LOGOUT ==========
+    const confirmLogoutOverlay = document.getElementById('customConfirmLogoutOverlay');
+    const confirmLogoutMessage = document.getElementById('confirmLogoutMessage');
+    const confirmLogoutCancelBtn = document.getElementById('confirmLogoutCancelBtn');
+    const confirmLogoutBtn = document.getElementById('confirmLogoutBtn');
+    const logoutBtn = document.getElementById('logoutBtn');
+    const sideLogoutBtn = document.getElementById('sideLogoutBtn');
+
+    let pendingLogoutUrl = null;
+
+    function showLogoutConfirmDialog(message, logoutUrl) {
+        confirmLogoutMessage.innerHTML = message;
+        pendingLogoutUrl = logoutUrl;
+        confirmLogoutOverlay.classList.add('show');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeLogoutConfirmDialog() {
+        confirmLogoutOverlay.classList.remove('show');
+        document.body.style.overflow = '';
+        pendingLogoutUrl = null;
+    }
+
+    function executeLogout() {
+        if (pendingLogoutUrl) {
+            window.location.href = pendingLogoutUrl;
+        }
+    }
+
+    confirmLogoutCancelBtn.addEventListener('click', closeLogoutConfirmDialog);
+    confirmLogoutBtn.addEventListener('click', executeLogout);
+
+    logoutBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        showLogoutConfirmDialog('Apakah Anda yakin ingin keluar dari sistem?', '<?= BASEURL; ?>/AuthController/logout');
+    });
+
+    sideLogoutBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        showLogoutConfirmDialog('Apakah Anda yakin ingin keluar dari sistem?', '<?= BASEURL; ?>/AuthController/logout');
+    });
+
+    // Tutup dialog jika klik di luar area
+    confirmDeleteOverlay.addEventListener('click', function(event) {
+        if (event.target === confirmDeleteOverlay) {
+            closeDeleteConfirmDialog();
+        }
+    });
+
+    confirmLogoutOverlay.addEventListener('click', function(event) {
+        if (event.target === confirmLogoutOverlay) {
+            closeLogoutConfirmDialog();
+        }
+    });
+
+    // ========== TOGGLE SIDEBAR ==========
     const toggleBtn = document.getElementById('toggleSidebar');
     const brandToggle = document.getElementById('brandToggle');
     const sideMenu = document.getElementById('sideMenuOverlay');

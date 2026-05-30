@@ -14,6 +14,8 @@ require_once '../app/models/User.php';
 require_once '../app/models/Mahasiswa.php';
 require_once '../app/models/Dosen.php';
 require_once '../app/models/MataKuliah.php';
+require_once '../app/models/Absensi.php';
+require_once '../app/models/SuratIzin.php';
 
 $url = isset($_GET['url']) ? $_GET['url'] : '';
 
@@ -223,6 +225,52 @@ if ($url === 'MahasiswaController/logout') {
     require_once '../app/controllers/MahasiswaController.php';
     $controller = new MahasiswaController();
     $controller->logout();
+    exit;
+}
+
+if ($url === 'MahasiswaController/uploadSuratStore') {
+    require_once '../app/controllers/MahasiswaController.php';
+    $controller = new MahasiswaController();
+    $controller->uploadSuratStore();
+    exit;
+}
+
+// ==========================================
+// ROUTING SURAT IZIN (ADMIN)
+// ==========================================
+
+if ($url === 'AdminController/surat_izin') {
+    require_once '../app/controllers/AdminController.php';
+    $controller = new AdminController();
+    $controller->surat_izin();
+    exit;
+}
+
+if (preg_match('/AdminController\/surat_izin_detail\/(\d+)/', $url, $matches)) {
+    require_once '../app/controllers/AdminController.php';
+    $controller = new AdminController();
+    $controller->surat_izin_detail($matches[1]);
+    exit;
+}
+
+if (preg_match('/AdminController\/surat_izin_update_status\/(\d+)/', $url, $matches)) {
+    require_once '../app/controllers/AdminController.php';
+    $controller = new AdminController();
+    $controller->surat_izin_update_status($matches[1]);
+    exit;
+}
+
+if (preg_match('/AdminController\/surat_izin_delete\/(\d+)/', $url, $matches)) {
+    require_once '../app/controllers/AdminController.php';
+    $controller = new AdminController();
+    $controller->surat_izin_delete($matches[1]);
+    exit;
+}
+
+if (preg_match('/AdminController\/surat_izin_download\/(\d+)/', $url, $matches)) {
+    require_once '../app/controllers/AdminController.php';
+    $controller = new AdminController();
+    $controller->surat_izin_download($matches[1]);
     exit;
 }
 

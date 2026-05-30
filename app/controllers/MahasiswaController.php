@@ -2,7 +2,6 @@
 
 class MahasiswaController extends Controller {
     
-    // Constructor: cek login dan role mahasiswa
     public function __construct() {
         if (!isset($_SESSION['logged_in']) || $_SESSION['role'] !== 'mahasiswa') {
             header('Location: ' . BASEURL . '/AuthController');
@@ -10,30 +9,153 @@ class MahasiswaController extends Controller {
         }
     }
     
-    // Halaman dashboard mahasiswa
     public function index() {
+        $mahasiswaModel = $this->model('Mahasiswa');
+        $absensiModel = $this->model('Absensi');
+        $suratModel = $this->model('SuratIzin');
+        
+        $userId = $_SESSION['user_id'];
+        $dataMahasiswa = $mahasiswaModel->getMahasiswaByUserId($userId);
+        $mahasiswaId = $dataMahasiswa['id'] ?? 0;
+        
+        // Total kehadiran (status 'Hadir')
+        $totalHadir = $absensiModel->countHadir($mahasiswaId);
+        
+        // Ambil rekap per mata kuliah untuk menghitung persentase yang akurat
+        $rekapMatkul = $absensiModel->getRekapPerMatkul($mahasiswaId);
+        
+        $totalPertemuanAdmin = 0;
+        $totalHadirSemuaMatkul = 0;
+        
+        foreach ($rekapMatkul as $matkul) {
+            // total_pertemuan dari database (set admin)
+            $totalPertemuanAdmin += (int)$matkul['total_pertemuan'];
+            $totalHadirSemuaMatkul += (int)$matkul['hadir'];
+        }
+        
+        // Hitung persentase berdasarkan TOTAL PERTEMUAN DARI ADMIN
+        if ($totalPertemuanAdmin > 0) {
+            $persentase = round(($totalHadirSemuaMatkul / $totalPertemuanAdmin) * 100, 2);
+        } else {
+            $persentase = 0;
+        }
+        
+        $totalSurat = $suratModel->countByMahasiswaId($mahasiswaId);
+        
         $data = [
             'nama' => $_SESSION['nama'] ?? $_SESSION['username'],
             'nim' => $_SESSION['nim'] ?? '-',
-            'email' => $_SESSION['email'] ?? '-'
+            'prodi' => $dataMahasiswa['kelas'] ?? 'Belum diisi',
+            'total_hadir' => $totalHadir,
+            'persentase' => $persentase,
+            'total_surat' => $totalSurat
         ];
-    
+        
         $this->view('mahasiswa/dashboard', $data);
     }
     
-    // Lihat absensi sendiri
     public function absensi() {
-        // Nanti diisi oleh Person 3
-        $this->view('mahasiswa/absensi/lihat');
+        $mahasiswaModel = $this->model('Mahasiswa');
+        $absensiModel = $this->model('Absensi');
+        
+        $userId = $_SESSION['user_id'];
+        $dataMahasiswa = $mahasiswaModel->getMahasiswaByUserId($userId);
+        $mahasiswaId = $dataMahasiswa['id'] ?? 0;
+        
+        $data = [
+            'absensi' => $absensiModel->getByMahasiswaId($mahasiswaId),
+            'rekap_matkul' => $absensiModel->getRekapPerMatkul($mahasiswaId)
+        ];
+        
+        $this->view('mahasiswa/absensi/lihat', $data);
     }
     
-    // Upload surat izin
     public function uploadSurat() {
-        // Nanti diisi oleh Person 3
-        $this->view('mahasiswa/surat/upload');
+        $mahasiswaModel = $this->model('Mahasiswa');
+        $absensiModel = $this->model('Absensi');
+        
+        $userId = $_SESSION['user_id'];
+        $dataMahasiswa = $mahasiswaModel->getMahasiswaByUserId($userId);
+        $mahasiswaId = $dataMahasiswa['id'] ?? 0;
+        
+        $data = [
+            'matkul_list' => $absensiModel->getMatkulByMahasiswaId($mahasiswaId)
+        ];
+        
+        $this->view('mahasiswa/surat/upload', $data);
     }
     
-    // Logout
+    public function uploadSuratStore() {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
+            $mahasiswaModel = $this->model('Mahasiswa');
+            $absensiModel = $this->model('Absensi');
+            $suratModel = $this->model('SuratIzin');
+            
+            $userId = $_SESSION['user_id'];
+            $dataMahasiswa = $mahasiswaModel->getMahasiswaByUserId($userId);
+            $mahasiswaId = $dataMahasiswa['id'] ?? 0;
+            
+            $matkul_id = $_POST['matkul_id'] ?? 0;
+            $jenis_surat = $_POST['jenis_surat'] ?? '';
+            $keterangan = $_POST['keterangan'] ?? '';
+            
+            if (empty($matkul_id) || empty($jenis_surat)) {
+                $_SESSION['error'] = 'Semua field wajib diisi';
+                header('Location: ' . BASEURL . '/MahasiswaController/uploadSurat');
+                exit;
+            }
+            
+            // PAKAI MODEL, BUKAN QUERY LANGSUNG
+            $absensi = $absensiModel->getLatestAbsensiByMahasiswaAndMatkul($mahasiswaId, $matkul_id);
+            
+            if (!$absensi) {
+                $_SESSION['error'] = 'Belum ada data absensi untuk mata kuliah ini';
+                header('Location: ' . BASEURL . '/MahasiswaController/uploadSurat');
+                exit;
+            }
+            
+            // Proses upload file
+            $targetDir = $_SERVER['DOCUMENT_ROOT'] . '/aplikasi-absensi-mahasiswa/public/uploads/surat/';
+
+            if (!file_exists($targetDir)) {
+                mkdir($targetDir, 0777, true);
+            }
+            
+            $fileName = time() . '_' . $_FILES['file_surat']['name'];
+            $targetFile = $targetDir . $fileName;
+            $fileType = strtolower(pathinfo($targetFile, PATHINFO_EXTENSION));
+            $allowedTypes = ['pdf', 'jpg', 'jpeg', 'png'];
+            
+            if (!in_array($fileType, $allowedTypes)) {
+                $_SESSION['error'] = 'Hanya file PDF, JPG, JPEG, PNG yang diperbolehkan';
+                header('Location: ' . BASEURL . '/MahasiswaController/uploadSurat');
+                exit;
+            }
+            
+            if ($_FILES['file_surat']['size'] > 2 * 1024 * 1024) {
+                $_SESSION['error'] = 'File maksimal 2MB';
+                header('Location: ' . BASEURL . '/MahasiswaController/uploadSurat');
+                exit;
+            }
+            
+            if (move_uploaded_file($_FILES['file_surat']['tmp_name'], $targetFile)) {
+                $filePath = 'uploads/surat/' . $fileName;
+                $result = $suratModel->createSuratIzin($absensi['id'], $filePath, $jenis_surat, $keterangan);
+                
+                if ($result['success']) {
+                    $_SESSION['success'] = $result['message'];
+                } else {
+                    $_SESSION['error'] = $result['message'];
+                }
+            } else {
+                $_SESSION['error'] = 'Gagal mengupload file';
+            }
+            
+            header('Location: ' . BASEURL . '/MahasiswaController/uploadSurat');
+            exit;
+        }
+    }
+    
     public function logout() {
         session_destroy();
         header('Location: ' . BASEURL . '/AuthController');

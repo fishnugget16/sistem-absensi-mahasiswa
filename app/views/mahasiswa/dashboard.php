@@ -20,7 +20,6 @@
             overflow-x: hidden;
         }
 
-        /* ========== NAVBAR ========== */
         .navbar-custom {
             background: #1e1e1e;
             padding: 12px 24px;
@@ -91,13 +90,13 @@
             display: flex;
             align-items: center;
             gap: 6px;
+            cursor: pointer;
         }
 
         .logout-link:hover {
             color: #ef5350 !important;
         }
 
-        /* ========== OVERLAY SIDEBAR ========== */
         .side-menu-overlay {
             position: fixed;
             top: 0;
@@ -172,6 +171,7 @@
         .side-menu-overlay .nav-link.logout {
             color: #ef5350;
             margin-top: 30px;
+            cursor: pointer;
         }
 
         .side-menu-overlay .nav-link.logout:hover {
@@ -179,13 +179,11 @@
             color: #ef5350;
         }
 
-        /* ========== MAIN CONTENT ========== */
         .main-content {
             width: 100%;
             min-height: calc(100vh - 60px);
         }
 
-        /* Header Panel */
         .header-panel {
             background: linear-gradient(135deg, #1a2a1a 0%, #1e1e1e 100%);
             padding: 28px 32px;
@@ -215,7 +213,6 @@
             margin: 0;
         }
 
-        /* Stat Cards - CSS Grid */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -271,7 +268,6 @@
             margin-top: 4px;
         }
 
-        /* Profile Card - Responsif Lebar */
         .profile-card {
             background: #1e1e1e;
             border-radius: 12px;
@@ -320,7 +316,6 @@
             word-break: break-word;
         }
 
-        /* Main Container */
         .main-container {
             padding: 0 32px 40px 32px;
             max-width: 1400px;
@@ -328,7 +323,110 @@
             width: 100%;
         }
 
-        /* ========== RESPONSIVE ========== */
+        .custom-confirm-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(4px);
+            z-index: 1100;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .custom-confirm-overlay.show {
+            display: flex;
+        }
+
+        .custom-confirm-dialog {
+            background: #1e1e1e;
+            border-radius: 16px;
+            width: 90%;
+            max-width: 400px;
+            padding: 24px;
+            border: 1px solid #2a2a2a;
+            animation: modalFadeIn 0.2s ease;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+        }
+
+        @keyframes modalFadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .confirm-icon {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .confirm-icon i {
+            font-size: 56px;
+            color: #dc3545;
+        }
+
+        .confirm-title {
+            text-align: center;
+            color: #e8eaed;
+            font-size: 20px;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+
+        .confirm-message {
+            text-align: center;
+            color: #9aa0a6;
+            font-size: 14px;
+            margin-bottom: 24px;
+            line-height: 1.5;
+        }
+
+        .confirm-buttons {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+        }
+
+        .confirm-buttons .btn-cancel-confirm {
+            background: #3c4043;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 8px;
+            color: white;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .confirm-buttons .btn-cancel-confirm:hover {
+            background: #4a4e54;
+        }
+
+        .confirm-buttons .btn-logout-confirm {
+            background: #dc3545;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 8px;
+            color: white;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .confirm-buttons .btn-logout-confirm:hover {
+            background: #c82333;
+        }
+
         @media (max-width: 992px) {
             .stats-grid {
                 gap: 16px;
@@ -431,7 +529,7 @@
             <i class="fas fa-user-circle"></i>
             <span><?= htmlspecialchars($data['nama'] ?? 'Mahasiswa'); ?></span>
         </span>
-        <a href="<?= BASEURL; ?>/AuthController/logout" class="logout-link" onclick="return confirm('Yakin ingin keluar?')">
+        <a href="#" class="logout-link" id="logoutBtn">
             <i class="fas fa-sign-out-alt"></i>
             <span>Logout</span>
         </a>
@@ -458,11 +556,32 @@
             </a>
         </li>
         <li class="nav-item">
-            <a href="<?= BASEURL; ?>/AuthController/logout" class="nav-link logout" onclick="return confirm('Yakin ingin keluar?')">
+            <a href="#" class="nav-link logout" id="sideLogoutBtn">
                 <i class="fas fa-sign-out-alt"></i> Logout
             </a>
         </li>
     </ul>
+</div>
+
+<!-- Custom Confirm Dialog untuk Logout -->
+<div id="customConfirmOverlay" class="custom-confirm-overlay">
+    <div class="custom-confirm-dialog">
+        <div class="confirm-icon">
+            <i class="fas fa-sign-out-alt"></i>
+        </div>
+        <div class="confirm-title">Konfirmasi Logout</div>
+        <div class="confirm-message" id="confirmMessage">
+            Apakah Anda yakin ingin keluar dari sistem?
+        </div>
+        <div class="confirm-buttons">
+            <button class="btn-cancel-confirm" id="confirmCancelBtn">
+                <i class="fas fa-times"></i> Batal
+            </button>
+            <button class="btn-logout-confirm" id="confirmLogoutBtn">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </button>
+        </div>
+    </div>
 </div>
 
 <!-- Main Content -->
@@ -474,26 +593,26 @@
             <p>Selamat datang di portal absensi mahasiswa</p>
         </div>
 
-        <!-- Stat Cards - Grid System -->
+        <!-- Stat Cards - Dinamis dari Database -->
         <div class="stats-grid">
             <div class="stat-card">
                 <div class="icon"><i class="fas fa-calendar-check"></i></div>
                 <div class="info">
-                    <div class="value">0</div>
+                    <div class="value"><?= $data['total_hadir'] ?? 0; ?></div>
                     <div class="label">Total Kehadiran</div>
                 </div>
             </div>
             <div class="stat-card">
                 <div class="icon"><i class="fas fa-chart-line"></i></div>
                 <div class="info">
-                    <div class="value">0%</div>
+                    <div class="value"><?= $data['persentase'] ?? 0; ?>%</div>
                     <div class="label">Persentase Kehadiran</div>
                 </div>
             </div>
             <div class="stat-card">
                 <div class="icon"><i class="fas fa-file-alt"></i></div>
                 <div class="info">
-                    <div class="value">0</div>
+                    <div class="value"><?= $data['total_surat'] ?? 0; ?></div>
                     <div class="label">Surat Izin Terkirim</div>
                 </div>
             </div>
@@ -514,8 +633,8 @@
                     <div class="value"><?= htmlspecialchars($data['nim'] ?? '-'); ?></div>
                 </div>
                 <div class="profile-info">
-                    <label>Email</label>
-                    <div class="value"><?= htmlspecialchars($data['email'] ?? '-'); ?></div>
+                    <label>Program Studi</label>
+                    <div class="value"><?= htmlspecialchars($data['prodi'] ?? '-'); ?></div>
                 </div>
             </div>
         </div>
@@ -523,6 +642,55 @@
 </div>
 
 <script>
+    // ========== CUSTOM CONFIRM DIALOG FOR LOGOUT ==========
+    const confirmOverlay = document.getElementById('customConfirmOverlay');
+    const confirmMessage = document.getElementById('confirmMessage');
+    const confirmCancelBtn = document.getElementById('confirmCancelBtn');
+    const confirmLogoutBtn = document.getElementById('confirmLogoutBtn');
+    const logoutBtn = document.getElementById('logoutBtn');
+    const sideLogoutBtn = document.getElementById('sideLogoutBtn');
+
+    let pendingLogoutUrl = null;
+
+    function showConfirmDialog(message, logoutUrl) {
+        confirmMessage.innerHTML = message;
+        pendingLogoutUrl = logoutUrl;
+        confirmOverlay.classList.add('show');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeConfirmDialog() {
+        confirmOverlay.classList.remove('show');
+        document.body.style.overflow = '';
+        pendingLogoutUrl = null;
+    }
+
+    function executeLogout() {
+        if (pendingLogoutUrl) {
+            window.location.href = pendingLogoutUrl;
+        }
+    }
+
+    confirmCancelBtn.addEventListener('click', closeConfirmDialog);
+    confirmLogoutBtn.addEventListener('click', executeLogout);
+
+    confirmOverlay.addEventListener('click', function(event) {
+        if (event.target === confirmOverlay) {
+            closeConfirmDialog();
+        }
+    });
+
+    logoutBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        showConfirmDialog('Apakah Anda yakin ingin keluar dari sistem?', '<?= BASEURL; ?>/AuthController/logout');
+    });
+
+    sideLogoutBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        showConfirmDialog('Apakah Anda yakin ingin keluar dari sistem?', '<?= BASEURL; ?>/AuthController/logout');
+    });
+
+    // ========== TOGGLE SIDEBAR ==========
     const toggleBtn = document.getElementById('toggleSidebar');
     const brandToggle = document.getElementById('brandToggle');
     const sideMenu = document.getElementById('sideMenuOverlay');

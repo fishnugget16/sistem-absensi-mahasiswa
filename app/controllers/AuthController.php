@@ -147,13 +147,15 @@ class AuthController extends Controller {
         $mahasiswaModel = $this->model('Mahasiswa');
         $dosenModel = $this->model('Dosen');
         $matkulModel = $this->model('MataKuliah');
+        $absensiModel = $this->model('Absensi');
     
         $data = [
             'nama' => $_SESSION['nama'] ?? $_SESSION['username'],
             'email' => $_SESSION['email'],
             'total_mahasiswa' => $mahasiswaModel->countMahasiswa(),
             'total_dosen' => $dosenModel->countDosen(),
-            'total_matkul' => $matkulModel->countMataKuliah()
+            'total_matkul' => $matkulModel->countMataKuliah(),
+            'total_absensi_hari_ini' => $absensiModel->countAbsensiHariIni()
         ];
     
         $this->view('auth/dashboard', $data);

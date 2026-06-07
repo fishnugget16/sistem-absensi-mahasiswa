@@ -8,521 +8,80 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Roboto', sans-serif;
-            background-color: #121212;
-            overflow-x: hidden;
-        }
-
-        .navbar-custom {
-            background: #1e1e1e;
-            padding: 12px 24px;
-            border-bottom: 1px solid #2a2a2a;
-            position: sticky;
-            top: 0;
-            z-index: 1001;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-
-        .navbar-left {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
-
-        .navbar-brand {
-            font-size: 18px;
-            font-weight: 500;
-            color: #e8eaed;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .navbar-brand i {
-            color: #4caf50;
-            font-size: 20px;
-        }
-
-        .toggle-btn {
-            background: transparent;
-            border: none;
-            color: #e8eaed;
-            font-size: 20px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-        }
-
-        .navbar-right {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
-
-        .user-info {
-            color: #9aa0a6;
-            font-size: 14px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .user-info i {
-            color: #4caf50;
-            font-size: 16px;
-        }
-
-        .logout-link {
-            color: #dc3545 !important;
-            font-size: 14px;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            cursor: pointer;
-        }
-
-        .side-menu-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 280px;
-            height: 100%;
-            background: #1e1e1e;
-            border-right: 1px solid #2a2a2a;
-            transform: translateX(-100%);
-            transition: transform 0.3s ease;
-            z-index: 1050;
-            overflow-y: auto;
-        }
-
-        .side-menu-overlay.open {
-            transform: translateX(0);
-        }
-
-        .sidebar-backdrop {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            z-index: 1040;
-            display: none;
-        }
-
-        .sidebar-backdrop.show {
-            display: block;
-        }
-
-        .side-menu-overlay .nav-menu {
-            list-style: none;
-            padding: 20px 16px;
-            margin-top: 60px;
-        }
-
-        .side-menu-overlay .nav-item {
-            margin-bottom: 8px;
-        }
-
-        .side-menu-overlay .nav-link {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            padding: 12px 16px;
-            color: #9aa0a6;
-            text-decoration: none;
-            font-size: 14px;
-            font-weight: 500;
-            border-radius: 10px;
-            transition: all 0.2s;
-            cursor: pointer;
-        }
-
-        .side-menu-overlay .nav-link i {
-            width: 22px;
-            font-size: 16px;
-        }
-
-        .side-menu-overlay .nav-link:hover {
-            background: rgba(255, 255, 255, 0.05);
-            color: #e8eaed;
-        }
-
-        .side-menu-overlay .nav-link.active {
-            background: rgba(76, 175, 80, 0.15);
-            color: #4caf50;
-        }
-
-        .side-menu-overlay .nav-link.logout {
-            color: #ef5350;
-            margin-top: 30px;
-        }
-
-        .main-content {
-            width: 100%;
-            min-height: calc(100vh - 60px);
-        }
-
-        .content-card {
-            background: #1e1e1e;
-            border-radius: 12px;
-            padding: 24px;
-            margin: 24px;
-            border: 1px solid #2a2a2a;
-        }
-
-        .page-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 24px;
-            flex-wrap: wrap;
-            gap: 16px;
-        }
-
-        .page-title {
-            color: #e8eaed;
-            font-size: 20px;
-            font-weight: 500;
-            margin: 0;
-        }
-
-        .page-title i {
-            color: #4caf50;
-            margin-right: 10px;
-        }
-
-        hr {
-            border-color: #2a2a2a;
-            margin: 16px 0 24px 0;
-        }
-
-        /* Filter Buttons */
-        .filter-section {
-            margin-bottom: 24px;
-        }
-
-        .filter-title {
-            color: #e8eaed;
-            font-size: 13px;
-            font-weight: 500;
-            margin-bottom: 12px;
-        }
-
-        .filter-buttons {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-
-        .filter-btn {
-            background: #2a2a2a;
-            border: 1px solid #3c4043;
-            padding: 8px 20px;
-            border-radius: 30px;
-            color: #9aa0a6;
-            text-decoration: none;
-            font-size: 13px;
-            font-weight: 500;
-            transition: all 0.2s;
-        }
-
-        .filter-btn:hover {
-            background: #4caf50;
-            border-color: #4caf50;
-            color: #121212;
-        }
-
-        .filter-btn.active {
-            background: #4caf50;
-            border-color: #4caf50;
-            color: #121212;
-        }
-
-        /* Table */
-        .table-wrapper {
-            overflow-x: auto;
-            border-radius: 10px;
-            margin-bottom: 20px;
-        }
-
-        .data-table {
-            width: 100%;
-            border-collapse: collapse;
-            min-width: 600px;
-        }
-
-        .data-table thead tr {
-            border-bottom: 2px solid #2a2a2a;
-        }
-
-        .data-table th {
-            text-align: left;
-            padding: 14px 12px;
-            color: #4caf50;
-            font-weight: 500;
-            font-size: 13px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .data-table td {
-            padding: 12px 12px;
-            color: #e8eaed;
-            font-size: 13px;
-            border-bottom: 1px solid #2a2a2a;
-            vertical-align: middle;
-        }
-
-        .data-table tbody tr:hover {
-            background: rgba(255, 255, 255, 0.03);
-        }
-
-        /* Badges Status */
-        .badge-pending {
-            background: rgba(255, 152, 0, 0.15);
-            color: #ff9800;
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 11px;
-            font-weight: 600;
-            display: inline-block;
-        }
-
-        .badge-approved {
-            background: rgba(76, 175, 80, 0.15);
-            color: #4caf50;
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 11px;
-            font-weight: 600;
-            display: inline-block;
-        }
-
-        .badge-rejected {
-            background: rgba(220, 53, 69, 0.15);
-            color: #ef9a9a;
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 11px;
-            font-weight: 600;
-            display: inline-block;
-        }
-
-        .badge-file {
-            background: rgba(33, 150, 243, 0.15);
-            color: #90caf9;
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 11px;
-            font-weight: 600;
-            display: inline-block;
-            text-decoration: none;
-        }
-
-        .badge-file:hover {
-            background: #2196f3;
-            color: white;
-        }
-
-        /* Button */
-        .btn-back, .btn-pagination {
-            background: #3c4043;
-            border: none;
-            padding: 8px 20px;
-            border-radius: 6px;
-            color: white;
-            font-size: 13px;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            transition: all 0.2s;
-            cursor: pointer;
-        }
-
-        .btn-back:hover, .btn-pagination:hover {
-            background: #4a4e54;
-            color: white;
-        }
-
-        .btn-pagination:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
-        .pagination-container {
-            display: flex;
-            justify-content: flex-end;
-            align-items: center;
-            gap: 16px;
-            margin-top: 20px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-        }
-
-        .pagination-info {
-            color: #9aa0a6;
-            font-size: 13px;
-        }
-
-        .empty-state {
-            text-align: center;
-            padding: 40px;
-            color: #9aa0a6;
-        }
-
-        .empty-state i {
-            font-size: 48px;
-            color: #4caf50;
-            margin-bottom: 16px;
-            display: block;
-        }
-
-        /* Custom Confirm Dialog */
-        .custom-confirm-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(4px);
-            z-index: 1100;
-            display: none;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .custom-confirm-overlay.show {
-            display: flex;
-        }
-
-        .custom-confirm-dialog {
-            background: #1e1e1e;
-            border-radius: 16px;
-            width: 90%;
-            max-width: 400px;
-            padding: 24px;
-            border: 1px solid #2a2a2a;
-            animation: modalFadeIn 0.2s ease;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
-        }
-
-        @keyframes modalFadeIn {
-            from {
-                opacity: 0;
-                transform: scale(0.95);
-            }
-            to {
-                opacity: 1;
-                transform: scale(1);
-            }
-        }
-
-        .confirm-icon {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        .confirm-icon i {
-            font-size: 56px;
-            color: #dc3545;
-        }
-
-        .confirm-title {
-            text-align: center;
-            color: #e8eaed;
-            font-size: 20px;
-            font-weight: 500;
-            margin-bottom: 8px;
-        }
-
-        .confirm-message {
-            text-align: center;
-            color: #9aa0a6;
-            font-size: 14px;
-            margin-bottom: 24px;
-            line-height: 1.5;
-        }
-
-        .confirm-buttons {
-            display: flex;
-            gap: 12px;
-            justify-content: center;
-        }
-
-        .confirm-buttons .btn-cancel-confirm {
-            background: #3c4043;
-            border: none;
-            padding: 10px 24px;
-            border-radius: 8px;
-            color: white;
-            font-size: 14px;
-            font-weight: 500;
-            cursor: pointer;
-        }
-
-        .confirm-buttons .btn-cancel-confirm:hover {
-            background: #4a4e54;
-        }
-
-        .confirm-buttons .btn-logout-confirm {
-            background: #dc3545;
-            border: none;
-            padding: 10px 24px;
-            border-radius: 8px;
-            color: white;
-            font-size: 14px;
-            font-weight: 500;
-            cursor: pointer;
-        }
-
-        .confirm-buttons .btn-logout-confirm:hover {
-            background: #c82333;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Roboto', sans-serif; background-color: #121212; overflow-x: hidden; }
+        .navbar-custom { background: #1e1e1e; padding: 12px 24px; border-bottom: 1px solid #2a2a2a; position: sticky; top: 0; z-index: 1001; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; }
+        .navbar-left { display: flex; align-items: center; gap: 16px; }
+        .navbar-brand { font-size: 18px; font-weight: 500; color: #e8eaed; text-decoration: none; display: flex; align-items: center; gap: 10px; }
+        .navbar-brand i { color: #4caf50; font-size: 20px; }
+        .toggle-btn { background: transparent; border: none; color: #e8eaed; font-size: 20px; cursor: pointer; display: flex; align-items: center; }
+        .navbar-right { display: flex; align-items: center; gap: 16px; }
+        .user-info { color: #9aa0a6; font-size: 14px; display: flex; align-items: center; gap: 8px; }
+        .user-info i { color: #4caf50; font-size: 16px; }
+        .logout-link { color: #dc3545 !important; font-size: 14px; text-decoration: none; display: flex; align-items: center; gap: 6px; cursor: pointer; }
+        .side-menu-overlay { position: fixed; top: 0; left: 0; width: 280px; height: 100%; background: #1e1e1e; border-right: 1px solid #2a2a2a; transform: translateX(-100%); transition: transform 0.3s ease; z-index: 1050; overflow-y: auto; }
+        .side-menu-overlay.open { transform: translateX(0); }
+        .sidebar-backdrop { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); z-index: 1040; display: none; }
+        .sidebar-backdrop.show { display: block; }
+        .side-menu-overlay .nav-menu { list-style: none; padding: 20px 16px; margin-top: 60px; }
+        .side-menu-overlay .nav-item { margin-bottom: 8px; }
+        .side-menu-overlay .nav-link { display: flex; align-items: center; gap: 14px; padding: 12px 16px; color: #9aa0a6; text-decoration: none; font-size: 14px; font-weight: 500; border-radius: 10px; transition: all 0.2s; cursor: pointer; }
+        .side-menu-overlay .nav-link i { width: 22px; font-size: 16px; }
+        .side-menu-overlay .nav-link:hover { background: rgba(255, 255, 255, 0.05); color: #e8eaed; }
+        .side-menu-overlay .nav-link.active { background: rgba(76, 175, 80, 0.15); color: #4caf50; }
+        .side-menu-overlay .nav-link.logout { color: #ef5350; margin-top: 30px; }
+        .main-content { width: 100%; min-height: calc(100vh - 60px); }
+        .content-card { background: #1e1e1e; border-radius: 12px; padding: 24px; margin: 24px; border: 1px solid #2a2a2a; }
+        .page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 16px; }
+        .page-title { color: #e8eaed; font-size: 20px; font-weight: 500; margin: 0; }
+        .page-title i { color: #4caf50; margin-right: 10px; }
+        hr { border-color: #2a2a2a; margin: 16px 0 24px 0; }
+        .filter-section { margin-bottom: 24px; }
+        .filter-title { color: #e8eaed; font-size: 13px; font-weight: 500; margin-bottom: 12px; }
+        .filter-buttons { display: flex; gap: 10px; flex-wrap: wrap; }
+        .filter-btn { background: #2a2a2a; border: 1px solid #3c4043; padding: 8px 20px; border-radius: 30px; color: #9aa0a6; text-decoration: none; font-size: 13px; font-weight: 500; transition: all 0.2s; display: inline-block; }
+        .filter-btn:hover { background: #4caf50; border-color: #4caf50; color: #121212; }
+        .filter-btn.active { background: #4caf50; border-color: #4caf50; color: #121212; }
+        .table-wrapper { overflow-x: auto; border-radius: 10px; margin-bottom: 20px; }
+        .data-table { width: 100%; border-collapse: collapse; min-width: 600px; }
+        .data-table thead tr { border-bottom: 2px solid #2a2a2a; }
+        .data-table th { text-align: left; padding: 14px 12px; color: #4caf50; font-weight: 500; font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .data-table td { padding: 12px 12px; color: #e8eaed; font-size: 13px; border-bottom: 1px solid #2a2a2a; vertical-align: middle; }
+        .data-table tbody tr:hover { background: rgba(255, 255, 255, 0.03); }
+        .badge-pending { background: rgba(255, 152, 0, 0.15); color: #ff9800; padding: 5px 12px; border-radius: 20px; font-size: 11px; font-weight: 600; display: inline-block; }
+        .badge-approved { background: rgba(76, 175, 80, 0.15); color: #4caf50; padding: 5px 12px; border-radius: 20px; font-size: 11px; font-weight: 600; display: inline-block; }
+        .badge-rejected { background: rgba(220, 53, 69, 0.15); color: #ef9a9a; padding: 5px 12px; border-radius: 20px; font-size: 11px; font-weight: 600; display: inline-block; }
+        .badge-file { background: rgba(33, 150, 243, 0.15); color: #90caf9; padding: 5px 12px; border-radius: 20px; font-size: 11px; font-weight: 600; display: inline-block; text-decoration: none; }
+        .badge-file:hover { background: #2196f3; color: white; }
+        .btn-back, .btn-pagination { background: #3c4043; border: none; padding: 8px 20px; border-radius: 6px; color: white; font-size: 13px; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; transition: all 0.2s; cursor: pointer; }
+        .btn-back:hover, .btn-pagination:hover { background: #4a4e54; color: white; }
+        .btn-pagination:disabled { opacity: 0.5; cursor: not-allowed; }
+        .pagination-container { display: flex; justify-content: flex-end; align-items: center; gap: 16px; margin-top: 20px; margin-bottom: 20px; flex-wrap: wrap; }
+        .pagination-info { color: #9aa0a6; font-size: 13px; }
+        .empty-state { text-align: center; padding: 40px; color: #9aa0a6; }
+        .empty-state i { font-size: 48px; color: #4caf50; margin-bottom: 16px; display: block; }
+        .custom-confirm-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(4px); z-index: 1100; display: none; align-items: center; justify-content: center; }
+        .custom-confirm-overlay.show { display: flex; }
+        .custom-confirm-dialog { background: #1e1e1e; border-radius: 16px; width: 90%; max-width: 400px; padding: 24px; border: 1px solid #2a2a2a; animation: modalFadeIn 0.2s ease; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4); }
+        @keyframes modalFadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+        .confirm-icon { text-align: center; margin-bottom: 20px; }
+        .confirm-icon i { font-size: 56px; color: #dc3545; }
+        .confirm-title { text-align: center; color: #e8eaed; font-size: 20px; font-weight: 500; margin-bottom: 8px; }
+        .confirm-message { text-align: center; color: #9aa0a6; font-size: 14px; margin-bottom: 24px; line-height: 1.5; }
+        .confirm-buttons { display: flex; gap: 12px; justify-content: center; }
+        .confirm-buttons .btn-cancel-confirm { background: #3c4043; border: none; padding: 10px 24px; border-radius: 8px; color: white; font-size: 14px; font-weight: 500; cursor: pointer; }
+        .confirm-buttons .btn-cancel-confirm:hover { background: #4a4e54; }
+        .confirm-buttons .btn-logout-confirm { background: #dc3545; border: none; padding: 10px 24px; border-radius: 8px; color: white; font-size: 14px; font-weight: 500; cursor: pointer; }
+        .confirm-buttons .btn-logout-confirm:hover { background: #c82333; }
         @media (max-width: 768px) {
-            .navbar-custom {
-                padding: 10px 16px;
-            }
-            .content-card {
-                margin: 16px;
-                padding: 20px;
-            }
-            .page-title {
-                font-size: 18px;
-            }
-            .filter-btn {
-                padding: 6px 14px;
-                font-size: 12px;
-            }
-            .data-table th, .data-table td {
-                padding: 10px 8px;
-                font-size: 12px;
-            }
-            .user-info span, .logout-link span, .navbar-brand span {
-                display: none;
-            }
-            .btn-back, .btn-pagination {
-                padding: 6px 16px;
-                font-size: 12px;
-            }
-            .pagination-container {
-                justify-content: center;
-            }
+            .navbar-custom { padding: 10px 16px; }
+            .content-card { margin: 16px; padding: 20px; }
+            .page-title { font-size: 18px; }
+            .filter-btn { padding: 6px 14px; font-size: 12px; }
+            .data-table th, .data-table td { padding: 10px 8px; font-size: 12px; }
+            .user-info span, .logout-link span, .navbar-brand span { display: none; }
+            .btn-back, .btn-pagination { padding: 6px 16px; font-size: 12px; }
+            .pagination-container { justify-content: center; }
         }
     </style>
 </head>
@@ -531,23 +90,12 @@
 <!-- Navbar -->
 <div class="navbar-custom">
     <div class="navbar-left">
-        <button class="toggle-btn" id="toggleSidebar">
-            <i class="fas fa-bars"></i>
-        </button>
-        <a href="#" class="navbar-brand" id="brandToggle">
-            <i class="fas fa-graduation-cap"></i>
-            <span>Absensi OOP</span>
-        </a>
+        <button class="toggle-btn" id="toggleSidebar"><i class="fas fa-bars"></i></button>
+        <a href="#" class="navbar-brand" id="brandToggle"><i class="fas fa-graduation-cap"></i><span>Absensi OOP</span></a>
     </div>
     <div class="navbar-right">
-        <span class="user-info">
-            <i class="fas fa-user-circle"></i>
-            <span><?= $_SESSION['nama'] ?? 'Mahasiswa'; ?></span>
-        </span>
-        <a href="#" class="logout-link" id="logoutBtn">
-            <i class="fas fa-sign-out-alt"></i>
-            <span>Logout</span>
-        </a>
+        <span class="user-info"><i class="fas fa-user-circle"></i><span><?= $_SESSION['nama'] ?? 'Mahasiswa'; ?></span></span>
+        <a href="#" class="logout-link" id="logoutBtn"><i class="fas fa-sign-out-alt"></i><span>Logout</span></a>
     </div>
 </div>
 
@@ -555,51 +103,23 @@
 <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
 <div class="side-menu-overlay" id="sideMenuOverlay">
     <ul class="nav-menu">
-        <li class="nav-item">
-            <a href="<?= BASEURL; ?>/MahasiswaController/index" class="nav-link">
-                <i class="fas fa-home"></i> Home
-            </a>
-        </li>
-        <li class="nav-item">
-            <a href="<?= BASEURL; ?>/MahasiswaController/absensi" class="nav-link">
-                <i class="fas fa-calendar-alt"></i> Lihat Absensi
-            </a>
-        </li>
-        <li class="nav-item">
-            <a href="<?= BASEURL; ?>/MahasiswaController/uploadSurat" class="nav-link">
-                <i class="fas fa-upload"></i> Upload Surat Izin
-            </a>
-        </li>
-        <li class="nav-item">
-            <a href="<?= BASEURL; ?>/MahasiswaController/historiSurat" class="nav-link active">
-                <i class="fas fa-history"></i> Histori Surat Izin
-            </a>
-        </li>
-        <li class="nav-item">
-            <a href="#" class="nav-link logout" id="sideLogoutBtn">
-                <i class="fas fa-sign-out-alt"></i> Logout
-            </a>
-        </li>
+        <li class="nav-item"><a href="<?= BASEURL; ?>/MahasiswaController/index" class="nav-link"><i class="fas fa-home"></i> Home</a></li>
+        <li class="nav-item"><a href="<?= BASEURL; ?>/MahasiswaController/absensi" class="nav-link"><i class="fas fa-calendar-alt"></i> Lihat Absensi</a></li>
+        <li class="nav-item"><a href="<?= BASEURL; ?>/MahasiswaController/uploadSurat" class="nav-link"><i class="fas fa-upload"></i> Upload Surat Izin</a></li>
+        <li class="nav-item"><a href="<?= BASEURL; ?>/MahasiswaController/historiSurat" class="nav-link active"><i class="fas fa-history"></i> Histori Surat Izin</a></li>
+        <li class="nav-item"><a href="#" class="nav-link logout" id="sideLogoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
     </ul>
 </div>
 
 <!-- Custom Confirm Dialog untuk Logout -->
 <div id="customConfirmOverlay" class="custom-confirm-overlay">
     <div class="custom-confirm-dialog">
-        <div class="confirm-icon">
-            <i class="fas fa-sign-out-alt"></i>
-        </div>
+        <div class="confirm-icon"><i class="fas fa-sign-out-alt"></i></div>
         <div class="confirm-title">Konfirmasi Logout</div>
-        <div class="confirm-message" id="confirmMessage">
-            Apakah Anda yakin ingin keluar dari sistem?
-        </div>
+        <div class="confirm-message" id="confirmMessage">Apakah Anda yakin ingin keluar dari sistem?</div>
         <div class="confirm-buttons">
-            <button class="btn-cancel-confirm" id="confirmCancelBtn">
-                <i class="fas fa-times"></i> Batal
-            </button>
-            <button class="btn-logout-confirm" id="confirmLogoutBtn">
-                <i class="fas fa-sign-out-alt"></i> Logout
-            </button>
+            <button class="btn-cancel-confirm" id="confirmCancelBtn"><i class="fas fa-times"></i> Batal</button>
+            <button class="btn-logout-confirm" id="confirmLogoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</button>
         </div>
     </div>
 </div>
@@ -612,40 +132,48 @@
         </div>
         <hr>
 
-        <?php if (isset($_SESSION['success'])): ?>
-        <div class="alert-success" style="background:#1a2c1a; border:1px solid #4caf50; color:#9aef9a; border-radius:8px; padding:12px 16px; margin-bottom:20px;">
-            <i class="fas fa-check-circle"></i> <?= $_SESSION['success']; unset($_SESSION['success']); ?>
-        </div>
-        <?php endif; ?>
+        <?php 
+        // Ambil data filter aktif yang sudah diproses dan dikirim oleh Controller
+        $current_filter = $data['filter_aktif'] ?? 'semua';
+        
+        // PAGINATION
+        $limit = 10;
+        $total_data = count($data['surat_izin']);
+        $total_pages = ceil($total_data / $limit);
+        $current_page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+        if ($current_page < 1) $current_page = 1;
+        if ($current_page > $total_pages && $total_pages > 0) $current_page = $total_pages;
+        
+        $start_index = ($current_page - 1) * $limit;
+        $display_data = array_slice($data['surat_izin'], $start_index, $limit);
+        
+        // Build filter parameter untuk pagination
+        $filter_param = '';
+        if ($current_filter != 'semua') {
+            $filter_param = '&status=' . $current_filter;
+        }
+        ?>
 
-        <?php if (isset($_SESSION['error'])): ?>
-        <div class="alert-danger" style="background:#2c1a1a; border:1px solid #dc3545; color:#ef9a9a; border-radius:8px; padding:12px 16px; margin-bottom:20px;">
-            <i class="fas fa-exclamation-circle"></i> <?= $_SESSION['error']; unset($_SESSION['error']); ?>
-        </div>
-        <?php endif; ?>
-
-        <!-- Filter Section -->
+        <!-- FILTER SECTION -->
         <div class="filter-section">
-            <div class="filter-title">
-                <i class="fas fa-filter"></i> Filter Status
-            </div>
+            <div class="filter-title"><i class="fas fa-filter"></i> Filter Status</div>
             <div class="filter-buttons">
-                <a href="<?= BASEURL; ?>/MahasiswaController/historiSurat" class="filter-btn <?= $data['filter_aktif'] == 'semua' ? 'active' : '' ?>">
+                <a href="<?= BASEURL; ?>/MahasiswaController/historiSurat" class="filter-btn <?= ($current_filter == 'semua') ? 'active' : ''; ?>">
                     <i class="fas fa-list"></i> Semua
                 </a>
-                <a href="<?= BASEURL; ?>/MahasiswaController/historiSurat?status=pending" class="filter-btn <?= $data['filter_aktif'] == 'pending' ? 'active' : '' ?>">
+                <a href="<?= BASEURL; ?>/MahasiswaController/historiSurat?status=pending" class="filter-btn <?= ($current_filter == 'pending') ? 'active' : ''; ?>">
                     <i class="fas fa-clock"></i> Menunggu
                 </a>
-                <a href="<?= BASEURL; ?>/MahasiswaController/historiSurat?status=disetujui" class="filter-btn <?= $data['filter_aktif'] == 'disetujui' ? 'active' : '' ?>">
+                <a href="<?= BASEURL; ?>/MahasiswaController/historiSurat?status=disetujui" class="filter-btn <?= ($current_filter == 'disetujui') ? 'active' : ''; ?>">
                     <i class="fas fa-check-circle"></i> Disetujui
                 </a>
-                <a href="<?= BASEURL; ?>/MahasiswaController/historiSurat?status=ditolak" class="filter-btn <?= $data['filter_aktif'] == 'ditolak' ? 'active' : '' ?>">
+                <a href="<?= BASEURL; ?>/MahasiswaController/historiSurat?status=ditolak" class="filter-btn <?= ($current_filter == 'ditolak') ? 'active' : ''; ?>">
                     <i class="fas fa-times-circle"></i> Ditolak
                 </a>
             </div>
         </div>
 
-        <!-- Tabel Histori Surat Izin -->
+        <!-- TABEL -->
         <div class="table-wrapper">
             <table class="data-table">
                 <thead>
@@ -659,30 +187,15 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <?php 
-                    // PAGINATION: 10 data per halaman
-                    $limit = 10;
-                    $total_data = count($data['surat_izin']);
-                    $total_pages = ceil($total_data / $limit);
-                    $current_page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
-                    if ($current_page < 1) $current_page = 1;
-                    if ($current_page > $total_pages && $total_pages > 0) $current_page = $total_pages;
-                    
-                    $start_index = ($current_page - 1) * $limit;
-                    $display_data = array_slice($data['surat_izin'], $start_index, $limit);
-                    
-                    // Build filter parameter untuk pagination
-                    $filter_param = '';
-                    if (isset($_GET['status']) && !empty($_GET['status'])) {
-                        $filter_param = '&status=' . $_GET['status'];
-                    }
-                    ?>
-                    
                     <?php if (empty($display_data)): ?>
-                    <tr>
+                    <tr class="empty-row">
                         <td colspan="6" class="empty-state">
                             <i class="fas fa-inbox"></i>
-                            Belum ada data surat izin
+                            <?php if ($current_filter != 'semua'): ?>
+                                Tidak ada data surat izin dengan status "<?= ucfirst($current_filter); ?>"
+                            <?php else: ?>
+                                Belum ada data surat izin
+                            <?php endif; ?>
                         </td>
                     </tr>
                     <?php else: ?>
@@ -720,7 +233,7 @@
             </table>
         </div>
 
-        <!-- Pagination Section -->
+        <!-- PAGINATION SECTION -->
         <?php if ($total_data > $limit): ?>
         <div class="pagination-container">
             <div class="pagination-info">

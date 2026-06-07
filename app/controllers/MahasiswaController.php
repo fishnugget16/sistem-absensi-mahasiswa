@@ -161,6 +161,7 @@ class MahasiswaController extends Controller {
     }
 
     public function historiSurat() {
+
         $mahasiswaModel = $this->model('Mahasiswa');
         $suratModel = $this->model('SuratIzin');
     

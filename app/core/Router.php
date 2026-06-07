@@ -37,25 +37,22 @@ class Router {
 
     // Fungsi untuk membersihkan dan memecah URL menjadi array
     public function parseURL() {
-        
-        if (isset($_GET['url'])) {
-            $url = rtrim($_GET['url'], '/');
-            $url = filter_var($url, FILTER_SANITIZE_URL);
-            $url = explode('/', $url);
-        
-            // DEBUG: Hapus komentar untuk cek
-            // echo "<pre>URL: "; print_r($url); echo "</pre>";
-        
-            return $url;
-        }
+        // 1. Ambil URL mentah dari $_GET['url'] atau $_SERVER['PATH_INFO']
+        $raw_url = $_GET['url'] ?? $_SERVER['PATH_INFO'] ?? '';
 
-        // Membaca URL dari server bawaan PHP maupun Apache (.htaccess)
-        $url = $_GET['url'] ?? $_SERVER['PATH_INFO'] ?? '';
-        if ($url) {
-            $url = trim($url, '/');
+        if ($raw_url) {
+            // 2. Pisahkan URL utama dengan Query String (?status=...) menggunakan explode
+            // Contoh: "MahasiswaController/historiSurat?status=pending" dipisah menjadi "MahasiswaController/historiSurat"
+            $clean_path = explode('?', $raw_url)[0];
+
+            // 3. Bersihkan sisa garis miring di awal/akhir dan lakukan sanitasi URL aman
+            $url = trim($clean_path, '/');
             $url = filter_var($url, FILTER_SANITIZE_URL);
+        
+            // 4. Pecah menjadi komponen array [Controller, Method, Params]
             return explode('/', $url);
         }
+    
         return [];
     }
 }

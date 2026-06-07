@@ -292,6 +292,47 @@
             color: #121212;
         }
 
+        /* Pagination */
+        .btn-back, .btn-pagination {
+            background: #3c4043;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 6px;
+            color: white;
+            font-size: 13px;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .btn-back:hover, .btn-pagination:hover {
+            background: #4a4e54;
+            color: white;
+        }
+
+        .btn-pagination:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .pagination-container {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 16px;
+            margin-top: 24px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .pagination-info {
+            color: #9aa0a6;
+            font-size: 13px;
+        }
+
         /* Table */
         .table-wrapper {
             overflow-x: auto;
@@ -381,27 +422,6 @@
         .btn-view:hover {
             background: #2196f3;
             border-color: #2196f3;
-            color: white;
-        }
-
-        .btn-back {
-            background: #3c4043;
-            border: none;
-            padding: 8px 20px;
-            border-radius: 6px;
-            color: white;
-            font-size: 13px;
-            font-weight: 500;
-            margin-top: 8px;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            transition: all 0.2s;
-        }
-
-        .btn-back:hover {
-            background: #4a4e54;
             color: white;
         }
 
@@ -604,6 +624,15 @@
             .navbar-brand span {
                 display: none;
             }
+
+            .btn-back, .btn-pagination {
+                padding: 6px 16px;
+                font-size: 12px;
+            }
+
+            .pagination-container {
+                justify-content: center;
+            }
         }
 
         @media (min-width: 769px) and (max-width: 992px) {
@@ -728,7 +757,7 @@
             </div>
         </div>
 
-        <!-- Tabel Surat Izin -->
+        <!-- Tabel Surat Izin dengan Pagination -->
         <div class="table-wrapper">
             <table class="data-table">
                 <thead>
@@ -740,18 +769,31 @@
                         <th>Jenis Surat</th>
                         <th>Status</th>
                         <th>Aksi</th>
-                    </td>
+                    </tr>
                 </thead>
                 <tbody>
-                    <?php if (empty($data['surat_izin'])): ?>
-                    <tr>
+                    <?php 
+                    // PAGINATION: 10 data per halaman
+                    $limit = 10;
+                    $total_data = count($data['surat_izin']);
+                    $total_pages = ceil($total_data / $limit);
+                    $current_page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+                    if ($current_page < 1) $current_page = 1;
+                    if ($current_page > $total_pages && $total_pages > 0) $current_page = $total_pages;
+                    
+                    $start_index = ($current_page - 1) * $limit;
+                    $display_data = array_slice($data['surat_izin'], $start_index, $limit);
+                    ?>
+                    
+                    <?php if (empty($display_data)): ?>
+                    <tr class="empty-row">
                         <td colspan="7" class="text-center" style="color: #9aa0a6; padding: 40px;">
                             <i class="fas fa-inbox" style="font-size: 48px; margin-bottom: 16px; display: block;"></i>
                             Belum ada data surat izin
                         </td>
                     </tr>
                     <?php else: ?>
-                        <?php $no = 1; foreach ($data['surat_izin'] as $sz): ?>
+                        <?php $no = $start_index + 1; foreach ($display_data as $sz): ?>
                         <tr>
                             <td><?= $no++; ?></td>
                             <td>
@@ -784,6 +826,43 @@
                 </tbody>
             </table>
         </div>
+
+        <!-- PAGINATION SECTION -->
+        <?php if ($total_data > $limit): ?>
+        <div class="pagination-container">
+            <div class="pagination-info">
+                Menampilkan <?= $start_index + 1; ?> - <?= min($start_index + $limit, $total_data); ?> dari <?= $total_data; ?> data
+            </div>
+            <div class="d-flex gap-2">
+                <?php 
+                // Build URL with existing filter parameters
+                $filter_param = '';
+                if (isset($_GET['status']) && !empty($_GET['status'])) {
+                    $filter_param = '&status=' . $_GET['status'];
+                }
+                ?>
+                <?php if ($current_page > 1): ?>
+                <a href="?page=<?= $current_page - 1; ?><?= $filter_param; ?>" class="btn-pagination">
+                    <i class="fas fa-chevron-left"></i> Sebelumnya
+                </a>
+                <?php else: ?>
+                <button class="btn-pagination" disabled>
+                    <i class="fas fa-chevron-left"></i> Sebelumnya
+                </button>
+                <?php endif; ?>
+                
+                <?php if ($current_page < $total_pages): ?>
+                <a href="?page=<?= $current_page + 1; ?><?= $filter_param; ?>" class="btn-pagination">
+                    Selanjutnya <i class="fas fa-chevron-right"></i>
+                </a>
+                <?php else: ?>
+                <button class="btn-pagination" disabled>
+                    Selanjutnya <i class="fas fa-chevron-right"></i>
+                </button>
+                <?php endif; ?>
+            </div>
+        </div>
+        <?php endif; ?>
 
         <a href="<?= BASEURL; ?>/AuthController/dashboard" class="btn-back">
             <i class="fas fa-arrow-left"></i> Kembali ke Dashboard

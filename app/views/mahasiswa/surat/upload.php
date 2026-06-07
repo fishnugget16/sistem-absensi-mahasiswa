@@ -825,6 +825,11 @@
             </a>
         </li>
         <li class="nav-item">
+            <a href="<?= BASEURL; ?>/MahasiswaController/historiSurat" class="nav-link">
+                <i class="fas fa-history"></i> Histori Surat Izin
+            </a>
+        </li>
+        <li class="nav-item">
             <a href="#" class="nav-link logout" id="sideLogoutBtn">
                 <i class="fas fa-sign-out-alt"></i> Logout
             </a>

@@ -182,6 +182,69 @@ class SuratIzin extends BaseModel {
     }
     
     /**
+     * Ambil surat izin berdasarkan mahasiswa_id dengan filter status (UNTUK HISTORI SURAT)
+     * @param int $mahasiswa_id ID mahasiswa
+     * @param string $filter_status Filter status (semua, pending, disetujui, ditolak)
+     * @return array Daftar surat izin
+     */
+    public function getByMahasiswaIdWithFilter($mahasiswa_id, $filter_status = 'semua') {
+        try {
+            $sql = "SELECT s.*, a.tanggal, mk.nama as mata_kuliah, mk.kode
+                    FROM surat_izin s
+                    JOIN absensi a ON s.absensi_id = a.id
+                    JOIN mata_kuliah mk ON a.matkul_id = mk.id
+                    WHERE a.mahasiswa_id = :mahasiswa_id";
+            
+            if ($filter_status != 'semua') {
+                $sql .= " AND s.status = :status";
+            }
+            
+            $sql .= " ORDER BY s.tanggal_upload DESC";
+            
+            $this->db->query($sql);
+            $this->db->bind(':mahasiswa_id', $mahasiswa_id);
+            
+            if ($filter_status != 'semua') {
+                $this->db->bind(':status', $filter_status);
+            }
+            
+            return $this->db->resultSet();
+        } catch (Exception $e) {
+            return [];
+        }
+    }
+    
+    /**
+     * Hitung jumlah surat izin mahasiswa berdasarkan status
+     * @param int $mahasiswa_id ID mahasiswa
+     * @param string|null $status Status (pending, disetujui, ditolak)
+     * @return int Jumlah surat izin
+     */
+    public function countByMahasiswaIdAndStatus($mahasiswa_id, $status = null) {
+        try {
+            $sql = "SELECT COUNT(*) as total FROM surat_izin s
+                    JOIN absensi a ON s.absensi_id = a.id
+                    WHERE a.mahasiswa_id = :mahasiswa_id";
+            
+            if ($status !== null) {
+                $sql .= " AND s.status = :status";
+            }
+            
+            $this->db->query($sql);
+            $this->db->bind(':mahasiswa_id', $mahasiswa_id);
+            
+            if ($status !== null) {
+                $this->db->bind(':status', $status);
+            }
+            
+            $result = $this->db->single();
+            return $result['total'];
+        } catch (Exception $e) {
+            return 0;
+        }
+    }
+    
+    /**
      * Hitung jumlah surat izin mahasiswa
      */
     public function countByMahasiswaId($mahasiswa_id) {

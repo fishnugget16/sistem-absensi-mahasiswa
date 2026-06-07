@@ -151,6 +151,7 @@
             font-weight: 500;
             border-radius: 10px;
             transition: all 0.2s;
+            cursor: pointer;
         }
 
         .side-menu-overlay .nav-link i {
@@ -171,7 +172,6 @@
         .side-menu-overlay .nav-link.logout {
             color: #ef5350;
             margin-top: 30px;
-            cursor: pointer;
         }
 
         .side-menu-overlay .nav-link.logout:hover {
@@ -487,7 +487,7 @@
 
         @media (min-width: 769px) and (max-width: 992px) {
             .stats-grid {
-                grid-template-columns: repeat(3, 1fr);
+                grid-template-columns: repeat(2, 1fr);
             }
             .stat-card .value {
                 font-size: 20px;
@@ -556,6 +556,11 @@
             </a>
         </li>
         <li class="nav-item">
+            <a href="<?= BASEURL; ?>/MahasiswaController/historiSurat" class="nav-link">
+                <i class="fas fa-history"></i> Histori Surat Izin
+            </a>
+        </li>
+        <li class="nav-item">
             <a href="#" class="nav-link logout" id="sideLogoutBtn">
                 <i class="fas fa-sign-out-alt"></i> Logout
             </a>
@@ -593,7 +598,7 @@
             <p>Selamat datang di portal absensi mahasiswa</p>
         </div>
 
-        <!-- Stat Cards - Dinamis dari Database -->
+        <!-- Stat Cards - Dinamis dari Database (3 card, tanpa Surat Menunggu) -->
         <div class="stats-grid">
             <div class="stat-card">
                 <div class="icon"><i class="fas fa-calendar-check"></i></div>

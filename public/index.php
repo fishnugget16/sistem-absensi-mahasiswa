@@ -236,6 +236,17 @@ if ($url === 'MahasiswaController/uploadSuratStore') {
 }
 
 // ==========================================
+// ROUTING MAHASISWA CONTROLLER (HISTORI SURAT)
+// ==========================================
+
+if ($url === 'MahasiswaController/historiSurat') {
+    require_once '../app/controllers/MahasiswaController.php';
+    $controller = new MahasiswaController();
+    $controller->historiSurat();
+    exit;
+}
+
+// ==========================================
 // ROUTING SURAT IZIN (ADMIN)
 // ==========================================
 

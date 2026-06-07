@@ -360,25 +360,45 @@
             display: block;
         }
 
-        /* Button */
-        .btn-back {
+        /* Pagination */
+        .btn-back, .btn-pagination {
             background: #3c4043;
             border: none;
             padding: 8px 20px;
             border-radius: 6px;
             color: white;
             font-size: 13px;
-            margin-top: 20px;
             text-decoration: none;
             display: inline-flex;
             align-items: center;
             gap: 8px;
             transition: all 0.2s;
+            cursor: pointer;
         }
 
-        .btn-back:hover {
+        .btn-back:hover, .btn-pagination:hover {
             background: #4a4e54;
             color: white;
+        }
+
+        .btn-pagination:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .pagination-container {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 16px;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .pagination-info {
+            color: #9aa0a6;
+            font-size: 13px;
         }
 
         /* Custom Confirm Dialog */
@@ -559,6 +579,15 @@
             .empty-state i {
                 font-size: 40px;
             }
+
+            .btn-back, .btn-pagination {
+                padding: 6px 16px;
+                font-size: 12px;
+            }
+
+            .pagination-container {
+                justify-content: center;
+            }
         }
 
         @media (min-width: 769px) and (max-width: 992px) {
@@ -617,6 +646,11 @@
         <li class="nav-item">
             <a href="<?= BASEURL; ?>/MahasiswaController/uploadSurat" class="nav-link">
                 <i class="fas fa-upload"></i> Upload Surat Izin
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="<?= BASEURL; ?>/MahasiswaController/historiSurat" class="nav-link">
+                <i class="fas fa-history"></i> Histori Surat Izin
             </a>
         </li>
         <li class="nav-item">
@@ -689,7 +723,7 @@
         </div>
         <?php endif; ?>
 
-        <!-- Tabel Absensi -->
+        <!-- Tabel Absensi dengan Pagination -->
         <div class="table-wrapper">
             <table class="data-table">
                 <thead>
@@ -702,15 +736,28 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <?php if (empty($data['absensi'])): ?>
-                    <tr>
+                    <?php 
+                    // PAGINATION: 10 data per halaman
+                    $limit = 10;
+                    $total_data = count($data['absensi']);
+                    $total_pages = ceil($total_data / $limit);
+                    $current_page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+                    if ($current_page < 1) $current_page = 1;
+                    if ($current_page > $total_pages && $total_pages > 0) $current_page = $total_pages;
+                    
+                    $start_index = ($current_page - 1) * $limit;
+                    $display_data = array_slice($data['absensi'], $start_index, $limit);
+                    ?>
+                    
+                    <?php if (empty($display_data)): ?>
+                    <tr class="empty-row">
                         <td colspan="5" class="empty-state">
                             <i class="fas fa-calendar-times"></i>
                             Belum ada data absensi
                         </td>
                     </tr>
                     <?php else: ?>
-                        <?php $no = 1; foreach ($data['absensi'] as $abs): ?>
+                        <?php $no = $start_index + 1; foreach ($display_data as $abs): ?>
                         <tr>
                             <td><?= $no++; ?></td>
                             <td><?= date('d-m-Y', strtotime($abs['tanggal'])); ?></td>
@@ -735,6 +782,36 @@
                 </tbody>
             </table>
         </div>
+
+        <!-- PAGINATION SECTION -->
+        <?php if ($total_data > $limit): ?>
+        <div class="pagination-container">
+            <div class="pagination-info">
+                Menampilkan <?= $start_index + 1; ?> - <?= min($start_index + $limit, $total_data); ?> dari <?= $total_data; ?> data
+            </div>
+            <div class="d-flex gap-2">
+                <?php if ($current_page > 1): ?>
+                <a href="?page=<?= $current_page - 1; ?>" class="btn-pagination">
+                    <i class="fas fa-chevron-left"></i> Sebelumnya
+                </a>
+                <?php else: ?>
+                <button class="btn-pagination" disabled>
+                    <i class="fas fa-chevron-left"></i> Sebelumnya
+                </button>
+                <?php endif; ?>
+                
+                <?php if ($current_page < $total_pages): ?>
+                <a href="?page=<?= $current_page + 1; ?>" class="btn-pagination">
+                    Selanjutnya <i class="fas fa-chevron-right"></i>
+                </a>
+                <?php else: ?>
+                <button class="btn-pagination" disabled>
+                    Selanjutnya <i class="fas fa-chevron-right"></i>
+                </button>
+                <?php endif; ?>
+            </div>
+        </div>
+        <?php endif; ?>
 
         <a href="<?= BASEURL; ?>/MahasiswaController/index" class="btn-back">
             <i class="fas fa-arrow-left"></i> Kembali ke Dashboard

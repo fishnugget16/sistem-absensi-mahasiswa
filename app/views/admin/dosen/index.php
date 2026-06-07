@@ -274,23 +274,44 @@
             color: white;
         }
 
-        .btn-back {
+        .btn-back, .btn-pagination {
             background: #3c4043;
             border: none;
             padding: 8px 20px;
             border-radius: 6px;
             color: white;
             font-size: 13px;
-            margin-top: 20px;
             text-decoration: none;
             display: inline-flex;
             align-items: center;
             gap: 8px;
+            transition: all 0.2s;
+            cursor: pointer;
         }
 
-        .btn-back:hover {
+        .btn-back:hover, .btn-pagination:hover {
             background: #4a4e54;
             color: white;
+        }
+
+        .btn-pagination:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .pagination-container {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 16px;
+            margin-top: 24px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .pagination-info {
+            color: #9aa0a6;
+            font-size: 13px;
         }
 
         .table-wrapper {
@@ -506,7 +527,7 @@
                 padding: 6px 16px;
                 font-size: 12px;
             }
-            .btn-back {
+            .btn-back, .btn-pagination {
                 padding: 6px 16px;
                 font-size: 12px;
             }
@@ -532,6 +553,9 @@
             .aksi-cell {
                 white-space: nowrap;
                 min-width: 70px;
+            }
+            .pagination-container {
+                justify-content: center;
             }
         }
 
@@ -684,12 +708,25 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <?php if (empty($data['dosen'])): ?>
+                    <?php 
+                    // PAGINATION: 10 data per halaman
+                    $limit = 10;
+                    $total_data = count($data['dosen']);
+                    $total_pages = ceil($total_data / $limit);
+                    $current_page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+                    if ($current_page < 1) $current_page = 1;
+                    if ($current_page > $total_pages && $total_pages > 0) $current_page = $total_pages;
+                    
+                    $start_index = ($current_page - 1) * $limit;
+                    $display_data = array_slice($data['dosen'], $start_index, $limit);
+                    ?>
+                    
+                    <?php if (empty($display_data)): ?>
                     <tr class="empty-row">
                         <td colspan="6" class="text-center" style="color: #9aa0a6;">Belum ada data dosen</td>
                     </tr>
                     <?php else: ?>
-                        <?php $no = 1; foreach ($data['dosen'] as $dsn): ?>
+                        <?php $no = $start_index + 1; foreach ($display_data as $dsn): ?>
                         <tr>
                             <td><?= $no++; ?></td>
                             <td><code><?= htmlspecialchars($dsn['nidn'] ?? '-'); ?></code></td>
@@ -710,6 +747,36 @@
                 </tbody>
             </table>
         </div>
+
+        <!-- PAGINATION SECTION -->
+        <?php if ($total_data > $limit): ?>
+        <div class="pagination-container">
+            <div class="pagination-info">
+                Menampilkan <?= $start_index + 1; ?> - <?= min($start_index + $limit, $total_data); ?> dari <?= $total_data; ?> data
+            </div>
+            <div class="d-flex gap-2">
+                <?php if ($current_page > 1): ?>
+                <a href="?page=<?= $current_page - 1; ?>" class="btn-pagination">
+                    <i class="fas fa-chevron-left"></i> Sebelumnya
+                </a>
+                <?php else: ?>
+                <button class="btn-pagination" disabled>
+                    <i class="fas fa-chevron-left"></i> Sebelumnya
+                </button>
+                <?php endif; ?>
+                
+                <?php if ($current_page < $total_pages): ?>
+                <a href="?page=<?= $current_page + 1; ?>" class="btn-pagination">
+                    Selanjutnya <i class="fas fa-chevron-right"></i>
+                </a>
+                <?php else: ?>
+                <button class="btn-pagination" disabled>
+                    Selanjutnya <i class="fas fa-chevron-right"></i>
+                </button>
+                <?php endif; ?>
+            </div>
+        </div>
+        <?php endif; ?>
 
         <a href="<?= BASEURL; ?>/AuthController/dashboard" class="btn-back">
             <i class="fas fa-arrow-left"></i> Kembali ke Dashboard

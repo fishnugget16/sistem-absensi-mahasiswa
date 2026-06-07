@@ -42,13 +42,17 @@ class MahasiswaController extends Controller {
         
         $totalSurat = $suratModel->countByMahasiswaId($mahasiswaId);
         
+        // Hitung surat yang masih pending untuk stat card tambahan
+        $suratPending = $suratModel->countByMahasiswaIdAndStatus($mahasiswaId, 'pending');
+        
         $data = [
             'nama' => $_SESSION['nama'] ?? $_SESSION['username'],
             'nim' => $_SESSION['nim'] ?? '-',
             'prodi' => $dataMahasiswa['kelas'] ?? 'Belum diisi',
             'total_hadir' => $totalHadir,
             'persentase' => $persentase,
-            'total_surat' => $totalSurat
+            'total_surat' => $totalSurat,
+            'surat_pending' => $suratPending
         ];
         
         $this->view('mahasiswa/dashboard', $data);
@@ -154,6 +158,29 @@ class MahasiswaController extends Controller {
             header('Location: ' . BASEURL . '/MahasiswaController/uploadSurat');
             exit;
         }
+    }
+
+    public function historiSurat() {
+        $mahasiswaModel = $this->model('Mahasiswa');
+        $suratModel = $this->model('SuratIzin');
+    
+        $userId = $_SESSION['user_id'];
+        $dataMahasiswa = $mahasiswaModel->getMahasiswaByUserId($userId);
+        $mahasiswaId = $dataMahasiswa['id'] ?? 0;
+    
+        // Ambil filter status dari URL
+        $filter_status = isset($_GET['status']) ? $_GET['status'] : 'semua';
+    
+        // ✅ PAKAI method getByMahasiswaIdWithFilter (sudah ditambahkan di SuratIzin.php)
+        $surat_izin = $suratModel->getByMahasiswaIdWithFilter($mahasiswaId, $filter_status);
+    
+        $data = [
+            'judul_halaman' => 'Histori Surat Izin',
+            'surat_izin' => $surat_izin,
+            'filter_aktif' => $filter_status
+        ];
+    
+        $this->view('mahasiswa/surat/histori', $data);
     }
     
     public function logout() {

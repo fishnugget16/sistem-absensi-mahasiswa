@@ -37,6 +37,18 @@ class Router {
 
     // Fungsi untuk membersihkan dan memecah URL menjadi array
     public function parseURL() {
+        
+        if (isset($_GET['url'])) {
+            $url = rtrim($_GET['url'], '/');
+            $url = filter_var($url, FILTER_SANITIZE_URL);
+            $url = explode('/', $url);
+        
+            // DEBUG: Hapus komentar untuk cek
+            // echo "<pre>URL: "; print_r($url); echo "</pre>";
+        
+            return $url;
+        }
+
         // Membaca URL dari server bawaan PHP maupun Apache (.htaccess)
         $url = $_GET['url'] ?? $_SERVER['PATH_INFO'] ?? '';
         if ($url) {

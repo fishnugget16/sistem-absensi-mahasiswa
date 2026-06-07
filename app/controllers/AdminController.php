@@ -20,15 +20,21 @@ class AdminController extends Controller {
     }
     
     // ==========================================
-    // CRUD MAHASISWA
+    // CRUD MAHASISWA (DENGAN FILTER)
     // ==========================================
     
-    // Menampilkan daftar semua mahasiswa
+    // Menampilkan daftar semua mahasiswa dengan filter
     public function mahasiswa() {
         $mahasiswaModel = $this->model('Mahasiswa');
+        
+        // Ambil parameter filter dari URL
+        $filter_prodi = isset($_GET['filter_prodi']) ? $_GET['filter_prodi'] : '';
+        $filter_angkatan = isset($_GET['filter_angkatan']) ? $_GET['filter_angkatan'] : '';
+        
         $data['judul_halaman'] = 'Manajemen Data Mahasiswa';
-        $data['mahasiswa'] = $mahasiswaModel->getAllMahasiswa();
-        $data['total'] = $mahasiswaModel->countMahasiswa();
+        $data['mahasiswa'] = $mahasiswaModel->getAllWithFilters($filter_prodi, $filter_angkatan);
+        $data['total'] = count($data['mahasiswa']);
+        
         $this->view('admin/mahasiswa/index', $data);
     }
     
@@ -130,15 +136,20 @@ class AdminController extends Controller {
     }
     
     // ==========================================
-    // CRUD DOSEN
+    // CRUD DOSEN (DENGAN FILTER)
     // ==========================================
     
-    // Menampilkan daftar semua dosen
+    // Menampilkan daftar semua dosen dengan filter
     public function dosen() {
         $dosenModel = $this->model('Dosen');
+        
+        // Ambil parameter filter dari URL
+        $filter_prodi = isset($_GET['filter_prodi']) ? $_GET['filter_prodi'] : '';
+        
         $data['judul_halaman'] = 'Manajemen Data Dosen';
-        $data['dosen'] = $dosenModel->getAllDosen();
-        $data['total'] = $dosenModel->countDosen();
+        $data['dosen'] = $dosenModel->getAllWithFilters($filter_prodi);
+        $data['total'] = count($data['dosen']);
+        
         $this->view('admin/dosen/index', $data);
     }
     
@@ -238,15 +249,22 @@ class AdminController extends Controller {
     }
     
     // ==========================================
-    // CRUD MATA KULIAH
+    // CRUD MATA KULIAH (DENGAN FILTER)
     // ==========================================
     
-    // Menampilkan daftar semua mata kuliah
+    // Menampilkan daftar semua mata kuliah dengan filter
     public function matakuliah() {
         $matkulModel = $this->model('MataKuliah');
+        
+        // Ambil parameter filter dari URL
+        $filter_semester = isset($_GET['filter_semester']) ? $_GET['filter_semester'] : '';
+        $filter_prodi = isset($_GET['filter_prodi']) ? $_GET['filter_prodi'] : '';
+        $filter_sks = isset($_GET['filter_sks']) ? $_GET['filter_sks'] : '';
+        
         $data['judul_halaman'] = 'Manajemen Data Mata Kuliah';
-        $data['matakuliah'] = $matkulModel->getAllMataKuliah();
-        $data['total'] = $matkulModel->countMataKuliah();
+        $data['matakuliah'] = $matkulModel->getAllWithFilters($filter_semester, $filter_prodi, $filter_sks);
+        $data['total'] = count($data['matakuliah']);
+        
         $this->view('admin/matakuliah/index', $data);
     }
     
@@ -347,7 +365,7 @@ class AdminController extends Controller {
     }
     
     // ==========================================
-    // KELOLA SURAT IZIN (TAMBAHAN BARU)
+    // KELOLA SURAT IZIN
     // ==========================================
     
     /**
@@ -459,7 +477,7 @@ class AdminController extends Controller {
             exit;
         } else {
             $_SESSION['error'] = 'File tidak ditemukan di server';
-            header('Location: ' . BASEURL . '/AdminController/suratizin');
+            header('Location: ' . BASEURL . '/AdminController/surat_izin');
             exit;
         }
     }

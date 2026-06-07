@@ -149,7 +149,7 @@ class Absensi extends BaseModel {
      */
     public function getByMahasiswaId($mahasiswa_id) {
         try {
-            $sql = "SELECT a.*, mk.kode, mk.nama as mata_kuliah, mk.sks, mk.jumlah_pertemuan
+            $sql = "SELECT a.*, mk.kode, mk.nama as mata_kuliah, mk.sks, mk.semester, mk.jumlah_pertemuan
                     FROM absensi a
                     JOIN mata_kuliah mk ON a.matkul_id = mk.id
                     WHERE a.mahasiswa_id = :mahasiswa_id
@@ -243,37 +243,129 @@ class Absensi extends BaseModel {
     }
     
     /**
-     * Ambil rekap absensi per mata kuliah
-     * total_pertemuan diambil dari mk.jumlah_pertemuan (set admin)
-     * hadir dihitung dari absensi mahasiswa
-     * 
-     * NOTE: Menampilkan semua mata kuliah yang ADA DI ABSENSI mahasiswa
-     * Jika mahasiswa belum absen sama sekali, array akan kosong
+     * Ambil semua mata kuliah berdasarkan prodi mahasiswa
+     * (menampilkan semua matkul yang kodenya sesuai dengan prodi mahasiswa)
+     * Digunakan untuk upload surat izin
      */
-    public function getRekapPerMatkul($mahasiswa_id) {
+    public function getMatkulByProdi($mahasiswa_id) {
         try {
+            // 1. Ambil kode prodi dari mahasiswa
+            $sql_prodi = "SELECT kelas FROM mahasiswa WHERE id = :mahasiswa_id";
+            $this->db->query($sql_prodi);
+            $this->db->bind(':mahasiswa_id', $mahasiswa_id);
+            $mahasiswa = $this->db->single();
+            $kode_prodi = $mahasiswa['kelas'] ?? '';
+            
+            if (empty($kode_prodi)) {
+                return [];
+            }
+            
+            // 2. Ambil SEMUA mata kuliah berdasarkan kode prodi
             $sql = "SELECT 
                         mk.id, 
                         mk.kode, 
                         mk.nama, 
                         mk.sks, 
-                        mk.jumlah_pertemuan as total_pertemuan,
-                        COALESCE(SUM(CASE WHEN a.status = 'Hadir' THEN 1 ELSE 0 END), 0) as hadir,
-                        COALESCE(SUM(CASE WHEN a.status = 'Sakit' THEN 1 ELSE 0 END), 0) as sakit,
-                        COALESCE(SUM(CASE WHEN a.status = 'Izin' THEN 1 ELSE 0 END), 0) as izin,
-                        COALESCE(SUM(CASE WHEN a.status = 'Alpa' THEN 1 ELSE 0 END), 0) as alpa
+                        mk.semester,
+                        mk.jumlah_pertemuan
                     FROM mata_kuliah mk
-                    INNER JOIN absensi a ON mk.id = a.matkul_id AND a.mahasiswa_id = :mahasiswa_id
-                    GROUP BY mk.id, mk.kode, mk.nama, mk.sks, mk.jumlah_pertemuan
-                    ORDER BY mk.nama ASC";
+                    WHERE mk.kode LIKE :kode_prodi
+                    ORDER BY mk.semester ASC, mk.nama ASC";
             
             $this->db->query($sql);
+            $this->db->bind(':kode_prodi', $kode_prodi . '%');
+            return $this->db->resultSet();
+        } catch (Exception $e) {
+            error_log("Error in getMatkulByProdi: " . $e->getMessage());
+            return [];
+        }
+    }
+    
+    /**
+     * Ambil rekap absensi per mata kuliah
+     * MENAMPILKAN SEMUA MATA KULIAH SESUAI PRODI MAHASISWA
+     * (tanpa perlu menunggu absensi dari dosen)
+     */
+    public function getRekapPerMatkul($mahasiswa_id) {
+        try {
+            // 1. Ambil kode prodi dari mahasiswa
+            $sql_prodi = "SELECT kelas FROM mahasiswa WHERE id = :mahasiswa_id";
+            $this->db->query($sql_prodi);
             $this->db->bind(':mahasiswa_id', $mahasiswa_id);
-            $result = $this->db->resultSet();
+            $mahasiswa = $this->db->single();
+            $kode_prodi = $mahasiswa['kelas'] ?? '';
             
-            // Jika tidak ada data absensi sama sekali, return array kosong
-            if (empty($result)) {
+            if (empty($kode_prodi)) {
                 return [];
+            }
+            
+            // 2. Ambil SEMUA mata kuliah berdasarkan kode prodi
+            $sql_matkul = "SELECT 
+                                mk.id, 
+                                mk.kode, 
+                                mk.nama, 
+                                mk.sks, 
+                                mk.semester,
+                                mk.jumlah_pertemuan as total_pertemuan
+                           FROM mata_kuliah mk
+                           WHERE mk.kode LIKE :kode_prodi
+                           ORDER BY mk.semester ASC, mk.nama ASC";
+            
+            $this->db->query($sql_matkul);
+            $this->db->bind(':kode_prodi', $kode_prodi . '%');
+            $all_matkul = $this->db->resultSet();
+            
+            if (empty($all_matkul)) {
+                return [];
+            }
+            
+            // 3. Ambil data absensi mahasiswa (status Hadir, Sakit, Izin, Alpa)
+            $sql_absensi = "SELECT 
+                                mk.id as matkul_id,
+                                SUM(CASE WHEN a.status = 'Hadir' THEN 1 ELSE 0 END) as hadir,
+                                SUM(CASE WHEN a.status = 'Sakit' THEN 1 ELSE 0 END) as sakit,
+                                SUM(CASE WHEN a.status = 'Izin' THEN 1 ELSE 0 END) as izin,
+                                SUM(CASE WHEN a.status = 'Alpa' THEN 1 ELSE 0 END) as alpa
+                            FROM absensi a
+                            JOIN mata_kuliah mk ON a.matkul_id = mk.id
+                            WHERE a.mahasiswa_id = :mahasiswa_id
+                            GROUP BY mk.id";
+            
+            $this->db->query($sql_absensi);
+            $this->db->bind(':mahasiswa_id', $mahasiswa_id);
+            $absensi_data = $this->db->resultSet();
+            
+            // 4. Gabungkan: semua matkul + data absensi (jika ada)
+            $result = [];
+            foreach ($all_matkul as $matkul) {
+                // Cari data absensi untuk matkul ini
+                $hadir = 0;
+                $sakit = 0;
+                $izin = 0;
+                $alpa = 0;
+                
+                foreach ($absensi_data as $abs) {
+                    if ($abs['matkul_id'] == $matkul['id']) {
+                        $hadir = $abs['hadir'];
+                        $sakit = $abs['sakit'];
+                        $izin = $abs['izin'];
+                        $alpa = $abs['alpa'];
+                        break;
+                    }
+                }
+                
+                $result[] = [
+                    'id' => $matkul['id'],
+                    'kode' => $matkul['kode'],
+                    'nama' => $matkul['nama'],
+                    'sks' => $matkul['sks'],
+                    'semester' => $matkul['semester'],
+                    'total_pertemuan' => $matkul['total_pertemuan'],
+                    'hadir' => $hadir,
+                    'sakit' => $sakit,
+                    'izin' => $izin,
+                    'alpa' => $alpa
+                ];
             }
             
             return $result;

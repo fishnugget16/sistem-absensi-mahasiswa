@@ -81,9 +81,10 @@ class MahasiswaController extends Controller {
         $userId = $_SESSION['user_id'];
         $dataMahasiswa = $mahasiswaModel->getMahasiswaByUserId($userId);
         $mahasiswaId = $dataMahasiswa['id'] ?? 0;
+        $matkul_list = $absensiModel->getMatkulByProdi($mahasiswaId);
         
         $data = [
-            'matkul_list' => $absensiModel->getMatkulByMahasiswaId($mahasiswaId)
+            'matkul_list' => $matkul_list
         ];
         
         $this->view('mahasiswa/surat/upload', $data);

@@ -192,7 +192,7 @@
                         <td colspan="6" class="empty-state">
                             <i class="fas fa-inbox"></i>
                             <?php if ($current_filter != 'semua'): ?>
-                                Tidak ada data surat izin dengan status "<?= ucfirst($current_filter); ?>"
+                                Tidak ada data surat izin dengan status <?= ucfirst($current_filter); ?>
                             <?php else: ?>
                                 Belum ada data surat izin
                             <?php endif; ?>

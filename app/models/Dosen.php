@@ -171,6 +171,37 @@ class Dosen extends BaseModel {
         }
     }
     
+    /**
+     * Ambil semua dosen dengan filter prodi (UNTUK HALAMAN ADMIN)
+     * @param string $filter_prodi Filter berdasarkan program studi
+     * @return array Daftar dosen
+     */
+    public function getAllWithFilters($filter_prodi = '') {
+        try {
+            $sql = "SELECT d.*, u.email, u.username 
+                    FROM dosen d
+                    LEFT JOIN users u ON d.user_id = u.id
+                    WHERE 1=1";
+            
+            if ($filter_prodi != '') {
+                $sql .= " AND d.prodi = :prodi";
+            }
+            
+            $sql .= " ORDER BY d.nama ASC";
+            
+            $this->db->query($sql);
+            
+            if ($filter_prodi != '') {
+                $this->db->bind(':prodi', $filter_prodi);
+            }
+            
+            return $this->db->resultSet();
+        } catch (Exception $e) {
+            error_log("Error in getAllWithFilters: " . $e->getMessage());
+            return [];
+        }
+    }
+    
     public function getDosenById($id) {
         try {
             $sql = "SELECT d.*, u.email, u.username 

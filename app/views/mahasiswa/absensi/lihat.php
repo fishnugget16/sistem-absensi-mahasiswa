@@ -20,7 +20,6 @@
             overflow-x: hidden;
         }
 
-        /* ========== NAVBAR ========== */
         .navbar-custom {
             background: #1e1e1e;
             padding: 12px 24px;
@@ -94,7 +93,6 @@
             cursor: pointer;
         }
 
-        /* ========== OVERLAY SIDEBAR ========== */
         .side-menu-overlay {
             position: fixed;
             top: 0;
@@ -149,6 +147,7 @@
             font-weight: 500;
             border-radius: 10px;
             transition: all 0.2s;
+            cursor: pointer;
         }
 
         .side-menu-overlay .nav-link i {
@@ -169,16 +168,13 @@
         .side-menu-overlay .nav-link.logout {
             color: #ef5350;
             margin-top: 30px;
-            cursor: pointer;
         }
 
-        /* ========== MAIN CONTENT ========== */
         .main-content {
             width: 100%;
             min-height: calc(100vh - 60px);
         }
 
-        /* Content Card */
         .content-card {
             background: #1e1e1e;
             border-radius: 12px;
@@ -202,6 +198,144 @@
         hr {
             border-color: #2a2a2a;
             margin: 16px 0 24px 0;
+        }
+
+        /* Filter Semester - Custom Select seperti create.php */
+        .filter-semester {
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            background: rgba(255, 255, 255, 0.03);
+            padding: 12px 16px;
+            border-radius: 10px;
+        }
+
+        .filter-semester label {
+            color: #e8eaed;
+            font-size: 13px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .filter-semester label i {
+            color: #4caf50;
+            font-size: 14px;
+        }
+
+        /* Custom Select Styles - SAMA dengan create.php mahasiswa */
+        .custom-select-container {
+            position: relative;
+            width: 220px;
+        }
+
+        .custom-select-trigger {
+            background: #2a2a2a;
+            border: 1px solid #3c4043;
+            border-radius: 8px;
+            padding: 8px 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: #e8eaed;
+            font-size: 13px;
+        }
+
+        .custom-select-trigger:hover {
+            border-color: #4caf50;
+        }
+
+        .custom-select-trigger i {
+            transition: transform 0.2s;
+            color: #9aa0a6;
+        }
+
+        .custom-select-trigger.open i {
+            transform: rotate(180deg);
+        }
+
+        .custom-select-options {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: #1e1e1e;
+            border: 1px solid #3c4043;
+            border-radius: 8px;
+            margin-top: 4px;
+            z-index: 100;
+            display: none;
+            max-height: 280px;
+            overflow: hidden;
+            flex-direction: column;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .custom-select-options.show {
+            display: flex;
+        }
+
+        .options-list {
+            overflow-y: auto;
+            max-height: 220px;
+        }
+
+        .option-item {
+            padding: 10px 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: #e8eaed;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .option-item i {
+            width: 20px;
+            font-size: 14px;
+            color: #4caf50;
+        }
+
+        .option-item:hover {
+            background: rgba(76, 175, 80, 0.1);
+        }
+
+        .option-item.selected {
+            background: rgba(76, 175, 80, 0.2);
+            color: #4caf50;
+        }
+
+        .options-list::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .options-list::-webkit-scrollbar-track {
+            background: #2a2a2a;
+            border-radius: 3px;
+        }
+
+        .options-list::-webkit-scrollbar-thumb {
+            background: #4caf50;
+            border-radius: 3px;
+        }
+
+        .filter-semester span {
+            font-size: 11px;
+            color: #9aa0a6;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .filter-semester span i {
+            color: #2196f3;
+            font-size: 12px;
         }
 
         /* Rekap Section */
@@ -275,7 +409,21 @@
             border-radius: 10px;
         }
 
-        /* ========== TABEL RIWAYAT ABSENSI ========== */
+        .empty-rekap {
+            text-align: center;
+            padding: 30px;
+            color: #9aa0a6;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 10px;
+        }
+
+        .empty-rekap i {
+            font-size: 40px;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        /* Tabel */
         .table-wrapper {
             overflow-x: auto;
             border-radius: 8px;
@@ -314,7 +462,6 @@
             background: rgba(255, 255, 255, 0.03);
         }
 
-        /* BADGES */
         .badge-status {
             display: inline-block;
             padding: 5px 14px;
@@ -346,7 +493,6 @@
             color: white;
         }
 
-        /* Empty State */
         .empty-state {
             text-align: center;
             padding: 40px;
@@ -360,7 +506,6 @@
             display: block;
         }
 
-        /* Pagination */
         .btn-back, .btn-pagination {
             background: #3c4043;
             border: none;
@@ -401,7 +546,6 @@
             font-size: 13px;
         }
 
-        /* Custom Confirm Dialog */
         .custom-confirm-overlay {
             position: fixed;
             top: 0;
@@ -504,7 +648,6 @@
             background: #c82333;
         }
 
-        /* ========== RESPONSIVE ========== */
         @media (max-width: 768px) {
             .navbar-custom {
                 padding: 10px 16px;
@@ -517,6 +660,15 @@
 
             .page-title {
                 font-size: 20px;
+            }
+
+            .filter-semester {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .custom-select-container {
+                width: 100%;
             }
 
             .rekap-card {
@@ -690,13 +842,62 @@
         </h3>
         <hr>
 
-        <!-- Rekap per Mata Kuliah -->
-        <?php if (!empty($data['rekap_matkul'])): ?>
+        <!-- Filter Semester - CUSTOM SELECT SAMA SEPERTI CREATE.PHP -->
+        <div class="filter-semester">
+            <label><i class="fas fa-layer-group"></i> Filter Mata Kuliah:</label>
+            <div class="custom-select-container" id="semesterSelectContainer">
+                <div class="custom-select-trigger" id="semesterSelectTrigger">
+                    <span id="selectedSemesterText">
+                        <?php 
+                        $selected_semester_display = isset($_GET['semester']) ? 'Semester ' . $_GET['semester'] : 'Semua Semester';
+                        echo $selected_semester_display;
+                        ?>
+                    </span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="custom-select-options" id="semesterSelectOptions">
+                    <div class="options-list" id="semesterOptionsList">
+                        <div class="option-item <?= (!isset($_GET['semester']) || $_GET['semester'] == 'semua') ? 'selected' : ''; ?>" data-value="semua">
+                            <i class="fas fa-list"></i> Semua Semester
+                        </div>
+                        <?php for ($i = 1; $i <= 8; $i++): ?>
+                        <div class="option-item <?= (isset($_GET['semester']) && $_GET['semester'] == $i) ? 'selected' : ''; ?>" data-value="<?= $i; ?>">
+                            <i class="fas fa-calendar-alt"></i> Semester <?= $i; ?>
+                        </div>
+                        <?php endfor; ?>
+                    </div>
+                </div>
+            </div>
+            <span>
+                <i class="fas fa-info-circle"></i> Filter hanya untuk Rekap Kehadiran
+            </span>
+        </div>
+
+        <!-- Rekap per Mata Kuliah (TERFILTER SEMESTER) -->
+        <?php 
+        $selected_semester = isset($_GET['semester']) ? $_GET['semester'] : 'semua';
+        $filtered_rekap = [];
+        
+        if ($selected_semester == 'semua') {
+            $filtered_rekap = $data['rekap_matkul'];
+        } else {
+            foreach ($data['rekap_matkul'] as $rekap) {
+                if ($rekap['semester'] == $selected_semester) {
+                    $filtered_rekap[] = $rekap;
+                }
+            }
+        }
+        ?>
+        
+        <?php if (!empty($filtered_rekap)): ?>
         <div class="mb-4">
             <div class="rekap-title">
                 <i class="fas fa-chart-pie"></i> Rekap Kehadiran per Mata Kuliah
+                <?php if ($selected_semester != 'semua'): ?>
+                    <span style="font-size: 12px; color: #4caf50;"> (Semester <?= $selected_semester; ?>)</span>
+                <?php endif; ?>
             </div>
-            <?php foreach ($data['rekap_matkul'] as $rekap): ?>
+            <?php foreach ($filtered_rekap as $rekap): ?>
             <?php 
                 $persen = $rekap['total_pertemuan'] > 0 ? round(($rekap['hadir'] / $rekap['total_pertemuan']) * 100, 1) : 0;
                 $jumlah_pertemuan = $rekap['jumlah_pertemuan'] ?? $rekap['total_pertemuan'];
@@ -721,9 +922,22 @@
             </div>
             <?php endforeach; ?>
         </div>
+        <?php else: ?>
+        <div class="empty-rekap">
+            <i class="fas fa-folder-open"></i>
+            <?php if ($selected_semester != 'semua'): ?>
+                Belum ada mata kuliah untuk Semester <?= $selected_semester; ?>
+            <?php else: ?>
+                Belum ada data mata kuliah
+            <?php endif; ?>
+        </div>
         <?php endif; ?>
 
-        <!-- Tabel Absensi dengan Pagination -->
+        <!-- Tabel Riwayat Absensi (TANPA FILTER, TAMPIL SEMUA) -->
+        <div class="rekap-title" style="margin-top: 30px;">
+            <i class="fas fa-history"></i> Histori Absensi
+        </div>
+        
         <div class="table-wrapper">
             <table class="data-table">
                 <thead>
@@ -733,11 +947,11 @@
                         <th>Mata Kuliah</th>
                         <th>Status</th>
                         <th>Keterangan</th>
-                    </tr>
+                    </td>
                 </thead>
                 <tbody>
                     <?php 
-                    // PAGINATION: 10 data per halaman
+                    // PAGINATION: 10 data per halaman (TANPA FILTER SEMESTER)
                     $limit = 10;
                     $total_data = count($data['absensi']);
                     $total_pages = ceil($total_data / $limit);
@@ -791,7 +1005,7 @@
             </div>
             <div class="d-flex gap-2">
                 <?php if ($current_page > 1): ?>
-                <a href="?page=<?= $current_page - 1; ?>" class="btn-pagination">
+                <a href="?page=<?= $current_page - 1; ?><?= ($selected_semester != 'semua') ? '&semester=' . $selected_semester : ''; ?>" class="btn-pagination">
                     <i class="fas fa-chevron-left"></i> Sebelumnya
                 </a>
                 <?php else: ?>
@@ -801,7 +1015,7 @@
                 <?php endif; ?>
                 
                 <?php if ($current_page < $total_pages): ?>
-                <a href="?page=<?= $current_page + 1; ?>" class="btn-pagination">
+                <a href="?page=<?= $current_page + 1; ?><?= ($selected_semester != 'semua') ? '&semester=' . $selected_semester : ''; ?>" class="btn-pagination">
                     Selanjutnya <i class="fas fa-chevron-right"></i>
                 </a>
                 <?php else: ?>
@@ -895,6 +1109,59 @@
     window.addEventListener('resize', function() {
         if (window.innerWidth > 768 && sideMenu.classList.contains('open')) {
             closeSidebar();
+        }
+    });
+
+    // ========== CUSTOM SELECT FOR SEMESTER FILTER ==========
+    const semesterTrigger = document.getElementById('semesterSelectTrigger');
+    const semesterOptionsContainer = document.getElementById('semesterSelectOptions');
+    const semesterSelectedText = document.getElementById('selectedSemesterText');
+
+    function toggleSemesterDropdown() {
+        semesterOptionsContainer.classList.toggle('show');
+        semesterTrigger.classList.toggle('open');
+    }
+
+    function selectSemesterOption(value, text) {
+        semesterSelectedText.textContent = text;
+        
+        // Update selected class
+        semesterOptionsContainer.querySelectorAll('.option-item').forEach(opt => {
+            opt.classList.remove('selected');
+        });
+        
+        const selectedOpt = Array.from(semesterOptionsContainer.querySelectorAll('.option-item')).find(
+            opt => opt.getAttribute('data-value') === value
+        );
+        if (selectedOpt) selectedOpt.classList.add('selected');
+        
+        semesterOptionsContainer.classList.remove('show');
+        semesterTrigger.classList.remove('open');
+        
+        // Redirect to URL with semester parameter
+        let url = '<?= BASEURL; ?>/MahasiswaController/absensi';
+        if (value !== 'semua') {
+            url += '?semester=' + value;
+        }
+        window.location.href = url;
+    }
+
+    semesterTrigger.addEventListener('click', toggleSemesterDropdown);
+
+    semesterOptionsContainer.querySelectorAll('.option-item').forEach(option => {
+        option.addEventListener('click', () => {
+            const value = option.getAttribute('data-value');
+            const text = option.textContent.trim();
+            selectSemesterOption(value, text);
+        });
+    });
+
+    // Tutup dropdown saat klik di luar
+    document.addEventListener('click', function(event) {
+        const container = document.getElementById('semesterSelectContainer');
+        if (!container.contains(event.target)) {
+            semesterOptionsContainer.classList.remove('show');
+            semesterTrigger.classList.remove('open');
         }
     });
 </script>

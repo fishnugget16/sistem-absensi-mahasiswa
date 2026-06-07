@@ -20,7 +20,6 @@
             overflow-x: hidden;
         }
 
-        /* ========== NAVBAR ========== */
         .navbar-custom {
             background: #1e1e1e;
             padding: 12px 24px;
@@ -94,7 +93,6 @@
             cursor: pointer;
         }
 
-        /* ========== OVERLAY SIDEBAR ========== */
         .side-menu-overlay {
             position: fixed;
             top: 0;
@@ -149,6 +147,7 @@
             font-weight: 500;
             border-radius: 10px;
             transition: all 0.2s;
+            cursor: pointer;
         }
 
         .side-menu-overlay .nav-link i {
@@ -169,16 +168,13 @@
         .side-menu-overlay .nav-link.logout {
             color: #ef5350;
             margin-top: 30px;
-            cursor: pointer;
         }
 
-        /* ========== MAIN CONTENT ========== */
         .main-content {
             width: 100%;
             min-height: calc(100vh - 60px);
         }
 
-        /* Content Card */
         .content-card {
             background: #1e1e1e;
             border-radius: 12px;
@@ -213,7 +209,6 @@
             margin: 16px 0 24px 0;
         }
 
-        /* Form */
         .form-label {
             color: #e8eaed;
             font-weight: 500;
@@ -251,7 +246,6 @@
             margin-top: 5px;
         }
 
-        /* Buttons */
         .btn-submit {
             background: #4caf50;
             border: none;
@@ -292,7 +286,6 @@
             color: white;
         }
 
-        /* Alert */
         .alert-success {
             background: #1a2c1a;
             border: 1px solid #4caf50;
@@ -321,7 +314,7 @@
             margin-right: 8px;
         }
 
-        /* ========== UPLOAD AREA ========== */
+        /* Upload Area */
         .upload-area {
             position: relative;
             width: 100%;
@@ -424,7 +417,6 @@
             margin-top: 4px;
         }
 
-        /* Tombol Hapus - Background Merah, Teks Merah Muda, Ikon Kecil */
         .btn-remove-file {
             background: #dc3545;
             border: none;
@@ -529,7 +521,7 @@
         }
 
         .search-box input {
-            background: #2a2a2a;
+            background: #1e1e1e;
             border: none;
             color: #e8eaed;
             width: 100%;
@@ -586,7 +578,6 @@
             border-radius: 3px;
         }
 
-        /* Custom Confirm Dialog */
         .custom-confirm-overlay {
             position: fixed;
             top: 0;
@@ -689,7 +680,6 @@
             background: #c82333;
         }
 
-        /* ========== RESPONSIVE ========== */
         @media (max-width: 768px) {
             .navbar-custom {
                 padding: 10px 16px;
@@ -754,10 +744,6 @@
 
             .btn-remove-file {
                 padding: 5px 12px;
-                font-size: 11px;
-            }
-
-            .btn-remove-file i {
                 font-size: 11px;
             }
         }
@@ -868,7 +854,6 @@
         </div>
         <hr>
 
-        <!-- Alert Messages -->
         <?php if (isset($_SESSION['success'])): ?>
         <div class="alert-success">
             <i class="fas fa-check-circle"></i> <?= $_SESSION['success']; unset($_SESSION['success']); ?>
@@ -881,10 +866,9 @@
         </div>
         <?php endif; ?>
 
-        <!-- Upload Form -->
         <form action="<?= BASEURL; ?>/MahasiswaController/uploadSuratStore" method="POST" enctype="multipart/form-data">
             <div class="row g-4">
-                <!-- Mata Kuliah - Custom Select -->
+                <!-- Mata Kuliah - Custom Select (Data dari prodi mahasiswa) -->
                 <div class="col-12">
                     <label class="form-label">
                         <i class="fas fa-book"></i> Mata Kuliah <span class="text-danger">*</span>
@@ -903,6 +887,7 @@
                                 <?php foreach ($data['matkul_list'] as $matkul): ?>
                                 <div class="option-item" data-value="<?= $matkul['id']; ?>">
                                     <i class="fas fa-book-open"></i> <?= htmlspecialchars($matkul['kode']); ?> - <?= htmlspecialchars($matkul['nama']); ?>
+                                    <span style="font-size: 10px; color: #4caf50; margin-left: auto;">Semester <?= $matkul['semester']; ?></span>
                                 </div>
                                 <?php endforeach; ?>
                             </div>
@@ -911,7 +896,7 @@
                     <input type="hidden" name="matkul_id" id="selectedMatkulValue" value="">
                     <?php if (empty($data['matkul_list'])): ?>
                     <div class="form-text text-warning">
-                        <i class="fas fa-info-circle"></i> Belum ada data absensi, silakan hubungi admin.
+                        <i class="fas fa-info-circle"></i> Belum ada mata kuliah untuk program studi Anda.
                     </div>
                     <?php endif; ?>
                 </div>

@@ -7,6 +7,8 @@ class SuratIzin extends BaseModel {
     // Properties untuk save/update
     private $id;
     private $absensi_id;
+    private $mahasiswa_id;
+    private $matkul_id;
     private $file_path;
     private $jenis;
     private $status;
@@ -26,6 +28,16 @@ class SuratIzin extends BaseModel {
     
     public function setAbsensiId($absensi_id) {
         $this->absensi_id = $absensi_id;
+        return $this;
+    }
+    
+    public function setMahasiswaId($mahasiswa_id) {
+        $this->mahasiswa_id = $mahasiswa_id;
+        return $this;
+    }
+    
+    public function setMatkulId($matkul_id) {
+        $this->matkul_id = $matkul_id;
         return $this;
     }
     
@@ -68,6 +80,14 @@ class SuratIzin extends BaseModel {
         return $this->absensi_id;
     }
     
+    public function getMahasiswaId() {
+        return $this->mahasiswa_id;
+    }
+    
+    public function getMatkulId() {
+        return $this->matkul_id;
+    }
+    
     public function getFilePath() {
         return $this->file_path;
     }
@@ -97,10 +117,6 @@ class SuratIzin extends BaseModel {
     public function validate() {
         $errors = [];
         
-        if (empty($this->absensi_id)) {
-            $errors['absensi_id'] = "Absensi ID tidak boleh kosong";
-        }
-        
         if (empty($this->file_path)) {
             $errors['file_path'] = "File path tidak boleh kosong";
         }
@@ -121,12 +137,14 @@ class SuratIzin extends BaseModel {
         try {
             if (isset($this->id) && !empty($this->id)) {
                 // UPDATE
-                $sql = "UPDATE surat_izin SET absensi_id = :absensi_id, file_path = :file_path, 
-                        jenis = :jenis, status = :status, keterangan = :keterangan,
-                        keterangan_admin = :keterangan_admin
+                $sql = "UPDATE surat_izin SET absensi_id = :absensi_id, mahasiswa_id = :mahasiswa_id,
+                        matkul_id = :matkul_id, file_path = :file_path, jenis = :jenis, status = :status, 
+                        keterangan = :keterangan, keterangan_admin = :keterangan_admin
                         WHERE id = :id";
                 $this->db->query($sql);
                 $this->db->bind(':absensi_id', $this->absensi_id);
+                $this->db->bind(':mahasiswa_id', $this->mahasiswa_id);
+                $this->db->bind(':matkul_id', $this->matkul_id);
                 $this->db->bind(':file_path', $this->file_path);
                 $this->db->bind(':jenis', $this->jenis);
                 $this->db->bind(':status', $this->status);
@@ -138,11 +156,19 @@ class SuratIzin extends BaseModel {
                     return ['success' => true, 'message' => 'Data surat izin berhasil diupdate'];
                 }
             } else {
-                // INSERT
-                $sql = "INSERT INTO surat_izin (absensi_id, file_path, jenis, status, keterangan, tanggal_upload) 
-                        VALUES (:absensi_id, :file_path, :jenis, :status, :keterangan, NOW())";
-                $this->db->query($sql);
-                $this->db->bind(':absensi_id', $this->absensi_id);
+                // INSERT (dengan prioritas mahasiswa_id & matkul_id)
+                if (!empty($this->mahasiswa_id) && !empty($this->matkul_id)) {
+                    $sql = "INSERT INTO surat_izin (mahasiswa_id, matkul_id, file_path, jenis, status, keterangan, tanggal_upload) 
+                            VALUES (:mahasiswa_id, :matkul_id, :file_path, :jenis, :status, :keterangan, NOW())";
+                    $this->db->query($sql);
+                    $this->db->bind(':mahasiswa_id', $this->mahasiswa_id);
+                    $this->db->bind(':matkul_id', $this->matkul_id);
+                } else {
+                    $sql = "INSERT INTO surat_izin (absensi_id, file_path, jenis, status, keterangan, tanggal_upload) 
+                            VALUES (:absensi_id, :file_path, :jenis, :status, :keterangan, NOW())";
+                    $this->db->query($sql);
+                    $this->db->bind(':absensi_id', $this->absensi_id);
+                }
                 $this->db->bind(':file_path', $this->file_path);
                 $this->db->bind(':jenis', $this->jenis);
                 $this->db->bind(':status', $this->status);
@@ -163,15 +189,16 @@ class SuratIzin extends BaseModel {
     // ========== METHOD UNTUK MAHASISWA ==========
     
     /**
-     * Ambil semua surat izin berdasarkan mahasiswa_id (join ke absensi)
+     * Ambil semua surat izin berdasarkan mahasiswa_id (join ke absensi untuk data lama)
+     * dan juga data baru yang langsung menggunakan mahasiswa_id
      */
     public function getByMahasiswaId($mahasiswa_id) {
         try {
-            $sql = "SELECT s.*, a.tanggal, mk.nama as mata_kuliah
+            $sql = "SELECT s.*, a.tanggal, mk.nama as mata_kuliah, mk.kode
                     FROM surat_izin s
-                    JOIN absensi a ON s.absensi_id = a.id
-                    JOIN mata_kuliah mk ON a.matkul_id = mk.id
-                    WHERE a.mahasiswa_id = :mahasiswa_id
+                    LEFT JOIN absensi a ON s.absensi_id = a.id
+                    LEFT JOIN mata_kuliah mk ON COALESCE(a.matkul_id, s.matkul_id) = mk.id
+                    WHERE s.mahasiswa_id = :mahasiswa_id
                     ORDER BY s.tanggal_upload DESC";
             $this->db->query($sql);
             $this->db->bind(':mahasiswa_id', $mahasiswa_id);
@@ -182,7 +209,7 @@ class SuratIzin extends BaseModel {
     }
     
     /**
-     * Ambil surat izin berdasarkan mahasiswa_id dengan filter status (UNTUK HISTORI SURAT)
+     * Ambil surat izin berdasarkan mahasiswa_id dengan filter status
      * @param int $mahasiswa_id ID mahasiswa
      * @param string $filter_status Filter status (semua, pending, disetujui, ditolak)
      * @return array Daftar surat izin
@@ -191,9 +218,9 @@ class SuratIzin extends BaseModel {
         try {
             $sql = "SELECT s.*, a.tanggal, mk.nama as mata_kuliah, mk.kode
                     FROM surat_izin s
-                    JOIN absensi a ON s.absensi_id = a.id
-                    JOIN mata_kuliah mk ON a.matkul_id = mk.id
-                    WHERE a.mahasiswa_id = :mahasiswa_id";
+                    LEFT JOIN absensi a ON s.absensi_id = a.id
+                    LEFT JOIN mata_kuliah mk ON COALESCE(a.matkul_id, s.matkul_id) = mk.id
+                    WHERE s.mahasiswa_id = :mahasiswa_id";
             
             if ($filter_status != 'semua') {
                 $sql .= " AND s.status = :status";
@@ -222,12 +249,11 @@ class SuratIzin extends BaseModel {
      */
     public function countByMahasiswaIdAndStatus($mahasiswa_id, $status = null) {
         try {
-            $sql = "SELECT COUNT(*) as total FROM surat_izin s
-                    JOIN absensi a ON s.absensi_id = a.id
-                    WHERE a.mahasiswa_id = :mahasiswa_id";
+            $sql = "SELECT COUNT(*) as total FROM surat_izin 
+                    WHERE mahasiswa_id = :mahasiswa_id";
             
             if ($status !== null) {
-                $sql .= " AND s.status = :status";
+                $sql .= " AND status = :status";
             }
             
             $this->db->query($sql);
@@ -249,9 +275,8 @@ class SuratIzin extends BaseModel {
      */
     public function countByMahasiswaId($mahasiswa_id) {
         try {
-            $sql = "SELECT COUNT(*) as total FROM surat_izin s
-                    JOIN absensi a ON s.absensi_id = a.id
-                    WHERE a.mahasiswa_id = :mahasiswa_id";
+            $sql = "SELECT COUNT(*) as total FROM surat_izin 
+                    WHERE mahasiswa_id = :mahasiswa_id";
             $this->db->query($sql);
             $this->db->bind(':mahasiswa_id', $mahasiswa_id);
             $result = $this->db->single();
@@ -262,7 +287,36 @@ class SuratIzin extends BaseModel {
     }
     
     /**
-     * Simpan surat izin baru
+     * Simpan surat izin baru berdasarkan mahasiswa_id dan matkul_id (tanpa absensi)
+     * @param int $mahasiswa_id ID mahasiswa
+     * @param int $matkul_id ID mata kuliah
+     * @param string $file_path Path file yang diupload
+     * @param string $jenis Jenis surat (sakit, izin, dispensasi)
+     * @param string|null $keterangan Keterangan tambahan
+     * @return array Hasil operasi
+     */
+    public function createSuratIzinByMahasiswa($mahasiswa_id, $matkul_id, $file_path, $jenis, $keterangan = null) {
+        try {
+            $sql = "INSERT INTO surat_izin (mahasiswa_id, matkul_id, file_path, jenis, keterangan, status, tanggal_upload) 
+                    VALUES (:mahasiswa_id, :matkul_id, :file_path, :jenis, :keterangan, 'pending', NOW())";
+            $this->db->query($sql);
+            $this->db->bind(':mahasiswa_id', $mahasiswa_id);
+            $this->db->bind(':matkul_id', $matkul_id);
+            $this->db->bind(':file_path', $file_path);
+            $this->db->bind(':jenis', $jenis);
+            $this->db->bind(':keterangan', $keterangan);
+            
+            if ($this->db->execute()) {
+                return ['success' => true, 'message' => 'Surat izin berhasil diupload'];
+            }
+            return ['success' => false, 'message' => 'Gagal mengupload surat izin'];
+        } catch (Exception $e) {
+            return ['success' => false, 'message' => 'Terjadi kesalahan: ' . $e->getMessage()];
+        }
+    }
+    
+    /**
+     * Simpan surat izin baru (lama, berdasarkan absensi_id)
      */
     public function createSuratIzin($absensi_id, $file_path, $jenis, $keterangan = null) {
         try {
@@ -301,18 +355,17 @@ class SuratIzin extends BaseModel {
     
     /**
      * Ambil detail surat izin lengkap dengan data mahasiswa dan mata kuliah
-     * Untuk ditampilkan di halaman detail admin
      */
     public function getDetailById($id) {
         try {
             $sql = "SELECT s.*, 
-                           a.tanggal, a.mahasiswa_id,
-                           mk.nama as mata_kuliah, mk.kode,
-                           m.nama as mahasiswa_nama, m.nim, m.kelas as prodi
+                           a.tanggal, 
+                           m.nama as mahasiswa_nama, m.nim, m.kelas as prodi,
+                           mk.nama as mata_kuliah, mk.kode
                     FROM surat_izin s
-                    JOIN absensi a ON s.absensi_id = a.id
-                    JOIN mata_kuliah mk ON a.matkul_id = mk.id
-                    JOIN mahasiswa m ON a.mahasiswa_id = m.id
+                    LEFT JOIN absensi a ON s.absensi_id = a.id
+                    LEFT JOIN mahasiswa m ON s.mahasiswa_id = m.id
+                    LEFT JOIN mata_kuliah mk ON COALESCE(a.matkul_id, s.matkul_id) = mk.id
                     WHERE s.id = :id";
             $this->db->query($sql);
             $this->db->bind(':id', $id);
@@ -332,9 +385,9 @@ class SuratIzin extends BaseModel {
             $sql = "SELECT s.*, a.tanggal, mk.nama as mata_kuliah, mk.kode,
                            m.nama as mahasiswa_nama, m.nim, m.kelas as prodi
                     FROM surat_izin s
-                    JOIN absensi a ON s.absensi_id = a.id
-                    JOIN mata_kuliah mk ON a.matkul_id = mk.id
-                    JOIN mahasiswa m ON a.mahasiswa_id = m.id";
+                    LEFT JOIN absensi a ON s.absensi_id = a.id
+                    LEFT JOIN mahasiswa m ON s.mahasiswa_id = m.id
+                    LEFT JOIN mata_kuliah mk ON COALESCE(a.matkul_id, s.matkul_id) = mk.id";
             
             if ($status !== null) {
                 $sql .= " WHERE s.status = :status";
@@ -357,16 +410,16 @@ class SuratIzin extends BaseModel {
     /**
      * Ambil semua surat izin berdasarkan mata kuliah (untuk dosen yang mengampu)
      * @param int $dosen_id ID dosen
-     * @return array Daftar surat izin untuk mata kuliah yang diampu dosen
+     * @return array Daftar surat izin
      */
     public function getSuratIzinByDosenId($dosen_id) {
         try {
             $sql = "SELECT s.*, a.tanggal, mk.nama as mata_kuliah, mk.kode,
                            m.nama as mahasiswa_nama, m.nim, m.kelas as prodi
                     FROM surat_izin s
-                    JOIN absensi a ON s.absensi_id = a.id
-                    JOIN mata_kuliah mk ON a.matkul_id = mk.id
-                    JOIN mahasiswa m ON a.mahasiswa_id = m.id
+                    LEFT JOIN absensi a ON s.absensi_id = a.id
+                    LEFT JOIN mahasiswa m ON s.mahasiswa_id = m.id
+                    LEFT JOIN mata_kuliah mk ON COALESCE(a.matkul_id, s.matkul_id) = mk.id
                     WHERE mk.dosen_id = :dosen_id
                     ORDER BY s.tanggal_upload DESC";
             

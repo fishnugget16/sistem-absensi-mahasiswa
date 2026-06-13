@@ -2,16 +2,12 @@
 
 Sistem informasi manajemen absensi mahasiswa berbasis web yang dibangun dengan **PHP OOP (Object Oriented Programming)** dan arsitektur **MVC (Model-View-Controller)**. Sistem ini memungkinkan tiga peran pengguna (Admin, Dosen, Mahasiswa) untuk mengelola data akademik dan absensi secara terintegrasi.
 
----
-
 ## Daftar Isi
 
 - [Fitur Utama](#fitur-utama)
 - [Teknologi yang Digunakan](#teknologi-yang-digunakan)
 - [Struktur Database](#struktur-database)
 - [Konsep OOP yang Diimplementasikan](#konsep-oop-yang-diimplementasikan)
-
----
 
 ## Fitur Utama
 
@@ -32,10 +28,8 @@ Sistem informasi manajemen absensi mahasiswa berbasis web yang dibangun dengan *
 
 ### 👨‍🎓 Mahasiswa
 - Login dan Logout
-- Lihat Riwayat Absensi (tabel + rekap per mata kuliah)
+- Lihat Riwayat Absensi dan Histori Surat Izin(tabel + rekap per mata kuliah)
 - Upload Surat Izin (file PDF, JPG, PNG)
-
----
 
 ## Teknologi yang Digunakan
 
@@ -48,8 +42,6 @@ Sistem informasi manajemen absensi mahasiswa berbasis web yang dibangun dengan *
 | JavaScript (Vanilla) | Interaksi frontend (custom select, confirm dialog, drag & drop upload) |
 | DomPDF | Export laporan PDF (fitur dosen) |
 
----
-
 ## Struktur Database
 
 | Tabel | Keterangan |
@@ -60,8 +52,6 @@ Sistem informasi manajemen absensi mahasiswa berbasis web yang dibangun dengan *
 | mata_kuliah | Data mata kuliah (kode, nama, SKS, semester, jumlah pertemuan) |
 | absensi | Data absensi (mahasiswa, mata kuliah, tanggal, status) |
 | surat_izin | Data surat izin (file path, status, keterangan) |
-
----
 
 ## Konsep OOP yang Diimplementasikan
 
@@ -74,5 +64,3 @@ Sistem informasi manajemen absensi mahasiswa berbasis web yang dibangun dengan *
 | Polymorphism | Method `validate()` di setiap model |
 | Singleton | Class `Database` dengan method `getInstance()` |
 | Namespace | (Opsional, bisa ditambahkan) |
-
----

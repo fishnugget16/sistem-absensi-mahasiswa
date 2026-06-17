@@ -216,7 +216,7 @@
             margin-bottom: 8px;
         }
 
-        .form-control, .form-select {
+        .form-control {
             background: #2a2a2a;
             border: 1px solid #3c4043;
             color: #e8eaed;
@@ -224,9 +224,10 @@
             padding: 10px 12px;
             font-size: 14px;
             transition: all 0.2s;
+            width: 100%;
         }
 
-        .form-control:focus, .form-select:focus {
+        .form-control:focus {
             background: #2a2a2a;
             border-color: #4caf50;
             color: #e8eaed;
@@ -283,7 +284,132 @@
             font-size: 13px;
         }
 
-        /* ========== CUSTOM CONFIRM DIALOG ========== */
+        /* Custom Select Styles */
+        .custom-select-container {
+            position: relative;
+            width: 100%;
+        }
+
+        .custom-select-trigger {
+            background: #2a2a2a;
+            border: 1px solid #3c4043;
+            border-radius: 8px;
+            padding: 10px 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: #e8eaed;
+            font-size: 14px;
+        }
+
+        .custom-select-trigger:hover {
+            border-color: #4caf50;
+        }
+
+        .custom-select-trigger i {
+            transition: transform 0.2s;
+            color: #9aa0a6;
+        }
+
+        .custom-select-trigger.open i {
+            transform: rotate(180deg);
+        }
+
+        .custom-select-options {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: #1e1e1e;
+            border: 1px solid #3c4043;
+            border-radius: 8px;
+            margin-top: 4px;
+            z-index: 100;
+            display: none;
+            max-height: 280px;
+            overflow: hidden;
+            flex-direction: column;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .custom-select-options.show {
+            display: flex;
+        }
+
+        .search-box {
+            padding: 10px;
+            border-bottom: 1px solid #3c4043;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .search-box i {
+            color: #9aa0a6;
+            font-size: 14px;
+        }
+
+        .search-box input {
+            background: #2a2a2a;
+            border: none;
+            color: #e8eaed;
+            width: 100%;
+            outline: none;
+            font-size: 13px;
+        }
+
+        .search-box input::placeholder {
+            color: #5f6368;
+        }
+
+        .options-list {
+            overflow-y: auto;
+            max-height: 220px;
+        }
+
+        .option-item {
+            padding: 10px 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: #e8eaed;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .option-item i {
+            width: 20px;
+            font-size: 14px;
+            color: #4caf50;
+        }
+
+        .option-item:hover {
+            background: rgba(76, 175, 80, 0.1);
+        }
+
+        .option-item.selected {
+            background: rgba(76, 175, 80, 0.2);
+            color: #4caf50;
+        }
+
+        .options-list::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .options-list::-webkit-scrollbar-track {
+            background: #2a2a2a;
+            border-radius: 3px;
+        }
+
+        .options-list::-webkit-scrollbar-thumb {
+            background: #4caf50;
+            border-radius: 3px;
+        }
+
+        /* Custom Confirm Dialog */
         .custom-confirm-overlay {
             position: fixed;
             top: 0;
@@ -327,16 +453,6 @@
         .confirm-icon {
             text-align: center;
             margin-bottom: 20px;
-        }
-
-        .confirm-icon.delete-icon i {
-            color: #ff9800;
-            font-size: 56px;
-        }
-
-        .confirm-icon.logout-icon i {
-            color: #dc3545;
-            font-size: 56px;
         }
 
         .confirm-icon i {
@@ -412,7 +528,7 @@
             .form-label {
                 font-size: 12px;
             }
-            .form-control, .form-select {
+            .form-control, .custom-select-trigger {
                 padding: 8px 12px;
                 font-size: 13px;
             }
@@ -429,6 +545,10 @@
             .navbar-brand span {
                 display: none;
             }
+            .option-item {
+                padding: 8px 12px;
+                font-size: 12px;
+            }
         }
 
         @media (min-width: 769px) and (max-width: 992px) {
@@ -442,7 +562,7 @@
                 margin: 28px 40px;
                 padding: 32px;
             }
-            .form-control, .form-select {
+            .form-control, .custom-select-trigger {
                 padding: 12px 16px;
             }
         }
@@ -544,6 +664,20 @@
         <?php unset($_SESSION['error']); endif; ?>
 
         <?php if ($data['dosen']): ?>
+        <?php 
+        // Mapping kode ke nama prodi untuk ditampilkan di trigger
+        $prodi_map = [
+            'TI' => 'Teknik Informatika (TI)',
+            'SI' => 'Sistem Informasi (SI)',
+            'TK' => 'Teknik Komputer (TK)',
+            'MI' => 'Manajemen Informatika (MI)',
+            'KA' => 'Komputerisasi Akuntansi (KA)',
+            'TE' => 'Teknik Elektro (TE)',
+            'DKV' => 'Desain Komunikasi Visual (DKV)',
+            'BD' => 'Bisnis Digital (BD)'
+        ];
+        $selected_prodi_text = $prodi_map[$data['dosen']['prodi']] ?? '-- Pilih Program Studi --';
+        ?>
         <form action="<?= BASEURL; ?>/AdminController/dosenUpdate/<?= $data['dosen']['id']; ?>" method="POST">
             <div class="row g-3">
                 <div class="col-12 col-md-6">
@@ -556,7 +690,45 @@
                 </div>
                 <div class="col-12 col-md-6">
                     <label class="form-label">Program Studi</label>
-                    <input type="text" name="prodi" class="form-control" value="<?= htmlspecialchars($data['dosen']['prodi'] ?? ''); ?>" placeholder="Contoh: Teknik Informatika">
+                    <div class="custom-select-container" id="prodiSelectContainer">
+                        <div class="custom-select-trigger" id="prodiSelectTrigger">
+                            <span id="selectedProdiText"><?= $selected_prodi_text; ?></span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="custom-select-options" id="prodiSelectOptions">
+                            <div class="search-box">
+                                <i class="fas fa-search"></i>
+                                <input type="text" id="prodiSearchInput" placeholder="Cari program studi...">
+                            </div>
+                            <div class="options-list" id="prodiOptionsList">
+                                <div class="option-item <?= ($data['dosen']['prodi'] == 'TI') ? 'selected' : ''; ?>" data-value="TI">
+                                    <i class="fas fa-laptop-code"></i> Teknik Informatika (TI)
+                                </div>
+                                <div class="option-item <?= ($data['dosen']['prodi'] == 'SI') ? 'selected' : ''; ?>" data-value="SI">
+                                    <i class="fas fa-database"></i> Sistem Informasi (SI)
+                                </div>
+                                <div class="option-item <?= ($data['dosen']['prodi'] == 'TK') ? 'selected' : ''; ?>" data-value="TK">
+                                    <i class="fas fa-microchip"></i> Teknik Komputer (TK)
+                                </div>
+                                <div class="option-item <?= ($data['dosen']['prodi'] == 'MI') ? 'selected' : ''; ?>" data-value="MI">
+                                    <i class="fas fa-chart-line"></i> Manajemen Informatika (MI)
+                                </div>
+                                <div class="option-item <?= ($data['dosen']['prodi'] == 'KA') ? 'selected' : ''; ?>" data-value="KA">
+                                    <i class="fas fa-calculator"></i> Komputerisasi Akuntansi (KA)
+                                </div>
+                                <div class="option-item <?= ($data['dosen']['prodi'] == 'TE') ? 'selected' : ''; ?>" data-value="TE">
+                                    <i class="fas fa-plug"></i> Teknik Elektro (TE)
+                                </div>
+                                <div class="option-item <?= ($data['dosen']['prodi'] == 'DKV') ? 'selected' : ''; ?>" data-value="DKV">
+                                    <i class="fas fa-palette"></i> Desain Komunikasi Visual (DKV)
+                                </div>
+                                <div class="option-item <?= ($data['dosen']['prodi'] == 'BD') ? 'selected' : ''; ?>" data-value="BD">
+                                    <i class="fas fa-chart-simple"></i> Bisnis Digital (BD)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <input type="hidden" name="prodi" id="selectedProdiValue" value="<?= htmlspecialchars($data['dosen']['prodi'] ?? ''); ?>">
                 </div>
                 <div class="col-12 col-md-6">
                     <label class="form-label">Email <span class="text-danger">*</span></label>
@@ -664,6 +836,65 @@
     window.addEventListener('resize', function() {
         if (window.innerWidth > 768 && sideMenu.classList.contains('open')) {
             closeSidebar();
+        }
+    });
+
+    // ========== CUSTOM SELECT FOR PROGRAM STUDI ==========
+    const prodiTrigger = document.getElementById('prodiSelectTrigger');
+    const prodiOptionsContainer = document.getElementById('prodiSelectOptions');
+    const prodiSelectedText = document.getElementById('selectedProdiText');
+    const prodiSelectedValue = document.getElementById('selectedProdiValue');
+    const prodiSearchInput = document.getElementById('prodiSearchInput');
+
+    function toggleProdiDropdown() {
+        prodiOptionsContainer.classList.toggle('show');
+        prodiTrigger.classList.toggle('open');
+    }
+
+    function selectProdiOption(value, text) {
+        prodiSelectedText.textContent = text;
+        prodiSelectedValue.value = value;
+        
+        prodiOptionsContainer.querySelectorAll('.option-item').forEach(opt => {
+            opt.classList.remove('selected');
+        });
+        
+        const selectedOpt = Array.from(prodiOptionsContainer.querySelectorAll('.option-item')).find(
+            opt => opt.getAttribute('data-value') === value
+        );
+        if (selectedOpt) selectedOpt.classList.add('selected');
+        
+        prodiOptionsContainer.classList.remove('show');
+        prodiTrigger.classList.remove('open');
+    }
+
+    prodiTrigger.addEventListener('click', toggleProdiDropdown);
+
+    prodiOptionsContainer.querySelectorAll('.option-item').forEach(option => {
+        option.addEventListener('click', () => {
+            const value = option.getAttribute('data-value');
+            const text = option.textContent.trim();
+            selectProdiOption(value, text);
+        });
+    });
+
+    prodiSearchInput.addEventListener('input', function() {
+        const searchTerm = this.value.toLowerCase();
+        prodiOptionsContainer.querySelectorAll('.option-item').forEach(option => {
+            const text = option.textContent.toLowerCase();
+            if (text.includes(searchTerm)) {
+                option.style.display = 'flex';
+            } else {
+                option.style.display = 'none';
+            }
+        });
+    });
+
+    document.addEventListener('click', function(event) {
+        const container = document.getElementById('prodiSelectContainer');
+        if (container && !container.contains(event.target)) {
+            prodiOptionsContainer.classList.remove('show');
+            prodiTrigger.classList.remove('open');
         }
     });
 </script>

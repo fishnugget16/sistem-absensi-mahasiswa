@@ -10,6 +10,7 @@ class MataKuliah extends BaseModel {
     private $nama;
     private $sks;
     private $semester;
+    private $jumlah_pertemuan;
     
     // Constructor
     public function __construct() {
@@ -45,6 +46,11 @@ class MataKuliah extends BaseModel {
         return $this;
     }
     
+    public function setJumlahPertemuan($jumlah_pertemuan) {
+        $this->jumlah_pertemuan = (int)$jumlah_pertemuan;
+        return $this;
+    }
+    
     // ==========================================
     // GETTER METHODS
     // ==========================================
@@ -67,6 +73,10 @@ class MataKuliah extends BaseModel {
     
     public function getSemester() {
         return $this->semester;
+    }
+    
+    public function getJumlahPertemuan() {
+        return $this->jumlah_pertemuan;
     }
     
     // ==========================================
@@ -100,6 +110,10 @@ class MataKuliah extends BaseModel {
             $errors['semester'] = "Semester harus antara 1-8";
         }
         
+        if (!empty($this->jumlah_pertemuan) && ($this->jumlah_pertemuan < 1 || $this->jumlah_pertemuan > 24)) {
+            $errors['jumlah_pertemuan'] = "Jumlah pertemuan harus antara 1-24";
+        }
+        
         return $errors;
     }
     
@@ -112,12 +126,13 @@ class MataKuliah extends BaseModel {
         try {
             if (isset($this->id) && !empty($this->id)) {
                 // UPDATE
-                $sql = "UPDATE mata_kuliah SET kode = :kode, nama = :nama, sks = :sks, semester = :semester WHERE id = :id";
+                $sql = "UPDATE mata_kuliah SET kode = :kode, nama = :nama, sks = :sks, semester = :semester, jumlah_pertemuan = :jumlah_pertemuan WHERE id = :id";
                 $this->db->query($sql);
                 $this->db->bind(':kode', $this->kode);
                 $this->db->bind(':nama', $this->nama);
                 $this->db->bind(':sks', $this->sks);
                 $this->db->bind(':semester', $this->semester);
+                $this->db->bind(':jumlah_pertemuan', $this->jumlah_pertemuan);
                 $this->db->bind(':id', $this->id);
                 
                 if ($this->db->execute()) {
@@ -135,12 +150,13 @@ class MataKuliah extends BaseModel {
                 }
                 
                 // INSERT
-                $sql = "INSERT INTO mata_kuliah (kode, nama, sks, semester) VALUES (:kode, :nama, :sks, :semester)";
+                $sql = "INSERT INTO mata_kuliah (kode, nama, sks, semester, jumlah_pertemuan) VALUES (:kode, :nama, :sks, :semester, :jumlah_pertemuan)";
                 $this->db->query($sql);
                 $this->db->bind(':kode', $this->kode);
                 $this->db->bind(':nama', $this->nama);
                 $this->db->bind(':sks', $this->sks);
                 $this->db->bind(':semester', $this->semester);
+                $this->db->bind(':jumlah_pertemuan', $this->jumlah_pertemuan);
                 
                 if ($this->db->execute()) {
                     $this->id = $this->db->lastInsertId();
@@ -155,9 +171,12 @@ class MataKuliah extends BaseModel {
     }
     
     // ==========================================
-    // ADDITIONAL METHODS (untuk AdminController)
+    // CRUD METHODS (untuk AdminController)
     // ==========================================
     
+    /**
+     * Ambil semua mata kuliah (tanpa filter)
+     */
     public function getAllMataKuliah() {
         try {
             $sql = "SELECT * FROM mata_kuliah ORDER BY semester ASC, kode ASC";
@@ -168,6 +187,51 @@ class MataKuliah extends BaseModel {
         }
     }
     
+    /**
+     * Ambil semua mata kuliah dengan filter (UNTUK HALAMAN ADMIN)
+     * @param string $filter_semester Filter berdasarkan semester
+     * @param string $filter_prodi Filter berdasarkan kode prodi (awalan kode)
+     * @param string $filter_sks Filter berdasarkan SKS
+     * @return array Daftar mata kuliah
+     */
+    public function getAllWithFilters($filter_semester = '', $filter_prodi = '', $filter_sks = '') {
+        try {
+            $sql = "SELECT * FROM mata_kuliah WHERE 1=1";
+            
+            if ($filter_semester != '') {
+                $sql .= " AND semester = :semester";
+            }
+            if ($filter_prodi != '') {
+                $sql .= " AND kode LIKE :prodi";
+            }
+            if ($filter_sks != '') {
+                $sql .= " AND sks = :sks";
+            }
+            
+            $sql .= " ORDER BY semester ASC, kode ASC";
+            
+            $this->db->query($sql);
+            
+            if ($filter_semester != '') {
+                $this->db->bind(':semester', $filter_semester);
+            }
+            if ($filter_prodi != '') {
+                $this->db->bind(':prodi', $filter_prodi . '%');
+            }
+            if ($filter_sks != '') {
+                $this->db->bind(':sks', $filter_sks);
+            }
+            
+            return $this->db->resultSet();
+        } catch (Exception $e) {
+            error_log("Error in getAllWithFilters: " . $e->getMessage());
+            return [];
+        }
+    }
+    
+    /**
+     * Ambil mata kuliah berdasarkan ID
+     */
     public function getMataKuliahById($id) {
         try {
             $sql = "SELECT * FROM mata_kuliah WHERE id = :id";
@@ -179,6 +243,9 @@ class MataKuliah extends BaseModel {
         }
     }
     
+    /**
+     * Ambil mata kuliah berdasarkan kode
+     */
     public function getMataKuliahByKode($kode) {
         try {
             $sql = "SELECT * FROM mata_kuliah WHERE kode = :kode";
@@ -190,6 +257,40 @@ class MataKuliah extends BaseModel {
         }
     }
     
+    /**
+     * Ambil mata kuliah berdasarkan semester
+     */
+    public function getMataKuliahBySemester($semester) {
+        try {
+            $sql = "SELECT * FROM mata_kuliah WHERE semester = :semester ORDER BY kode ASC";
+            $this->db->query($sql);
+            $this->db->bind(':semester', $semester);
+            return $this->db->resultSet();
+        } catch (Exception $e) {
+            return [];
+        }
+    }
+    
+    /**
+     * Cari mata kuliah berdasarkan keyword
+     */
+    public function searchMataKuliah($keyword) {
+        try {
+            $sql = "SELECT * FROM mata_kuliah 
+                    WHERE kode LIKE :keyword 
+                       OR nama LIKE :keyword 
+                    ORDER BY semester ASC, kode ASC";
+            $this->db->query($sql);
+            $this->db->bind(':keyword', "%$keyword%");
+            return $this->db->resultSet();
+        } catch (Exception $e) {
+            return [];
+        }
+    }
+    
+    /**
+     * Buat mata kuliah baru
+     */
     public function createMataKuliah($kode, $nama, $sks, $semester, $jumlah_pertemuan = 14) {
         try {
             // Cek apakah kode sudah terdaftar
@@ -221,7 +322,10 @@ class MataKuliah extends BaseModel {
         }
     }
     
-    public function updateMataKuliah($id, $kode, $nama, $sks, $semester, $jumlah_pertemuan) {
+    /**
+     * Update mata kuliah
+     */
+    public function updateMataKuliah($id, $kode, $nama, $sks, $semester, $jumlah_pertemuan = 14) {
         try {
             // Cek apakah kode sudah dipakai matkul lain
             $sql = "SELECT COUNT(*) as total FROM mata_kuliah WHERE kode = :kode AND id != :id";
@@ -254,6 +358,9 @@ class MataKuliah extends BaseModel {
         }
     }
     
+    /**
+     * Hapus mata kuliah
+     */
     public function deleteMataKuliah($id) {
         try {
             $sql = "DELETE FROM mata_kuliah WHERE id = :id";
@@ -270,6 +377,9 @@ class MataKuliah extends BaseModel {
         }
     }
     
+    /**
+     * Hitung total mata kuliah
+     */
     public function countMataKuliah() {
         try {
             $sql = "SELECT COUNT(*) as total FROM mata_kuliah";
@@ -278,31 +388,6 @@ class MataKuliah extends BaseModel {
             return $result['total'];
         } catch (Exception $e) {
             return 0;
-        }
-    }
-    
-    public function searchMataKuliah($keyword) {
-        try {
-            $sql = "SELECT * FROM mata_kuliah 
-                    WHERE kode LIKE :keyword 
-                       OR nama LIKE :keyword 
-                    ORDER BY semester ASC, kode ASC";
-            $this->db->query($sql);
-            $this->db->bind(':keyword', "%$keyword%");
-            return $this->db->resultSet();
-        } catch (Exception $e) {
-            return [];
-        }
-    }
-    
-    public function getMataKuliahBySemester($semester) {
-        try {
-            $sql = "SELECT * FROM mata_kuliah WHERE semester = :semester ORDER BY kode ASC";
-            $this->db->query($sql);
-            $this->db->bind(':semester', $semester);
-            return $this->db->resultSet();
-        } catch (Exception $e) {
-            return [];
         }
     }
 }

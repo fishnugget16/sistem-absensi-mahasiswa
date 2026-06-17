@@ -660,6 +660,19 @@
         <?php unset($_SESSION['error']); endif; ?>
 
         <?php if ($data['mahasiswa']): ?>
+        <?php 
+        // Mapping kode ke nama prodi untuk ditampilkan
+        $prodi_map = [
+            'SI' => 'Sistem Informasi (SI)',
+            'TK' => 'Teknik Komputer (TK)',
+            'MI' => 'Manajemen Informatika (MI)',
+            'KA' => 'Komputerisasi Akuntansi (KA)',
+            'TE' => 'Teknik Elektro (TE)',
+            'DKV' => 'Desain Komunikasi Visual (DKV)',
+            'BD' => 'Bisnis Digital (BD)'
+        ];
+        $selected_prodi_text = $prodi_map[$data['mahasiswa']['kelas']] ?? '-- Pilih Program Studi --';
+        ?>
         <form action="<?= BASEURL; ?>/AdminController/mahasiswaUpdate/<?= $data['mahasiswa']['id']; ?>" method="POST">
             <div class="row g-3">
                 <div class="col-12 col-md-6">
@@ -678,7 +691,7 @@
                     <label class="form-label">Program Studi</label>
                     <div class="custom-select-container" id="prodiSelectContainer">
                         <div class="custom-select-trigger" id="prodiSelectTrigger">
-                            <span id="selectedProdiText"><?= htmlspecialchars($data['mahasiswa']['kelas'] ?? '-- Pilih Program Studi --'); ?></span>
+                            <span id="selectedProdiText"><?= $selected_prodi_text; ?></span>
                             <i class="fas fa-chevron-down"></i>
                         </div>
                         <div class="custom-select-options" id="prodiSelectOptions">
@@ -687,29 +700,29 @@
                                 <input type="text" id="prodiSearchInput" placeholder="Cari program studi...">
                             </div>
                             <div class="options-list" id="prodiOptionsList">
-                                <div class="option-item" data-value="Teknik Informatika" <?= ($data['mahasiswa']['kelas'] ?? '') == 'Teknik Informatika' ? 'selected' : ''; ?>>
-                                    <i class="fas fa-laptop-code"></i> Teknik Informatika (S1)
+                                <div class="option-item" data-value="TI" <?= ($data['mahasiswa']['kelas'] ?? '') == 'SI' ? 'selected' : ''; ?>>
+                                    <i class="fas fa-laptop-code"></i> Teknik Informatika (TI)
                                 </div>
-                                <div class="option-item" data-value="Sistem Informasi" <?= ($data['mahasiswa']['kelas'] ?? '') == 'Sistem Informasi' ? 'selected' : ''; ?>>
-                                    <i class="fas fa-database"></i> Sistem Informasi (S1)
+                                <div class="option-item" data-value="SI" <?= ($data['mahasiswa']['kelas'] ?? '') == 'SI' ? 'selected' : ''; ?>>
+                                    <i class="fas fa-database"></i> Sistem Informasi (SI)
                                 </div>
-                                <div class="option-item" data-value="Teknik Komputer" <?= ($data['mahasiswa']['kelas'] ?? '') == 'Teknik Komputer' ? 'selected' : ''; ?>>
-                                    <i class="fas fa-microchip"></i> Teknik Komputer (S1)
+                                <div class="option-item" data-value="TK" <?= ($data['mahasiswa']['kelas'] ?? '') == 'TK' ? 'selected' : ''; ?>>
+                                    <i class="fas fa-microchip"></i> Teknik Komputer (TK)
                                 </div>
-                                <div class="option-item" data-value="Manajemen Informatika" <?= ($data['mahasiswa']['kelas'] ?? '') == 'Manajemen Informatika' ? 'selected' : ''; ?>>
-                                    <i class="fas fa-chart-line"></i> Manajemen Informatika (D3)
+                                <div class="option-item" data-value="MI" <?= ($data['mahasiswa']['kelas'] ?? '') == 'MI' ? 'selected' : ''; ?>>
+                                    <i class="fas fa-chart-line"></i> Manajemen Informatika (MI)
                                 </div>
-                                <div class="option-item" data-value="Komputerisasi Akuntansi" <?= ($data['mahasiswa']['kelas'] ?? '') == 'Komputerisasi Akuntansi' ? 'selected' : ''; ?>>
-                                    <i class="fas fa-calculator"></i> Komputerisasi Akuntansi (D3)
+                                <div class="option-item" data-value="KA" <?= ($data['mahasiswa']['kelas'] ?? '') == 'KA' ? 'selected' : ''; ?>>
+                                    <i class="fas fa-calculator"></i> Komputerisasi Akuntansi (KA)
                                 </div>
-                                <div class="option-item" data-value="Teknik Elektro" <?= ($data['mahasiswa']['kelas'] ?? '') == 'Teknik Elektro' ? 'selected' : ''; ?>>
-                                    <i class="fas fa-plug"></i> Teknik Elektro (S1)
+                                <div class="option-item" data-value="TE" <?= ($data['mahasiswa']['kelas'] ?? '') == 'TE' ? 'selected' : ''; ?>>
+                                    <i class="fas fa-plug"></i> Teknik Elektro (TE)
                                 </div>
-                                <div class="option-item" data-value="Desain Komunikasi Visual" <?= ($data['mahasiswa']['kelas'] ?? '') == 'Desain Komunikasi Visual' ? 'selected' : ''; ?>>
-                                    <i class="fas fa-palette"></i> Desain Komunikasi Visual (S1)
+                                <div class="option-item" data-value="DKV" <?= ($data['mahasiswa']['kelas'] ?? '') == 'DKV' ? 'selected' : ''; ?>>
+                                    <i class="fas fa-palette"></i> Desain Komunikasi Visual (DKV)
                                 </div>
-                                <div class="option-item" data-value="Bisnis Digital" <?= ($data['mahasiswa']['kelas'] ?? '') == 'Bisnis Digital' ? 'selected' : ''; ?>>
-                                    <i class="fas fa-chart-simple"></i> Bisnis Digital (S1)
+                                <div class="option-item" data-value="BD" <?= ($data['mahasiswa']['kelas'] ?? '') == 'BD' ? 'selected' : ''; ?>>
+                                    <i class="fas fa-chart-simple"></i> Bisnis Digital (BD)
                                 </div>
                             </div>
                         </div>

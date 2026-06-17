@@ -693,29 +693,29 @@
                                 <input type="text" id="prodiSearchInput" placeholder="Cari program studi...">
                             </div>
                             <div class="options-list" id="prodiOptionsList">
-                                <div class="option-item" data-value="Teknik Informatika">
-                                    <i class="fas fa-laptop-code"></i> Teknik Informatika (S1)
+                                <div class="option-item" data-value="TI">
+                                    <i class="fas fa-laptop-code"></i> Teknik Informatika (TI)
                                 </div>
-                                <div class="option-item" data-value="Sistem Informasi">
-                                    <i class="fas fa-database"></i> Sistem Informasi (S1)
+                                <div class="option-item" data-value="SI">
+                                    <i class="fas fa-database"></i> Sistem Informasi (SI)
                                 </div>
-                                <div class="option-item" data-value="Teknik Komputer">
-                                    <i class="fas fa-microchip"></i> Teknik Komputer (S1)
+                                <div class="option-item" data-value="TK">
+                                    <i class="fas fa-microchip"></i> Teknik Komputer (TK)
                                 </div>
-                                <div class="option-item" data-value="Manajemen Informatika">
-                                    <i class="fas fa-chart-line"></i> Manajemen Informatika (D3)
+                                <div class="option-item" data-value="MI">
+                                    <i class="fas fa-chart-line"></i> Manajemen Informatika (MI)
                                 </div>
-                                <div class="option-item" data-value="Komputerisasi Akuntansi">
-                                    <i class="fas fa-calculator"></i> Komputerisasi Akuntansi (D3)
+                                <div class="option-item" data-value="KA">
+                                    <i class="fas fa-calculator"></i> Komputerisasi Akuntansi (KA)
                                 </div>
-                                <div class="option-item" data-value="Teknik Elektro">
-                                    <i class="fas fa-plug"></i> Teknik Elektro (S1)
+                                <div class="option-item" data-value="TE">
+                                    <i class="fas fa-plug"></i> Teknik Elektro (TE)
                                 </div>
-                                <div class="option-item" data-value="Desain Komunikasi Visual">
-                                    <i class="fas fa-palette"></i> Desain Komunikasi Visual (S1)
+                                <div class="option-item" data-value="DKV">
+                                    <i class="fas fa-palette"></i> Desain Komunikasi Visual (DKV)
                                 </div>
-                                <div class="option-item" data-value="Bisnis Digital">
-                                    <i class="fas fa-chart-simple"></i> Bisnis Digital (S1)
+                                <div class="option-item" data-value="BD">
+                                    <i class="fas fa-chart-simple"></i> Bisnis Digital (BD)
                                 </div>
                             </div>
                         </div>

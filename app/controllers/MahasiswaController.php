@@ -42,13 +42,17 @@ class MahasiswaController extends Controller {
         
         $totalSurat = $suratModel->countByMahasiswaId($mahasiswaId);
         
+        // Hitung surat yang masih pending untuk stat card tambahan
+        $suratPending = $suratModel->countByMahasiswaIdAndStatus($mahasiswaId, 'pending');
+        
         $data = [
             'nama' => $_SESSION['nama'] ?? $_SESSION['username'],
             'nim' => $_SESSION['nim'] ?? '-',
             'prodi' => $dataMahasiswa['kelas'] ?? 'Belum diisi',
             'total_hadir' => $totalHadir,
             'persentase' => $persentase,
-            'total_surat' => $totalSurat
+            'total_surat' => $totalSurat,
+            'surat_pending' => $suratPending
         ];
         
         $this->view('mahasiswa/dashboard', $data);
@@ -78,8 +82,11 @@ class MahasiswaController extends Controller {
         $dataMahasiswa = $mahasiswaModel->getMahasiswaByUserId($userId);
         $mahasiswaId = $dataMahasiswa['id'] ?? 0;
         
+        // Ambil semua mata kuliah berdasarkan prodi mahasiswa
+        $matkul_list = $absensiModel->getMatkulByProdi($mahasiswaId);
+        
         $data = [
-            'matkul_list' => $absensiModel->getMatkulByMahasiswaId($mahasiswaId)
+            'matkul_list' => $matkul_list
         ];
         
         $this->view('mahasiswa/surat/upload', $data);
@@ -88,7 +95,6 @@ class MahasiswaController extends Controller {
     public function uploadSuratStore() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
             $mahasiswaModel = $this->model('Mahasiswa');
-            $absensiModel = $this->model('Absensi');
             $suratModel = $this->model('SuratIzin');
             
             $userId = $_SESSION['user_id'];
@@ -105,11 +111,12 @@ class MahasiswaController extends Controller {
                 exit;
             }
             
-            // PAKAI MODEL, BUKAN QUERY LANGSUNG
-            $absensi = $absensiModel->getLatestAbsensiByMahasiswaAndMatkul($mahasiswaId, $matkul_id);
+            // Validasi: cek apakah mata kuliah valid
+            $matkulModel = $this->model('MataKuliah');
+            $matkul = $matkulModel->getMataKuliahById($matkul_id);
             
-            if (!$absensi) {
-                $_SESSION['error'] = 'Belum ada data absensi untuk mata kuliah ini';
+            if (!$matkul) {
+                $_SESSION['error'] = 'Mata kuliah tidak valid';
                 header('Location: ' . BASEURL . '/MahasiswaController/uploadSurat');
                 exit;
             }
@@ -140,7 +147,9 @@ class MahasiswaController extends Controller {
             
             if (move_uploaded_file($_FILES['file_surat']['tmp_name'], $targetFile)) {
                 $filePath = 'uploads/surat/' . $fileName;
-                $result = $suratModel->createSuratIzin($absensi['id'], $filePath, $jenis_surat, $keterangan);
+                
+                // Simpan surat izin (tanpa perlu cek absensi terlebih dahulu)
+                $result = $suratModel->createSuratIzinByMahasiswa($mahasiswaId, $matkul_id, $filePath, $jenis_surat, $keterangan);
                 
                 if ($result['success']) {
                     $_SESSION['success'] = $result['message'];
@@ -154,6 +163,29 @@ class MahasiswaController extends Controller {
             header('Location: ' . BASEURL . '/MahasiswaController/uploadSurat');
             exit;
         }
+    }
+
+    public function historiSurat() {
+        $mahasiswaModel = $this->model('Mahasiswa');
+        $suratModel = $this->model('SuratIzin');
+    
+        $userId = $_SESSION['user_id'];
+        $dataMahasiswa = $mahasiswaModel->getMahasiswaByUserId($userId);
+        $mahasiswaId = $dataMahasiswa['id'] ?? 0;
+    
+        // Ambil filter status dari URL
+        $filter_status = isset($_GET['status']) ? $_GET['status'] : 'semua';
+    
+        // Ambil data surat izin berdasarkan filter
+        $surat_izin = $suratModel->getByMahasiswaIdWithFilter($mahasiswaId, $filter_status);
+    
+        $data = [
+            'judul_halaman' => 'Histori Surat Izin',
+            'surat_izin' => $surat_izin,
+            'filter_aktif' => $filter_status
+        ];
+    
+        $this->view('mahasiswa/surat/histori', $data);
     }
     
     public function logout() {

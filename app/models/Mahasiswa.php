@@ -183,6 +183,44 @@ class Mahasiswa extends BaseModel {
         }
     }
     
+    /**
+     * Ambil semua mahasiswa dengan filter (UNTUK HALAMAN ADMIN)
+     * @param string $filter_prodi Filter berdasarkan program studi (kode: TI, SI, TK, dll)
+     * @param string $filter_angkatan Filter berdasarkan angkatan
+     * @return array Daftar mahasiswa
+     */
+    public function getAllWithFilters($filter_prodi = '', $filter_angkatan = '') {
+        try {
+            $sql = "SELECT m.*, u.email, u.username 
+                    FROM mahasiswa m
+                    LEFT JOIN users u ON m.user_id = u.id
+                    WHERE 1=1";
+            
+            if ($filter_prodi != '') {
+                $sql .= " AND m.kelas = :prodi";
+            }
+            if ($filter_angkatan != '') {
+                $sql .= " AND m.angkatan = :angkatan";
+            }
+            
+            $sql .= " ORDER BY m.nama ASC";
+            
+            $this->db->query($sql);
+            
+            if ($filter_prodi != '') {
+                $this->db->bind(':prodi', $filter_prodi);
+            }
+            if ($filter_angkatan != '') {
+                $this->db->bind(':angkatan', $filter_angkatan);
+            }
+            
+            return $this->db->resultSet();
+        } catch (Exception $e) {
+            error_log("Error in getAllWithFilters: " . $e->getMessage());
+            return [];
+        }
+    }
+    
     public function getMahasiswaById($id) {
         try {
             $sql = "SELECT m.*, u.email, u.username 

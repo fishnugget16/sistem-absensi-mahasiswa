@@ -64,3 +64,33 @@ Sistem informasi manajemen absensi mahasiswa berbasis web yang dibangun dengan *
 | Polymorphism | Method `validate()` di setiap model |
 | Singleton | Class `Database` dengan method `getInstance()` |
 | Namespace | (Opsional, bisa ditambahkan) |
+
+## Cara Instalasi
+
+### 1. Persiapan
+Pastikan Anda memiliki **XAMPP** atau **Laragon** terinstal di komputer Anda.
+
+### 2. Copy Project
+Copy folder `aplikasi-absensi-mahasiswa` ke dalam folder `htdocs` (XAMPP) atau `www` (Laragon).
+
+### 3. Import Database
+- Buka **phpMyAdmin** (http://localhost/phpmyadmin)
+- Buat database baru dengan nama `absensi_oop`
+- Pilih tab **Import**
+- Pilih file `sql/database.sql` dari folder proyek
+- Klik **Go** / **Execute**
+
+### 4. Konfigurasi
+Buka file `config/config.php` dan sesuaikan dengan setting server Anda:
+
+(
+<?php
+define('BASEURL', 'http://localhost/aplikasi-absensi-mahasiswa/public');
+define('DB_HOST', 'localhost');
+define('DB_USER', 'root');
+define('DB_PASS', '');
+define('DB_NAME', 'absensi_oop');
+)
+
+### 5. Jalankan Aplikasi
+Akses URL ini dibrowser (http://localhost/aplikasi-absensi-mahasiswa/public)

@@ -84,13 +84,14 @@ Copy folder `aplikasi-absensi-mahasiswa` ke dalam folder `htdocs` (XAMPP) atau `
 ### 4. Konfigurasi
 Buka file `config/config.php` dan sesuaikan dengan setting server Anda:
 
-
-'<?php
+'''php
+<?php
 define('BASEURL', 'http://localhost/aplikasi-absensi-mahasiswa/public');
 define('DB_HOST', 'localhost');
 define('DB_USER', 'root');
 define('DB_PASS', '');
-define('DB_NAME', 'absensi_oop');'
+define('DB_NAME', 'absensi_oop');
+'''
 
 ### 5. Jalankan Aplikasi
 Akses URL ini dibrowser 'http://localhost/aplikasi-absensi-mahasiswa/public'

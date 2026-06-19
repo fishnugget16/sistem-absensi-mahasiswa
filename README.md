@@ -75,7 +75,7 @@ Pastikan Anda memiliki **XAMPP** atau **Laragon** terinstal di komputer Anda.
 Copy folder `aplikasi-absensi-mahasiswa` ke dalam folder `htdocs` (XAMPP) atau `www` (Laragon).
 
 ### 3. Import Database
-- Buka **phpMyAdmin** 'http://localhost/phpmyadmin'
+- Buka **phpMyAdmin** `http://localhost/phpmyadmin`
 - Buat database baru dengan nama `absensi_oop`
 - Pilih tab **Import**
 - Pilih file `sql/database.sql` dari folder proyek
@@ -94,4 +94,4 @@ define('DB_NAME', 'absensi_oop');
 ```
 
 ### 5. Jalankan Aplikasi
-Akses URL ini dibrowser 'http://localhost/aplikasi-absensi-mahasiswa/public'
+Akses URL ini dibrowser `http://localhost/aplikasi-absensi-mahasiswa/public`

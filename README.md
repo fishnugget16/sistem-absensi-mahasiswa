@@ -87,6 +87,7 @@ Buka file `config/config.php` dan sesuaikan dengan setting server Anda:
 ```php
 <?php
 define('BASEURL', 'http://localhost/aplikasi-absensi-mahasiswa/public');
+# localhost bisa diganti dengan ip local device baik pc / laptop
 define('DB_HOST', 'localhost');
 define('DB_USER', 'root');
 define('DB_PASS', '');

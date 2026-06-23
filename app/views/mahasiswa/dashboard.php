@@ -31,27 +31,14 @@
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
+            min-height: 60px;
         }
 
         .navbar-left {
             display: flex;
             align-items: center;
             gap: 16px;
-        }
-
-        .navbar-brand {
-            font-size: 18px;
-            font-weight: 500;
-            color: #e8eaed;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .navbar-brand i {
-            color: #4caf50;
-            font-size: 20px;
+            height: 100%;
         }
 
         .toggle-btn {
@@ -62,12 +49,56 @@
             cursor: pointer;
             display: flex;
             align-items: center;
+            justify-content: center;
+            padding: 0;
+            border-radius: 4px;
+            transition: background 0.2s;
+            height: 36px;
+            width: 36px;
+        }
+
+        .toggle-btn:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            cursor: default;
+            pointer-events: none;
+            user-select: none;
+            height: 36px;
+            line-height: 1;
+        }
+
+        .navbar-brand i {
+            color: #4caf50;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            flex-shrink: 0;
+        }
+
+        .navbar-brand span {
+            color: #e8eaed;
+            font-size: 18px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            height: 24px;
+            line-height: 24px;
         }
 
         .navbar-right {
             display: flex;
             align-items: center;
             gap: 16px;
+            height: 100%;
         }
 
         .user-info {
@@ -132,12 +163,46 @@
 
         .side-menu-overlay .nav-menu {
             list-style: none;
-            padding: 20px 16px;
-            margin-top: 60px;
+            padding: 20px 16px 20px 16px;
+            margin-top: 0;
+        }
+
+        .sidebar-brand {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 12px 16px;
+            margin-bottom: 4px;
+            cursor: default;
+            pointer-events: none;
+            user-select: none;
+            min-height: 48px;
+            border-radius: 10px;
+        }
+
+        .sidebar-brand i {
+            color: #4caf50;
+            font-size: 16px;
+            width: 22px;
+            text-align: center;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 1;
+        }
+
+        .sidebar-brand span {
+            color: #e8eaed;
+            font-size: 14px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            line-height: 1;
         }
 
         .side-menu-overlay .nav-item {
-            margin-bottom: 8px;
+            margin-bottom: 4px;
         }
 
         .side-menu-overlay .nav-link {
@@ -152,11 +217,18 @@
             border-radius: 10px;
             transition: all 0.2s;
             cursor: pointer;
+            min-height: 48px;
         }
 
         .side-menu-overlay .nav-link i {
             width: 22px;
             font-size: 16px;
+            text-align: center;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 1;
         }
 
         .side-menu-overlay .nav-link:hover {
@@ -453,6 +525,7 @@
         @media (max-width: 768px) {
             .navbar-custom {
                 padding: 10px 16px;
+                min-height: 56px;
             }
             .header-panel {
                 padding: 20px 20px;
@@ -519,10 +592,10 @@
         <button class="toggle-btn" id="toggleSidebar">
             <i class="fas fa-bars"></i>
         </button>
-        <a href="#" class="navbar-brand" id="brandToggle">
+        <div class="navbar-brand">
             <i class="fas fa-graduation-cap"></i>
-            <span>Absensi OOP</span>
-        </a>
+            <span>SENMA</span>
+        </div>
     </div>
     <div class="navbar-right">
         <span class="user-info">
@@ -540,6 +613,12 @@
 <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
 <div class="side-menu-overlay" id="sideMenuOverlay">
     <ul class="nav-menu">
+        <!-- ===== BRANDING SEBAGAI ITEM MENU PERTAMA ===== -->
+        <li class="sidebar-brand">
+            <i class="fas fa-graduation-cap"></i>
+            <span>SENMA</span>
+        </li>
+
         <li class="nav-item">
             <a href="<?= BASEURL; ?>/MahasiswaController/index" class="nav-link active">
                 <i class="fas fa-home"></i> Home
@@ -697,7 +776,6 @@
 
     // ========== TOGGLE SIDEBAR ==========
     const toggleBtn = document.getElementById('toggleSidebar');
-    const brandToggle = document.getElementById('brandToggle');
     const sideMenu = document.getElementById('sideMenuOverlay');
     const backdrop = document.getElementById('sidebarBackdrop');
 
@@ -722,7 +800,6 @@
     }
 
     toggleBtn.addEventListener('click', toggleSidebar);
-    brandToggle.addEventListener('click', toggleSidebar);
     backdrop.addEventListener('click', closeSidebar);
 </script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

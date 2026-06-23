@@ -82,7 +82,8 @@ class MahasiswaController extends Controller {
         $dataMahasiswa = $mahasiswaModel->getMahasiswaByUserId($userId);
         $mahasiswaId = $dataMahasiswa['id'] ?? 0;
         
-        // Ambil semua mata kuliah berdasarkan prodi mahasiswa
+        // Ambil semua mata kuliah berdasarkan prodi DAN ANGKATAN mahasiswa
+        // Method ini sudah diupdate di Absensi.php untuk filter berdasarkan prodi dan angkatan
         $matkul_list = $absensiModel->getMatkulByProdi($mahasiswaId);
         
         $data = [

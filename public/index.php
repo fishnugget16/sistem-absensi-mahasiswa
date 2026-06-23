@@ -151,6 +151,31 @@ if (preg_match('/AdminController\/dosenDelete\/(\d+)/', $url, $matches)) {
 }
 
 // ==========================================
+// ROUTING ADMIN CONTROLLER (ASSIGN MATA KULIAH) - 🔥 BARU
+// ==========================================
+
+if (preg_match('/AdminController\/getMatkulByDosen\/(\d+)/', $url, $matches)) {
+    require_once '../app/controllers/AdminController.php';
+    $controller = new AdminController();
+    $controller->getMatkulByDosen($matches[1]);
+    exit;
+}
+
+if ($url === 'AdminController/assignMatkul') {
+    require_once '../app/controllers/AdminController.php';
+    $controller = new AdminController();
+    $controller->assignMatkul();
+    exit;
+}
+
+if ($url === 'AdminController/removeMatkul') {
+    require_once '../app/controllers/AdminController.php';
+    $controller = new AdminController();
+    $controller->removeMatkul();
+    exit;
+}
+
+// ==========================================
 // ROUTING ADMIN CONTROLLER (MATA KULIAH)
 // ==========================================
 
@@ -282,6 +307,52 @@ if (preg_match('/AdminController\/surat_izin_download\/(\d+)/', $url, $matches))
     require_once '../app/controllers/AdminController.php';
     $controller = new AdminController();
     $controller->surat_izin_download($matches[1]);
+    exit;
+}
+
+// ==========================================
+// ROUTING DOSEN CONTROLLER
+// ==========================================
+
+if ($url === 'DosenController/index') {
+    require_once '../app/controllers/DosenController.php';
+    $controller = new DosenController();
+    $controller->index();
+    exit;
+}
+
+if ($url === 'DosenController/inputAbsensi') {
+    require_once '../app/controllers/DosenController.php';
+    $controller = new DosenController();
+    $controller->inputAbsensi();
+    exit;
+}
+
+if ($url === 'DosenController/inputAbsensiStore') {
+    require_once '../app/controllers/DosenController.php';
+    $controller = new DosenController();
+    $controller->inputAbsensiStore();
+    exit;
+}
+
+if ($url === 'DosenController/rekapAbsensi') {
+    require_once '../app/controllers/DosenController.php';
+    $controller = new DosenController();
+    $controller->rekapAbsensi();
+    exit;
+}
+
+if ($url === 'DosenController/exportPDF') {
+    require_once '../app/controllers/DosenController.php';
+    $controller = new DosenController();
+    $controller->exportPDF();
+    exit;
+}
+
+if ($url === 'DosenController/logout') {
+    require_once '../app/controllers/DosenController.php';
+    $controller = new DosenController();
+    $controller->logout();
     exit;
 }
 

@@ -32,27 +32,14 @@
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
+            min-height: 60px;
         }
 
         .navbar-left {
             display: flex;
             align-items: center;
             gap: 16px;
-        }
-
-        .navbar-brand {
-            font-size: 18px;
-            font-weight: 500;
-            color: #e8eaed;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .navbar-brand i {
-            color: #4caf50;
-            font-size: 20px;
+            height: 100%;
         }
 
         .toggle-btn {
@@ -63,12 +50,56 @@
             cursor: pointer;
             display: flex;
             align-items: center;
+            justify-content: center;
+            padding: 0;
+            border-radius: 4px;
+            transition: background 0.2s;
+            height: 36px;
+            width: 36px;
+        }
+
+        .toggle-btn:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            cursor: default;
+            pointer-events: none;
+            user-select: none;
+            height: 36px;
+            line-height: 1;
+        }
+
+        .navbar-brand i {
+            color: #4caf50;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            flex-shrink: 0;
+        }
+
+        .navbar-brand span {
+            color: #e8eaed;
+            font-size: 18px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            height: 24px;
+            line-height: 24px;
         }
 
         .navbar-right {
             display: flex;
             align-items: center;
             gap: 16px;
+            height: 100%;
         }
 
         .user-info {
@@ -134,12 +165,46 @@
 
         .side-menu-overlay .nav-menu {
             list-style: none;
-            padding: 20px 16px;
-            margin-top: 60px;
+            padding: 20px 16px 20px 16px;
+            margin-top: 0;
+        }
+
+        .sidebar-brand {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 12px 16px;
+            margin-bottom: 4px;
+            cursor: default;
+            pointer-events: none;
+            user-select: none;
+            min-height: 48px;
+            border-radius: 10px;
+        }
+
+        .sidebar-brand i {
+            color: #4caf50;
+            font-size: 16px;
+            width: 22px;
+            text-align: center;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 1;
+        }
+
+        .sidebar-brand span {
+            color: #e8eaed;
+            font-size: 14px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            line-height: 1;
         }
 
         .side-menu-overlay .nav-item {
-            margin-bottom: 8px;
+            margin-bottom: 4px;
         }
 
         .side-menu-overlay .nav-link {
@@ -154,11 +219,18 @@
             border-radius: 10px;
             transition: all 0.2s;
             cursor: pointer;
+            min-height: 48px;
         }
 
         .side-menu-overlay .nav-link i {
             width: 22px;
             font-size: 16px;
+            text-align: center;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 1;
         }
 
         .side-menu-overlay .nav-link:hover {
@@ -515,10 +587,269 @@
             font-size: 12px;
         }
 
+        /* ===== MODAL TAHUN ANGKATAN ===== */
+        .year-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(8px);
+            z-index: 2000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .year-modal-overlay.show {
+            display: flex;
+        }
+
+        .year-modal-content {
+            background: #1e1e1e;
+            border-radius: 20px;
+            width: 100%;
+            max-width: 380px;
+            max-height: 90vh;
+            border: 1px solid #2a2a2a;
+            animation: modalFadeIn 0.3s ease;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+        }
+
+        .year-modal-header {
+            padding: 20px 24px 12px 24px;
+            border-bottom: 1px solid #2a2a2a;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .year-modal-header h4 {
+            color: #e8eaed;
+            font-size: 18px;
+            font-weight: 500;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .year-modal-header h4 i {
+            color: #4caf50;
+            font-size: 18px;
+        }
+
+        .year-modal-close {
+            background: transparent;
+            border: none;
+            color: #9aa0a6;
+            font-size: 24px;
+            cursor: pointer;
+            transition: all 0.2s;
+            padding: 0 4px;
+        }
+
+        .year-modal-close:hover {
+            color: #dc3545;
+            transform: rotate(90deg);
+        }
+
+        .year-modal-body {
+            padding: 20px 24px 16px 24px;
+            overflow-y: auto;
+            max-height: 60vh;
+        }
+
+        /* ===== YEAR SCROLL WHEEL ===== */
+        .year-wheel-container {
+            display: flex;
+            justify-content: center;
+            padding: 10px 0 15px 0;
+            position: relative;
+        }
+
+        .year-wheel-container::before,
+        .year-wheel-container::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            right: 0;
+            height: 35px;
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        .year-wheel-container::before {
+            top: 0;
+            background: linear-gradient(to bottom, #1e1e1e, transparent);
+        }
+
+        .year-wheel-container::after {
+            bottom: 0;
+            background: linear-gradient(to top, #1e1e1e, transparent);
+        }
+
+        .year-wheel-col {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 120px;
+            position: relative;
+            z-index: 3;
+        }
+
+        .year-wheel {
+            width: 100%;
+            height: 120px;
+            overflow-y: auto;
+            scroll-snap-type: y mandatory;
+            padding: 40px 0;
+            position: relative;
+            scroll-behavior: smooth;
+        }
+
+        /* Hilangkan scrollbar */
+        .year-wheel::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .year-wheel {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        .year-wheel-item {
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #5f6368;
+            font-size: 16px;
+            scroll-snap-align: center;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            font-weight: 400;
+            padding: 0 4px;
+            text-align: center;
+            user-select: none;
+        }
+
+        .year-wheel-item:hover {
+            color: #9aa0a6;
+        }
+
+        .year-wheel-item.active {
+            color: #4caf50;
+            font-size: 24px;
+            font-weight: 600;
+            text-shadow: 0 0 30px rgba(76, 175, 80, 0.15);
+        }
+
+        .year-wheel-label {
+            font-size: 11px;
+            color: #5f6368;
+            text-align: center;
+            margin-top: 8px;
+            font-weight: 400;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .year-modal-footer {
+            padding: 16px 24px;
+            border-top: 1px solid #2a2a2a;
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+        }
+
+        .btn-cancel-year {
+            background: #3c4043;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 8px;
+            color: white;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-cancel-year:hover {
+            background: #4a4e54;
+        }
+
+        .btn-confirm-year {
+            background: #4caf50;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 8px;
+            color: white;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-confirm-year:hover {
+            background: #43a047;
+            transform: translateY(-1px);
+        }
+
+        /* ===== CUSTOM TRIGGER ANGKATAN ===== */
+        .angkatan-trigger-wrapper {
+            position: relative;
+            width: 100%;
+        }
+
+        .angkatan-trigger {
+            background: #2a2a2a;
+            border: 1px solid #3c4043;
+            border-radius: 8px;
+            padding: 10px 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            min-height: 46px;
+            color: #e8eaed;
+            font-size: 14px;
+        }
+
+        .angkatan-trigger:hover {
+            border-color: #4caf50;
+        }
+
+        .angkatan-trigger i {
+            color: #4caf50;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        .angkatan-trigger .angkatan-display {
+            flex: 1;
+            font-weight: 500;
+        }
+
+        .angkatan-trigger .angkatan-arrow {
+            color: #9aa0a6;
+            transition: transform 0.2s;
+            flex-shrink: 0;
+        }
+
+        .angkatan-trigger:hover .angkatan-arrow {
+            transform: translateX(3px);
+        }
+
         /* ========== RESPONSIVE ========== */
         @media (max-width: 768px) {
             .navbar-custom {
                 padding: 10px 16px;
+                min-height: 56px;
             }
 
             .content-card {
@@ -555,6 +886,76 @@
             .navbar-brand span {
                 display: none;
             }
+
+            .year-wheel {
+                height: 100px;
+                padding: 30px 0;
+            }
+
+            .year-wheel-item {
+                height: 34px;
+                font-size: 14px;
+            }
+
+            .year-wheel-item.active {
+                font-size: 20px;
+            }
+
+            .year-wheel-col {
+                width: 100px;
+            }
+
+            .year-modal-content {
+                max-width: 100%;
+                margin: 10px;
+            }
+
+            .angkatan-trigger {
+                padding: 8px 12px;
+                font-size: 13px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .year-wheel {
+                height: 84px;
+                padding: 24px 0;
+            }
+
+            .year-wheel-item {
+                height: 28px;
+                font-size: 12px;
+            }
+
+            .year-wheel-item.active {
+                font-size: 18px;
+            }
+
+            .year-wheel-col {
+                width: 80px;
+            }
+
+            .year-modal-body {
+                padding: 16px;
+            }
+
+            .year-modal-header h4 {
+                font-size: 16px;
+            }
+
+            .year-wheel-label {
+                font-size: 9px;
+                margin-top: 4px;
+            }
+
+            .angkatan-trigger {
+                padding: 6px 10px;
+                font-size: 12px;
+            }
+
+            .angkatan-trigger i {
+                font-size: 14px;
+            }
         }
 
         @media (min-width: 769px) and (max-width: 992px) {
@@ -583,10 +984,10 @@
         <button class="toggle-btn" id="toggleSidebar">
             <i class="fas fa-bars"></i>
         </button>
-        <a href="#" class="navbar-brand" id="brandToggle">
+        <div class="navbar-brand">
             <i class="fas fa-graduation-cap"></i>
-            <span>Absensi OOP</span>
-        </a>
+            <span>SENMA</span>
+        </div>
     </div>
     <div class="navbar-right">
         <span class="user-info">
@@ -604,6 +1005,11 @@
 <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
 <div class="side-menu-overlay" id="sideMenuOverlay">
     <ul class="nav-menu">
+        <li class="sidebar-brand">
+            <i class="fas fa-graduation-cap"></i>
+            <span>SENMA</span>
+        </li>
+
         <li class="nav-item">
             <a href="<?= BASEURL; ?>/AuthController/dashboard" class="nav-link">
                 <i class="fas fa-home"></i> Home
@@ -653,6 +1059,36 @@
             </button>
             <button class="btn-logout-confirm" id="confirmLogoutBtn">
                 <i class="fas fa-sign-out-alt"></i> Logout
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- ===== MODAL TAHUN ANGKATAN ===== -->
+<div id="yearModal" class="year-modal-overlay">
+    <div class="year-modal-content">
+        <div class="year-modal-header">
+            <h4>
+                <i class="fas fa-calendar-alt"></i> Pilih Angkatan
+            </h4>
+            <button class="year-modal-close" id="yearModalClose">&times;</button>
+        </div>
+        <div class="year-modal-body">
+            <div class="year-wheel-container">
+                <div class="year-wheel-col">
+                    <div class="year-wheel" id="yearWheel">
+                        <!-- Akan di-generate oleh JavaScript -->
+                    </div>
+                    <div class="year-wheel-label">Tahun</div>
+                </div>
+            </div>
+        </div>
+        <div class="year-modal-footer">
+            <button class="btn-cancel-year" id="yearCancelBtn">
+                <i class="fas fa-times"></i> Batal
+            </button>
+            <button class="btn-confirm-year" id="yearConfirmBtn">
+                <i class="fas fa-check"></i> Pilih Tahun
             </button>
         </div>
     </div>
@@ -754,6 +1190,29 @@
                     <input type="hidden" name="jumlah_pertemuan" id="selectedPertemuanValue" value="<?= $data['matakuliah']['jumlah_pertemuan'] ?? 14; ?>">
                     <div class="form-text text-muted small">Minimal 1, maksimal 24 pertemuan per semester</div>
                 </div>
+
+                <!-- ===== FIELD ANGKATAN - PAKAI MODAL ===== -->
+                <div class="col-12 col-md-4">
+                    <label class="form-label">Angkatan</label>
+                    <div class="angkatan-trigger-wrapper">
+                        <div class="angkatan-trigger" id="angkatanTrigger">
+                            <i class="fas fa-calendar-alt"></i>
+                            <span class="angkatan-display" id="angkatanDisplay">
+                                <?php 
+                                $angkatan_val = $data['matakuliah']['angkatan'] ?? 'Semua';
+                                if ($angkatan_val == 'Semua' || empty($angkatan_val)) {
+                                    echo 'Semua Angkatan';
+                                } else {
+                                    echo 'Angkatan ' . $angkatan_val;
+                                }
+                                ?>
+                            </span>
+                            <i class="fas fa-chevron-right angkatan-arrow"></i>
+                        </div>
+                    </div>
+                    <input type="hidden" name="angkatan" id="angkatanValue" value="<?= htmlspecialchars($data['matakuliah']['angkatan'] ?? 'Semua'); ?>">
+                    <div class="form-text text-muted small">Klik untuk memilih angkatan</div>
+                </div>
             </div>
 
             <div class="mt-4 d-flex gap-3 flex-wrap">
@@ -825,7 +1284,6 @@
 
     // ========== TOGGLE SIDEBAR ==========
     const toggleBtn = document.getElementById('toggleSidebar');
-    const brandToggle = document.getElementById('brandToggle');
     const sideMenu = document.getElementById('sideMenuOverlay');
     const backdrop = document.getElementById('sidebarBackdrop');
 
@@ -850,7 +1308,6 @@
     }
 
     toggleBtn.addEventListener('click', toggleSidebar);
-    brandToggle.addEventListener('click', toggleSidebar);
     backdrop.addEventListener('click', closeSidebar);
 
     window.addEventListener('resize', function() {
@@ -915,6 +1372,156 @@
     
     // Init custom select untuk Jumlah Pertemuan
     initCustomSelect('pertemuanSelectContainer', 'pertemuanSelectTrigger', 'pertemuanSelectOptions', 'selectedPertemuanText', 'selectedPertemuanValue', '14 Pertemuan');
+
+    // ========== ANGKATAN TRIGGER - BUKA MODAL ==========
+    const angkatanTrigger = document.getElementById('angkatanTrigger');
+    const angkatanDisplay = document.getElementById('angkatanDisplay');
+    const angkatanValue = document.getElementById('angkatanValue');
+
+    angkatanTrigger.addEventListener('click', function(e) {
+        e.stopPropagation();
+        openYearModal();
+    });
+
+    // ========== YEAR MODAL (SCROLL WHEEL) ==========
+    const yearModal = document.getElementById('yearModal');
+    const yearWheel = document.getElementById('yearWheel');
+    const yearModalClose = document.getElementById('yearModalClose');
+    const yearCancelBtn = document.getElementById('yearCancelBtn');
+    const yearConfirmBtn = document.getElementById('yearConfirmBtn');
+
+    let selectedYear = '<?= $data['matakuliah']['angkatan'] ?? 'Semua'; ?>';
+
+    // Generate year wheel items
+    function generateYearWheel() {
+        yearWheel.innerHTML = '';
+        const currentYear = new Date().getFullYear();
+        
+        // Option "Semua Angkatan"
+        const semuaDiv = document.createElement('div');
+        semuaDiv.className = 'year-wheel-item';
+        semuaDiv.setAttribute('data-value', 'Semua');
+        semuaDiv.textContent = 'Semua Angkatan';
+        if (selectedYear === 'Semua') {
+            semuaDiv.classList.add('active');
+        }
+        yearWheel.appendChild(semuaDiv);
+        
+        // Generate tahun dari 3000 sampai 1967
+        for (let y = 3000; y >= 1967; y--) {
+            const div = document.createElement('div');
+            div.className = 'year-wheel-item';
+            div.setAttribute('data-value', y);
+            div.textContent = y;
+            if (y == selectedYear) {
+                div.classList.add('active');
+            }
+            yearWheel.appendChild(div);
+        }
+        
+        // Scroll ke tahun yang dipilih
+        setTimeout(() => {
+            const activeItem = yearWheel.querySelector('.year-wheel-item.active');
+            if (activeItem) {
+                activeItem.scrollIntoView({ block: 'center' });
+            } else {
+                // Default ke "Semua Angkatan"
+                const firstItem = yearWheel.querySelector('.year-wheel-item');
+                if (firstItem) {
+                    firstItem.classList.add('active');
+                    firstItem.scrollIntoView({ block: 'center' });
+                    selectedYear = 'Semua';
+                }
+            }
+        }, 100);
+    }
+
+    // Scroll handler untuk year wheel
+    let scrollTimeout = null;
+    yearWheel.addEventListener('scroll', function() {
+        clearTimeout(scrollTimeout);
+        scrollTimeout = setTimeout(() => {
+            const items = this.querySelectorAll('.year-wheel-item');
+            const containerRect = this.getBoundingClientRect();
+            const centerY = containerRect.top + containerRect.height / 2;
+            
+            let closest = null;
+            let closestDist = Infinity;
+            
+            items.forEach(item => {
+                const rect = item.getBoundingClientRect();
+                const itemCenter = rect.top + rect.height / 2;
+                const dist = Math.abs(itemCenter - centerY);
+                
+                if (dist < closestDist) {
+                    closestDist = dist;
+                    closest = item;
+                }
+            });
+            
+            if (closest) {
+                items.forEach(item => item.classList.remove('active'));
+                closest.classList.add('active');
+                selectedYear = closest.getAttribute('data-value');
+                if (selectedYear === 'Semua') {
+                    selectedYear = 'Semua';
+                } else {
+                    selectedYear = parseInt(selectedYear);
+                }
+            }
+        }, 100);
+    });
+
+    // Click item untuk scroll ke center
+    yearWheel.addEventListener('click', function(e) {
+        const item = e.target.closest('.year-wheel-item');
+        if (item) {
+            item.scrollIntoView({ block: 'center' });
+        }
+    });
+
+    function openYearModal() {
+        yearModal.classList.add('show');
+        document.body.style.overflow = 'hidden';
+        generateYearWheel();
+    }
+
+    function closeYearModal() {
+        yearModal.classList.remove('show');
+        document.body.style.overflow = '';
+    }
+
+    function confirmYear() {
+        // Update display dan value
+        let text = '';
+        if (selectedYear === 'Semua') {
+            text = 'Semua Angkatan';
+        } else {
+            text = 'Angkatan ' + selectedYear;
+        }
+        angkatanDisplay.textContent = text;
+        angkatanValue.value = selectedYear;
+        
+        closeYearModal();
+    }
+
+    // Event listeners
+    yearModalClose.addEventListener('click', closeYearModal);
+    yearCancelBtn.addEventListener('click', closeYearModal);
+    yearConfirmBtn.addEventListener('click', confirmYear);
+
+    yearModal.addEventListener('click', function(e) {
+        if (e.target === this) closeYearModal();
+    });
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && yearModal.classList.contains('show')) {
+            closeYearModal();
+        }
+        if (e.key === 'Enter' && yearModal.classList.contains('show')) {
+            confirmYear();
+        }
+    });
 </script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>

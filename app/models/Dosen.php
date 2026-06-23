@@ -158,15 +158,30 @@ class Dosen extends BaseModel {
     // ADDITIONAL METHODS (untuk AdminController)
     // ==========================================
     
+    /**
+     * Ambil semua dosen dengan jumlah mata kuliah yang diampu
+     * @return array Daftar dosen dengan matkul_count
+     */
     public function getAllDosen() {
         try {
+            // Query sederhana tanpa subquery dulu untuk testing
             $sql = "SELECT d.*, u.email, u.username 
                     FROM dosen d
                     LEFT JOIN users u ON d.user_id = u.id
                     ORDER BY d.id DESC";
             $this->db->query($sql);
-            return $this->db->resultSet();
+            $result = $this->db->resultSet();
+            
+            // Tambahkan matkul_count manual (jika perlu)
+            if (!empty($result)) {
+                foreach ($result as &$row) {
+                    $row['matkul_count'] = $this->countMatkulByDosen($row['id']);
+                }
+            }
+            
+            return $result;
         } catch (Exception $e) {
+            error_log("Error in getAllDosen: " . $e->getMessage());
             return [];
         }
     }
@@ -174,34 +189,69 @@ class Dosen extends BaseModel {
     /**
      * Ambil semua dosen dengan filter prodi (UNTUK HALAMAN ADMIN)
      * @param string $filter_prodi Filter berdasarkan program studi
-     * @return array Daftar dosen
+     * @return array Daftar dosen dengan matkul_count
      */
     public function getAllWithFilters($filter_prodi = '') {
         try {
+            // Query sederhana tanpa subquery dulu untuk testing
             $sql = "SELECT d.*, u.email, u.username 
                     FROM dosen d
                     LEFT JOIN users u ON d.user_id = u.id
                     WHERE 1=1";
             
+            $params = [];
+            
             if ($filter_prodi != '') {
                 $sql .= " AND d.prodi = :prodi";
+                $params[':prodi'] = $filter_prodi;
             }
             
             $sql .= " ORDER BY d.nama ASC";
             
             $this->db->query($sql);
             
-            if ($filter_prodi != '') {
-                $this->db->bind(':prodi', $filter_prodi);
+            foreach ($params as $key => $value) {
+                $this->db->bind($key, $value);
             }
             
-            return $this->db->resultSet();
+            $result = $this->db->resultSet();
+            
+            // Tambahkan matkul_count manual (jika perlu)
+            if (!empty($result)) {
+                foreach ($result as &$row) {
+                    $row['matkul_count'] = $this->countMatkulByDosen($row['id']);
+                }
+            }
+            
+            return $result;
         } catch (Exception $e) {
             error_log("Error in getAllWithFilters: " . $e->getMessage());
             return [];
         }
     }
     
+    /**
+     * Hitung jumlah mata kuliah yang diampu oleh dosen
+     * @param int $dosen_id ID dosen
+     * @return int Jumlah mata kuliah
+     */
+    private function countMatkulByDosen($dosen_id) {
+        try {
+            $sql = "SELECT COUNT(*) as total FROM mata_kuliah WHERE dosen_id = :dosen_id";
+            $this->db->query($sql);
+            $this->db->bind(':dosen_id', $dosen_id);
+            $result = $this->db->single();
+            return $result['total'] ?? 0;
+        } catch (Exception $e) {
+            return 0;
+        }
+    }
+    
+    /**
+     * Ambil data dosen berdasarkan ID
+     * @param int $id ID dosen
+     * @return array|null Data dosen
+     */
     public function getDosenById($id) {
         try {
             $sql = "SELECT d.*, u.email, u.username 
@@ -210,12 +260,24 @@ class Dosen extends BaseModel {
                     WHERE d.id = :id";
             $this->db->query($sql);
             $this->db->bind(':id', $id);
-            return $this->db->single();
+            $result = $this->db->single();
+            
+            if ($result) {
+                $result['matkul_count'] = $this->countMatkulByDosen($id);
+            }
+            
+            return $result;
         } catch (Exception $e) {
+            error_log("Error in getDosenById: " . $e->getMessage());
             return null;
         }
     }
     
+    /**
+     * Ambil dosen berdasarkan NIDN
+     * @param string $nidn NIDN dosen
+     * @return array|null Data dosen
+     */
     public function getDosenByNidn($nidn) {
         try {
             $sql = "SELECT d.*, u.email, u.username 
@@ -226,10 +288,16 @@ class Dosen extends BaseModel {
             $this->db->bind(':nidn', $nidn);
             return $this->db->single();
         } catch (Exception $e) {
+            error_log("Error in getDosenByNidn: " . $e->getMessage());
             return null;
         }
     }
     
+    /**
+     * Ambil dosen berdasarkan user_id
+     * @param int $user_id ID user
+     * @return array|null Data dosen
+     */
     public function getDosenByUserId($user_id) {
         try {
             $sql = "SELECT d.*, u.email, u.username 
@@ -240,10 +308,20 @@ class Dosen extends BaseModel {
             $this->db->bind(':user_id', $user_id);
             return $this->db->single();
         } catch (Exception $e) {
+            error_log("Error in getDosenByUserId: " . $e->getMessage());
             return null;
         }
     }
     
+    /**
+     * Buat dosen baru
+     * @param string $nama Nama dosen
+     * @param string $nidn NIDN dosen
+     * @param string $prodi Program studi
+     * @param string $email Email
+     * @param string $password Password
+     * @return array Hasil operasi
+     */
     public function createDosen($nama, $nidn, $prodi, $email, $password) {
         try {
             // Cek apakah NIDN sudah terdaftar
@@ -307,6 +385,15 @@ class Dosen extends BaseModel {
         }
     }
     
+    /**
+     * Update data dosen
+     * @param int $id ID dosen
+     * @param string $nama Nama dosen
+     * @param string $nidn NIDN dosen
+     * @param string $prodi Program studi
+     * @param string $email Email
+     * @return array Hasil operasi
+     */
     public function updateDosen($id, $nama, $nidn, $prodi, $email) {
         try {
             // Cek apakah NIDN sudah dipakai dosen lain
@@ -353,6 +440,11 @@ class Dosen extends BaseModel {
         }
     }
     
+    /**
+     * Hapus dosen
+     * @param int $id ID dosen
+     * @return array Hasil operasi
+     */
     public function deleteDosen($id) {
         try {
             // Ambil user_id dari dosen
@@ -378,6 +470,10 @@ class Dosen extends BaseModel {
         }
     }
     
+    /**
+     * Hitung total dosen
+     * @return int Jumlah dosen
+     */
     public function countDosen() {
         try {
             $sql = "SELECT COUNT(*) as total FROM dosen";
@@ -389,6 +485,11 @@ class Dosen extends BaseModel {
         }
     }
     
+    /**
+     * Cari dosen berdasarkan keyword
+     * @param string $keyword Keyword pencarian
+     * @return array Hasil pencarian
+     */
     public function searchDosen($keyword) {
         try {
             $sql = "SELECT d.*, u.email 
@@ -402,6 +503,7 @@ class Dosen extends BaseModel {
             $this->db->bind(':keyword', "%$keyword%");
             return $this->db->resultSet();
         } catch (Exception $e) {
+            error_log("Error in searchDosen: " . $e->getMessage());
             return [];
         }
     }

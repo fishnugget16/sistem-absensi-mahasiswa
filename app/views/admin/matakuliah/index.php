@@ -31,27 +31,14 @@
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
+            min-height: 60px;
         }
 
         .navbar-left {
             display: flex;
             align-items: center;
             gap: 16px;
-        }
-
-        .navbar-brand {
-            font-size: 18px;
-            font-weight: 500;
-            color: #e8eaed;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .navbar-brand i {
-            color: #4caf50;
-            font-size: 20px;
+            height: 100%;
         }
 
         .toggle-btn {
@@ -62,12 +49,56 @@
             cursor: pointer;
             display: flex;
             align-items: center;
+            justify-content: center;
+            padding: 0;
+            border-radius: 4px;
+            transition: background 0.2s;
+            height: 36px;
+            width: 36px;
+        }
+
+        .toggle-btn:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            cursor: default;
+            pointer-events: none;
+            user-select: none;
+            height: 36px;
+            line-height: 1;
+        }
+
+        .navbar-brand i {
+            color: #4caf50;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            flex-shrink: 0;
+        }
+
+        .navbar-brand span {
+            color: #e8eaed;
+            font-size: 18px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            height: 24px;
+            line-height: 24px;
         }
 
         .navbar-right {
             display: flex;
             align-items: center;
             gap: 16px;
+            height: 100%;
         }
 
         .user-info {
@@ -132,12 +163,46 @@
 
         .side-menu-overlay .nav-menu {
             list-style: none;
-            padding: 20px 16px;
-            margin-top: 60px;
+            padding: 20px 16px 20px 16px;
+            margin-top: 0;
+        }
+
+        .sidebar-brand {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 12px 16px;
+            margin-bottom: 4px;
+            cursor: default;
+            pointer-events: none;
+            user-select: none;
+            min-height: 48px;
+            border-radius: 10px;
+        }
+
+        .sidebar-brand i {
+            color: #4caf50;
+            font-size: 16px;
+            width: 22px;
+            text-align: center;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 1;
+        }
+
+        .sidebar-brand span {
+            color: #e8eaed;
+            font-size: 14px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            line-height: 1;
         }
 
         .side-menu-overlay .nav-item {
-            margin-bottom: 8px;
+            margin-bottom: 4px;
         }
 
         .side-menu-overlay .nav-link {
@@ -152,11 +217,18 @@
             border-radius: 10px;
             transition: all 0.2s;
             cursor: pointer;
+            min-height: 48px;
         }
 
         .side-menu-overlay .nav-link i {
             width: 22px;
             font-size: 16px;
+            text-align: center;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 1;
         }
 
         .side-menu-overlay .nav-link:hover {
@@ -401,46 +473,6 @@
             color: white;
         }
 
-        .btn-edit {
-            background: #ff9800;
-            border: none;
-            padding: 5px 12px;
-            border-radius: 4px;
-            color: #121212;
-            font-size: 12px;
-            font-weight: 500;
-            margin-right: 5px;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .btn-edit:hover {
-            background: #fb8c00;
-            color: #121212;
-        }
-
-        .btn-delete {
-            background: #dc3545;
-            border: none;
-            padding: 5px 12px;
-            border-radius: 4px;
-            color: white;
-            font-size: 12px;
-            font-weight: 500;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-            cursor: pointer;
-        }
-
-        .btn-delete:hover {
-            background: #c82333;
-            color: white;
-        }
-
         .btn-back, .btn-pagination {
             background: #3c4043;
             border: none;
@@ -483,14 +515,16 @@
 
         .table-wrapper {
             overflow-x: auto;
+            overflow-y: visible;
             border-radius: 8px;
             -webkit-overflow-scrolling: touch;
+            width: 100%;
         }
 
         .data-table {
             width: 100%;
             border-collapse: collapse;
-            min-width: 600px;
+            min-width: 700px;
         }
 
         .data-table thead tr {
@@ -512,10 +546,33 @@
             color: #e8eaed;
             font-size: 14px;
             border-bottom: 1px solid #2a2a2a;
+            vertical-align: middle;
+        }
+
+        .data-table tbody tr {
+            cursor: pointer;
+            transition: background 0.2s;
+            position: relative;
         }
 
         .data-table tbody tr:hover {
             background: rgba(255, 255, 255, 0.03);
+        }
+
+        .data-table tbody tr.expanded {
+            background: rgba(76, 175, 80, 0.08);
+        }
+
+        .data-table tbody tr .expand-icon {
+            display: inline-block;
+            transition: transform 0.3s ease;
+            color: #4caf50;
+            font-size: 14px;
+            margin-right: 6px;
+        }
+
+        .data-table tbody tr.expanded .expand-icon {
+            transform: rotate(180deg);
         }
 
         .data-table code {
@@ -536,9 +593,96 @@
             display: inline-block;
         }
 
-        .aksi-cell {
+        /* ===== PRODI BADGE ===== */
+        .prodi-badge {
+            display: inline-block;
+            padding: 3px 10px;
+            background: rgba(76, 175, 80, 0.1);
+            border-radius: 4px;
+            color: #4caf50;
+            font-size: 12px;
+            font-weight: 500;
+            font-family: 'Roboto', sans-serif;
+            border: 1px solid rgba(76, 175, 80, 0.12);
             white-space: nowrap;
-            min-width: 80px;
+            letter-spacing: 0.2px;
+        }
+
+        /* ===== EXPANDED ROW ACTION ===== */
+        .action-row {
+            display: none;
+            background: rgba(255, 255, 255, 0.02);
+            border-bottom: 1px solid #2a2a2a;
+        }
+
+        .action-row td {
+            padding: 0 12px 12px 12px;
+        }
+
+        .action-row.show {
+            display: table-row;
+        }
+
+        .action-row .action-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            padding: 12px 8px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 8px;
+            border: 1px solid #2a2a2a;
+        }
+
+        .action-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+            text-decoration: none;
+            background: transparent;
+            color: #e8eaed;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-1px);
+        }
+
+        .action-btn:active {
+            transform: scale(0.97);
+        }
+
+        .action-btn .action-icon {
+            font-size: 15px;
+        }
+
+        .action-btn.action-edit {
+            background: rgba(255, 152, 0, 0.15);
+            color: #ff9800;
+        }
+
+        .action-btn.action-edit:hover {
+            background: rgba(255, 152, 0, 0.25);
+        }
+
+        .action-btn.action-delete {
+            background: rgba(220, 53, 69, 0.15);
+            color: #dc3545;
+        }
+
+        .action-btn.action-delete:hover {
+            background: rgba(220, 53, 69, 0.25);
+        }
+
+        .action-divider {
+            width: 1px;
+            background: #2a2a2a;
+            flex-shrink: 0;
         }
 
         .alert-success {
@@ -691,9 +835,17 @@
             background: #c82333;
         }
 
+        /* ===== NAMA PRODI LENGKAP ===== */
+        .prodi-full {
+            font-size: 11px;
+            color: #9aa0a6;
+            margin-left: 4px;
+        }
+
         @media (max-width: 768px) {
             .navbar-custom {
                 padding: 10px 16px;
+                min-height: 56px;
             }
 
             .content-card {
@@ -727,24 +879,6 @@
                 display: none;
             }
 
-            .btn-edit span, .btn-delete span {
-                display: none;
-            }
-            
-            .btn-edit, .btn-delete {
-                padding: 6px 10px !important;
-                font-size: 14px !important;
-            }
-            
-            .btn-edit i, .btn-delete i {
-                margin: 0 !important;
-            }
-            
-            .aksi-cell {
-                white-space: nowrap;
-                min-width: 70px;
-            }
-
             .pagination-container {
                 justify-content: center;
             }
@@ -755,6 +889,39 @@
 
             .filter-group {
                 width: 100%;
+            }
+
+            .data-table {
+                min-width: 600px;
+            }
+
+            .action-container {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .action-divider {
+                display: none;
+            }
+
+            .action-btn {
+                justify-content: center;
+                padding: 10px 16px;
+            }
+
+            .prodi-badge {
+                font-size: 11px;
+                padding: 2px 8px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .data-table {
+                min-width: 500px;
+            }
+            .prodi-badge {
+                font-size: 10px;
+                padding: 2px 6px;
             }
         }
 
@@ -780,10 +947,10 @@
         <button class="toggle-btn" id="toggleSidebar">
             <i class="fas fa-bars"></i>
         </button>
-        <a href="#" class="navbar-brand" id="brandToggle">
+        <div class="navbar-brand">
             <i class="fas fa-graduation-cap"></i>
-            <span>Absensi OOP</span>
-        </a>
+            <span>SENMA</span>
+        </div>
     </div>
     <div class="navbar-right">
         <span class="user-info">
@@ -801,6 +968,12 @@
 <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
 <div class="side-menu-overlay" id="sideMenuOverlay">
     <ul class="nav-menu">
+        <!-- ===== BRANDING SEBAGAI ITEM MENU PERTAMA ===== -->
+        <li class="sidebar-brand">
+            <i class="fas fa-graduation-cap"></i>
+            <span>SENMA</span>
+        </li>
+
         <li class="nav-item">
             <a href="<?= BASEURL; ?>/AuthController/dashboard" class="nav-link">
                 <i class="fas fa-home"></i> Home
@@ -894,14 +1067,14 @@
         <div class="alert-danger"><i class="fas fa-exclamation-circle"></i> <?= $_SESSION['error']; unset($_SESSION['error']); ?></div>
         <?php endif; ?>
 
-        <!-- FILTER SECTION - TANPA TOMBOL CARI & RESET -->
+        <!-- FILTER SECTION -->
         <div class="filter-section">
             <div class="filter-title">
                 <i class="fas fa-filter"></i> Filter Data
             </div>
             <form method="GET" action="<?= BASEURL; ?>/AdminController/matakuliah" id="filterForm">
                 <div class="filter-row">
-                    <!-- Filter Semester - CUSTOM SELECT -->
+                    <!-- Filter Semester -->
                     <div class="filter-group">
                         <label><i class="fas fa-layer-group"></i> Semester</label>
                         <input type="hidden" name="filter_semester" id="selectedSemesterValue" value="<?= isset($_GET['filter_semester']) ? htmlspecialchars($_GET['filter_semester']) : ''; ?>">
@@ -938,7 +1111,7 @@
                         </div>
                     </div>
 
-                    <!-- Filter Prodi - CUSTOM SELECT (DENGAN KODE YANG BENAR) -->
+                    <!-- Filter Prodi -->
                     <div class="filter-group">
                         <label><i class="fas fa-code-branch"></i> Program Studi</label>
                         <input type="hidden" name="filter_prodi" id="selectedProdiValue" value="<?= isset($_GET['filter_prodi']) ? htmlspecialchars($_GET['filter_prodi']) : ''; ?>">
@@ -996,7 +1169,7 @@
                         </div>
                     </div>
 
-                    <!-- Filter SKS - CUSTOM SELECT -->
+                    <!-- Filter SKS -->
                     <div class="filter-group">
                         <label><i class="fas fa-star"></i> SKS</label>
                         <input type="hidden" name="filter_sks" id="selectedSksValue" value="<?= isset($_GET['filter_sks']) ? htmlspecialchars($_GET['filter_sks']) : ''; ?>">
@@ -1079,17 +1252,17 @@
             <table class="data-table">
                 <thead>
                     <tr>
-                        <th>#</th>
+                        <th style="width:30px;"></th>
+                        <th style="width:40px;">#</th>
                         <th>Kode</th>
                         <th>Nama Mata Kuliah</th>
                         <th>SKS</th>
                         <th>Semester</th>
-                        <th>Aksi</th>
+                        <th>Prodi</th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php 
-                    // PAGINATION: 10 data per halaman
                     $limit = 10;
                     $total_data = count($data['matakuliah']);
                     $total_pages = ceil($total_data / $limit);
@@ -1099,27 +1272,89 @@
                     
                     $start_index = ($current_page - 1) * $limit;
                     $display_data = array_slice($data['matakuliah'], $start_index, $limit);
+                    
+                    $query_params = [];
+                    if (isset($_GET['filter_semester']) && $_GET['filter_semester'] != '') {
+                        $query_params[] = 'filter_semester=' . $_GET['filter_semester'];
+                    }
+                    if (isset($_GET['filter_prodi']) && $_GET['filter_prodi'] != '') {
+                        $query_params[] = 'filter_prodi=' . $_GET['filter_prodi'];
+                    }
+                    if (isset($_GET['filter_sks']) && $_GET['filter_sks'] != '') {
+                        $query_params[] = 'filter_sks=' . $_GET['filter_sks'];
+                    }
+                    $query_string = !empty($query_params) ? '&' . implode('&', $query_params) : '';
                     ?>
                     
                     <?php if (empty($display_data)): ?>
-                    <tr class="empty-row">
-                        <td colspan="6" class="text-center" style="color: #9aa0a6;">Tidak ada data mata kuliah yang sesuai filter</td>
+                    <tr>
+                        <td colspan="7" style="text-align:center; color:#9aa0a6; padding:40px 0;">
+                            <i class="fas fa-inbox" style="font-size:24px; display:block; margin-bottom:8px;"></i>
+                            Tidak ada data mata kuliah yang sesuai filter
+                        </td>
                     </tr>
                     <?php else: ?>
                         <?php $no = $start_index + 1; foreach ($display_data as $mk): ?>
-                        <tr>
+                        <!-- Main Row -->
+                        <tr class="matkul-main-row" data-matkul-id="<?= $mk['id']; ?>" onclick="toggleRow(<?= $mk['id']; ?>)">
+                            <td style="text-align:center;">
+                                <span class="expand-icon">
+                                    <i class="fas fa-chevron-down"></i>
+                                </span>
+                            </td>
                             <td><?= $no++; ?></td>
                             <td><code><?= htmlspecialchars($mk['kode'] ?? '-'); ?></code></td>
                             <td><?= htmlspecialchars($mk['nama'] ?? '-'); ?></td>
                             <td><span class="badge-sks"><?= $mk['sks'] ?? '-'; ?> SKS</span></td>
                             <td>Semester <?= $mk['semester'] ?? '-'; ?></td>
-                            <td class="aksi-cell">
-                                <a href="<?= BASEURL; ?>/AdminController/matakuliahEdit/<?= $mk['id']; ?>" class="btn-edit">
-                                    <i class="fas fa-edit"></i> <span>Edit</span>
-                                </a>
-                                <button class="btn-delete" onclick="showDeleteConfirmDialog('Apakah Anda yakin ingin menghapus mata kuliah <strong><?= htmlspecialchars($mk['nama']); ?></strong>?', '<?= BASEURL; ?>/AdminController/matakuliahDelete/<?= $mk['id']; ?>');">
-                                    <i class="fas fa-trash"></i> <span>Hapus</span>
-                                </button>
+                            <td>
+                                <?php 
+                                // Ambil prodi dari kode mata kuliah (2 huruf pertama)
+                                $prodi_kode = isset($mk['kode']) ? substr($mk['kode'], 0, 2) : '';
+                                $prodi_display = $mk['prodi'] ?? '';
+                                
+                                // Map kode prodi ke nama lengkap
+                                $prodi_map = [
+                                    'TI' => 'Teknik Informatika',
+                                    'SI' => 'Sistem Informasi',
+                                    'TK' => 'Teknik Komputer',
+                                    'MI' => 'Manajemen Informatika',
+                                    'KA' => 'Komputerisasi Akuntansi',
+                                    'TE' => 'Teknik Elektro',
+                                    'DKV' => 'Desain Komunikasi Visual',
+                                    'BD' => 'Bisnis Digital'
+                                ];
+                                
+                                if (!empty($prodi_display)) {
+                                    // Jika ada prodi di database, tampilkan
+                                    $nama_prodi = $prodi_map[$prodi_display] ?? $prodi_display;
+                                    echo '<span class="prodi-badge">' . htmlspecialchars($prodi_display) . '</span>';
+                                    echo ' <span class="prodi-full">' . htmlspecialchars($nama_prodi) . '</span>';
+                                } else if (!empty($prodi_kode)) {
+                                    // Jika tidak ada, ambil dari kode mata kuliah
+                                    $nama_prodi = $prodi_map[$prodi_kode] ?? $prodi_kode;
+                                    echo '<span class="prodi-badge">' . htmlspecialchars($prodi_kode) . '</span>';
+                                    echo ' <span class="prodi-full">' . htmlspecialchars($nama_prodi) . '</span>';
+                                } else {
+                                    echo '<span style="color:#5f6368;">-</span>';
+                                }
+                                ?>
+                            </td>
+                        </tr>
+                        <!-- Action Row (Expanded) -->
+                        <tr class="action-row" id="action-row-<?= $mk['id']; ?>">
+                            <td colspan="7">
+                                <div class="action-container">
+                                    <a href="<?= BASEURL; ?>/AdminController/matakuliahEdit/<?= $mk['id']; ?>" class="action-btn action-edit" onclick="event.stopPropagation();">
+                                        <span class="action-icon"><i class="fas fa-edit"></i></span>
+                                        Edit Mata Kuliah
+                                    </a>
+                                    <div class="action-divider"></div>
+                                    <button class="action-btn action-delete" onclick="event.stopPropagation(); showDeleteConfirmDialog('Apakah Anda yakin ingin menghapus mata kuliah <strong><?= htmlspecialchars($mk['nama']); ?></strong>?', '<?= BASEURL; ?>/AdminController/matakuliahDelete/<?= $mk['id']; ?>')">
+                                        <span class="action-icon"><i class="fas fa-trash"></i></span>
+                                        Hapus Mata Kuliah
+                                    </button>
+                                </div>
                             </td>
                         </tr>
                         <?php endforeach; ?>
@@ -1128,27 +1363,13 @@
             </table>
         </div>
 
-        <!-- PAGINATION SECTION -->
+        <!-- PAGINATION -->
         <?php if ($total_data > $limit): ?>
         <div class="pagination-container">
             <div class="pagination-info">
                 Menampilkan <?= $start_index + 1; ?> - <?= min($start_index + $limit, $total_data); ?> dari <?= $total_data; ?> data
             </div>
             <div class="d-flex gap-2">
-                <?php 
-                // Build query string untuk pagination
-                $query_params = [];
-                if (isset($_GET['filter_semester']) && $_GET['filter_semester'] != '') {
-                    $query_params[] = 'filter_semester=' . $_GET['filter_semester'];
-                }
-                if (isset($_GET['filter_prodi']) && $_GET['filter_prodi'] != '') {
-                    $query_params[] = 'filter_prodi=' . $_GET['filter_prodi'];
-                }
-                if (isset($_GET['filter_sks']) && $_GET['filter_sks'] != '') {
-                    $query_params[] = 'filter_sks=' . $_GET['filter_sks'];
-                }
-                $query_string = !empty($query_params) ? '&' . implode('&', $query_params) : '';
-                ?>
                 <?php if ($current_page > 1): ?>
                 <a href="?page=<?= $current_page - 1; ?><?= $query_string; ?>" class="btn-pagination">
                     <i class="fas fa-chevron-left"></i> Sebelumnya
@@ -1179,6 +1400,59 @@
 </div>
 
 <script>
+    // ========== TOGGLE ROW EXPAND ==========
+    function toggleRow(matkulId) {
+        var actionRow = document.getElementById('action-row-' + matkulId);
+        var mainRow = document.querySelector('.matkul-main-row[data-matkul-id="' + matkulId + '"]');
+        
+        if (!actionRow || !mainRow) return;
+        
+        // Close all other expanded rows
+        document.querySelectorAll('.action-row.show').forEach(function(row) {
+            if (row.id !== 'action-row-' + matkulId) {
+                row.classList.remove('show');
+                var prevRow = row.previousElementSibling;
+                if (prevRow && prevRow.classList.contains('matkul-main-row')) {
+                    prevRow.classList.remove('expanded');
+                    var icon = prevRow.querySelector('.expand-icon i');
+                    if (icon) {
+                        icon.className = 'fas fa-chevron-down';
+                    }
+                }
+            }
+        });
+        
+        // Toggle current row
+        actionRow.classList.toggle('show');
+        mainRow.classList.toggle('expanded');
+        
+        var icon = mainRow.querySelector('.expand-icon i');
+        if (icon) {
+            if (mainRow.classList.contains('expanded')) {
+                icon.className = 'fas fa-chevron-up';
+            } else {
+                icon.className = 'fas fa-chevron-down';
+            }
+        }
+    }
+
+    // Close expanded rows when clicking outside
+    document.addEventListener('click', function(e) {
+        if (!e.target.closest('.data-table')) {
+            document.querySelectorAll('.action-row.show').forEach(function(row) {
+                row.classList.remove('show');
+                var prevRow = row.previousElementSibling;
+                if (prevRow && prevRow.classList.contains('matkul-main-row')) {
+                    prevRow.classList.remove('expanded');
+                    var icon = prevRow.querySelector('.expand-icon i');
+                    if (icon) {
+                        icon.className = 'fas fa-chevron-down';
+                    }
+                }
+            });
+        }
+    });
+
     // ========== CUSTOM CONFIRM DIALOG FOR DELETE ==========
     const confirmDeleteOverlay = document.getElementById('customConfirmDeleteOverlay');
     const confirmDeleteMessage = document.getElementById('confirmDeleteMessage');
@@ -1207,6 +1481,12 @@
             window.location.href = pendingDeleteUrl;
         }
         closeDeleteConfirmDialog();
+    });
+
+    confirmDeleteOverlay.addEventListener('click', function(event) {
+        if (event.target === confirmDeleteOverlay) {
+            closeDeleteConfirmDialog();
+        }
     });
 
     // ========== CUSTOM CONFIRM DIALOG FOR LOGOUT ==========
@@ -1251,12 +1531,6 @@
         showLogoutConfirmDialog('Apakah Anda yakin ingin keluar dari sistem?', '<?= BASEURL; ?>/AuthController/logout');
     });
 
-    confirmDeleteOverlay.addEventListener('click', function(event) {
-        if (event.target === confirmDeleteOverlay) {
-            closeDeleteConfirmDialog();
-        }
-    });
-
     confirmLogoutOverlay.addEventListener('click', function(event) {
         if (event.target === confirmLogoutOverlay) {
             closeLogoutConfirmDialog();
@@ -1265,7 +1539,6 @@
 
     // ========== TOGGLE SIDEBAR ==========
     const toggleBtn = document.getElementById('toggleSidebar');
-    const brandToggle = document.getElementById('brandToggle');
     const sideMenu = document.getElementById('sideMenuOverlay');
     const backdrop = document.getElementById('sidebarBackdrop');
 
@@ -1290,7 +1563,6 @@
     }
 
     toggleBtn.addEventListener('click', toggleSidebar);
-    brandToggle.addEventListener('click', toggleSidebar);
     backdrop.addEventListener('click', closeSidebar);
 
     window.addEventListener('resize', function() {
@@ -1317,7 +1589,6 @@
             selectedText.textContent = text;
             selectedValue.value = value;
             
-            // Update selected class
             optionsContainer.querySelectorAll('.option-item').forEach(opt => {
                 opt.classList.remove('selected');
             });
@@ -1330,7 +1601,6 @@
             optionsContainer.classList.remove('show');
             trigger.classList.remove('open');
             
-            // Submit form setelah memilih
             if (filterForm) {
                 filterForm.submit();
             }
@@ -1346,7 +1616,6 @@
             });
         });
 
-        // Tutup dropdown saat klik di luar
         document.addEventListener('click', function(event) {
             if (container && !container.contains(event.target)) {
                 optionsContainer.classList.remove('show');
@@ -1355,7 +1624,6 @@
         });
     }
 
-    // Init all custom selects
     initCustomSelect('semesterSelectContainer', 'semesterSelectTrigger', 'semesterSelectOptions', 'selectedSemesterText', 'selectedSemesterValue', 'filterForm');
     initCustomSelect('prodiSelectContainer', 'prodiSelectTrigger', 'prodiSelectOptions', 'selectedProdiText', 'selectedProdiValue', 'filterForm');
     initCustomSelect('sksSelectContainer', 'sksSelectTrigger', 'sksSelectOptions', 'selectedSksText', 'selectedSksValue', 'filterForm');

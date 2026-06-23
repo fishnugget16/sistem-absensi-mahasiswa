@@ -9,6 +9,7 @@ class Mahasiswa extends BaseModel {
     private $user_id;
     private $nim;
     private $nama;
+    private $prodi;
     private $angkatan;
     private $kelas;
     private $email;
@@ -40,6 +41,11 @@ class Mahasiswa extends BaseModel {
     
     public function setNama($nama) {
         $this->nama = htmlspecialchars(trim($nama));
+        return $this;
+    }
+    
+    public function setProdi($prodi) {
+        $this->prodi = htmlspecialchars(trim($prodi));
         return $this;
     }
     
@@ -81,6 +87,10 @@ class Mahasiswa extends BaseModel {
     
     public function getNama() {
         return $this->nama;
+    }
+    
+    public function getProdi() {
+        return $this->prodi;
     }
     
     public function getAngkatan() {
@@ -134,10 +144,17 @@ class Mahasiswa extends BaseModel {
         try {
             if (isset($this->id) && !empty($this->id)) {
                 // UPDATE
-                $sql = "UPDATE mahasiswa SET nim = :nim, nama = :nama, angkatan = :angkatan, kelas = :kelas WHERE id = :id";
+                $sql = "UPDATE mahasiswa SET 
+                            nim = :nim, 
+                            nama = :nama, 
+                            prodi = :prodi,
+                            angkatan = :angkatan, 
+                            kelas = :kelas 
+                        WHERE id = :id";
                 $this->db->query($sql);
                 $this->db->bind(':nim', $this->nim);
                 $this->db->bind(':nama', $this->nama);
+                $this->db->bind(':prodi', $this->prodi);
                 $this->db->bind(':angkatan', $this->angkatan);
                 $this->db->bind(':kelas', $this->kelas);
                 $this->db->bind(':id', $this->id);
@@ -147,10 +164,13 @@ class Mahasiswa extends BaseModel {
                 }
             } else {
                 // INSERT
-                $sql = "INSERT INTO mahasiswa (nim, nama, angkatan, kelas) VALUES (:nim, :nama, :angkatan, :kelas)";
+                $sql = "INSERT INTO mahasiswa (user_id, nim, nama, prodi, angkatan, kelas) 
+                        VALUES (:user_id, :nim, :nama, :prodi, :angkatan, :kelas)";
                 $this->db->query($sql);
+                $this->db->bind(':user_id', $this->user_id);
                 $this->db->bind(':nim', $this->nim);
                 $this->db->bind(':nama', $this->nama);
+                $this->db->bind(':prodi', $this->prodi);
                 $this->db->bind(':angkatan', $this->angkatan);
                 $this->db->bind(':kelas', $this->kelas);
                 
@@ -197,7 +217,7 @@ class Mahasiswa extends BaseModel {
                     WHERE 1=1";
             
             if ($filter_prodi != '') {
-                $sql .= " AND m.kelas = :prodi";
+                $sql .= " AND m.prodi = :prodi";
             }
             if ($filter_angkatan != '') {
                 $sql .= " AND m.angkatan = :angkatan";
@@ -221,6 +241,11 @@ class Mahasiswa extends BaseModel {
         }
     }
     
+    /**
+     * Ambil mahasiswa berdasarkan ID - DIPERBAIKI dengan fallback prodi
+     * @param int $id ID mahasiswa
+     * @return array|null Data mahasiswa
+     */
     public function getMahasiswaById($id) {
         try {
             $sql = "SELECT m.*, u.email, u.username 
@@ -229,7 +254,14 @@ class Mahasiswa extends BaseModel {
                     WHERE m.id = :id";
             $this->db->query($sql);
             $this->db->bind(':id', $id);
-            return $this->db->single();
+            $result = $this->db->single();
+            
+            // Jika prodi kosong, gunakan kelas sebagai fallback
+            if ($result && (empty($result['prodi']) || $result['prodi'] === null)) {
+                $result['prodi'] = $result['kelas'] ?? '';
+            }
+            
+            return $result;
         } catch (Exception $e) {
             return null;
         }
@@ -249,6 +281,11 @@ class Mahasiswa extends BaseModel {
         }
     }
     
+    /**
+     * Ambil mahasiswa berdasarkan user_id - DIPERBAIKI dengan fallback prodi
+     * @param int $user_id ID user
+     * @return array|null Data mahasiswa
+     */
     public function getMahasiswaByUserId($user_id) {
         try {
             $sql = "SELECT m.*, u.email, u.username 
@@ -257,13 +294,20 @@ class Mahasiswa extends BaseModel {
                     WHERE m.user_id = :user_id";
             $this->db->query($sql);
             $this->db->bind(':user_id', $user_id);
-            return $this->db->single();
+            $result = $this->db->single();
+            
+            // Jika prodi kosong, gunakan kelas sebagai fallback
+            if ($result && (empty($result['prodi']) || $result['prodi'] === null)) {
+                $result['prodi'] = $result['kelas'] ?? '';
+            }
+            
+            return $result;
         } catch (Exception $e) {
             return null;
         }
     }
     
-    public function createMahasiswa($nama, $nim, $angkatan, $kelas, $email, $password) {
+    public function createMahasiswa($nama, $nim, $prodi, $angkatan, $kelas, $email, $password) {
         try {
             // Cek apakah NIM sudah terdaftar
             $sql = "SELECT COUNT(*) as total FROM mahasiswa WHERE nim = :nim";
@@ -298,21 +342,25 @@ class Mahasiswa extends BaseModel {
             $hashedPassword = md5($password);
             
             // Insert ke tabel users
-            $sql = "INSERT INTO users (email, password, role, username) VALUES (:email, :password, 'mahasiswa', :username)";
+            $sql = "INSERT INTO users (username, email, password, role, nama) 
+                    VALUES (:username, :email, :password, 'mahasiswa', :nama)";
             $this->db->query($sql);
+            $this->db->bind(':username', $nama);
             $this->db->bind(':email', $email);
             $this->db->bind(':password', $hashedPassword);
-            $this->db->bind(':username', $nama);
+            $this->db->bind(':nama', $nama);
             
             if ($this->db->execute()) {
                 $userId = $this->db->lastInsertId();
                 
                 // Insert ke tabel mahasiswa
-                $sql = "INSERT INTO mahasiswa (user_id, nim, nama, angkatan, kelas) VALUES (:user_id, :nim, :nama, :angkatan, :kelas)";
+                $sql = "INSERT INTO mahasiswa (user_id, nim, nama, prodi, angkatan, kelas) 
+                        VALUES (:user_id, :nim, :nama, :prodi, :angkatan, :kelas)";
                 $this->db->query($sql);
                 $this->db->bind(':user_id', $userId);
                 $this->db->bind(':nim', $nim);
                 $this->db->bind(':nama', $nama);
+                $this->db->bind(':prodi', $prodi);
                 $this->db->bind(':angkatan', $angkatan);
                 $this->db->bind(':kelas', $kelas);
                 
@@ -327,7 +375,7 @@ class Mahasiswa extends BaseModel {
         }
     }
     
-    public function updateMahasiswa($id, $nama, $nim, $angkatan, $kelas, $email) {
+    public function updateMahasiswa($id, $nama, $nim, $prodi, $angkatan, $kelas, $email) {
         try {
             // Cek apakah NIM sudah dipakai mahasiswa lain
             $sql = "SELECT COUNT(*) as total FROM mahasiswa WHERE nim = :nim AND id != :id";
@@ -341,10 +389,17 @@ class Mahasiswa extends BaseModel {
             }
             
             // Update tabel mahasiswa
-            $sql = "UPDATE mahasiswa SET nim = :nim, nama = :nama, angkatan = :angkatan, kelas = :kelas WHERE id = :id";
+            $sql = "UPDATE mahasiswa SET 
+                        nim = :nim, 
+                        nama = :nama, 
+                        prodi = :prodi,
+                        angkatan = :angkatan, 
+                        kelas = :kelas 
+                    WHERE id = :id";
             $this->db->query($sql);
             $this->db->bind(':nim', $nim);
             $this->db->bind(':nama', $nama);
+            $this->db->bind(':prodi', $prodi);
             $this->db->bind(':angkatan', $angkatan);
             $this->db->bind(':kelas', $kelas);
             $this->db->bind(':id', $id);
@@ -418,6 +473,7 @@ class Mahasiswa extends BaseModel {
                     WHERE m.nama LIKE :keyword 
                        OR m.nim LIKE :keyword 
                        OR m.kelas LIKE :keyword
+                       OR m.prodi LIKE :keyword
                     ORDER BY m.nama ASC";
             $this->db->query($sql);
             $this->db->bind(':keyword', "%$keyword%");
@@ -426,4 +482,216 @@ class Mahasiswa extends BaseModel {
             return [];
         }
     }
+
+    // ==================
+    // METHOD UNTUK DOSEN - DIPERBAIKI
+    // ==================
+
+    /**
+     * Ambil mahasiswa berdasarkan mata kuliah (untuk input absensi dosen)
+     * MENGGUNAKAN PRODI DAN ANGKATAN DARI MATA KULIAH
+     * TANPA perlu relasi di matkul_mahasiswa
+     * @param int $matkul_id ID mata kuliah
+     * @return array Daftar mahasiswa
+     */
+    public function getMahasiswaByMatkul($matkul_id) {
+        try {
+            // Ambil data mata kuliah untuk mendapatkan prodi dan angkatan
+            $matkulModel = $this->model('MataKuliah');
+            $matkul = $matkulModel->getMataKuliahById($matkul_id);
+            
+            if (!$matkul) {
+                return [];
+            }
+            
+            // Ambil prodi dari kode mata kuliah (2 huruf pertama)
+            $prodi = substr($matkul['kode'], 0, 2);
+            $angkatan = $matkul['angkatan'] ?? date('Y');
+            
+            // Ambil mahasiswa berdasarkan prodi dan angkatan
+            $sql = "SELECT 
+                        m.id, 
+                        m.nim, 
+                        m.nama, 
+                        m.prodi, 
+                        m.kelas,
+                        m.angkatan
+                    FROM mahasiswa m
+                    WHERE m.prodi = :prodi 
+                      AND m.angkatan = :angkatan
+                    ORDER BY m.nama ASC";
+            
+            $this->db->query($sql);
+            $this->db->bind(':prodi', $prodi);
+            $this->db->bind(':angkatan', $angkatan);
+            $result = $this->db->resultSet();
+            
+            // Tambahkan status terakhir untuk setiap mahasiswa
+            foreach ($result as &$row) {
+                $row['status_terakhir'] = $this->getLastStatus($row['id'], $matkul_id);
+            }
+            
+            return $result;
+        } catch (Exception $e) {
+            error_log("Error in getMahasiswaByMatkul: " . $e->getMessage());
+            return [];
+        }
+    }
+
+    /**
+     * Ambil status terakhir mahasiswa untuk mata kuliah tertentu
+     * @param int $mahasiswa_id
+     * @param int $matkul_id
+     * @return string|null
+     */
+    public function getLastStatus($mahasiswa_id, $matkul_id) {
+        try {
+            $sql = "SELECT status 
+                    FROM absensi 
+                    WHERE mahasiswa_id = :mahasiswa_id 
+                      AND matkul_id = :matkul_id 
+                    ORDER BY tanggal DESC, created_at DESC
+                    LIMIT 1";
+            $this->db->query($sql);
+            $this->db->bind(':mahasiswa_id', $mahasiswa_id);
+            $this->db->bind(':matkul_id', $matkul_id);
+            $result = $this->db->single();
+            return $result ? $result['status'] : null;
+        } catch (Exception $e) {
+            return null;
+        }
+    }
+
+    /**
+     * Ambil mahasiswa berdasarkan prodi dan angkatan
+     * @param string $prodi Kode prodi (contoh: SI, TI)
+     * @param string $angkatan Tahun angkatan
+     * @param int $matkul_id ID mata kuliah (untuk status terakhir)
+     * @return array Daftar mahasiswa
+     */
+    public function getMahasiswaByProdiAngkatan($prodi, $angkatan, $matkul_id = 0) {
+        try {
+            $sql = "SELECT 
+                        m.id, 
+                        m.nim, 
+                        m.nama, 
+                        m.prodi, 
+                        m.kelas,
+                        m.angkatan
+                    FROM mahasiswa m
+                    WHERE m.prodi = :prodi 
+                      AND m.angkatan = :angkatan
+                    ORDER BY m.nama ASC";
+            
+            $this->db->query($sql);
+            $this->db->bind(':prodi', $prodi);
+            $this->db->bind(':angkatan', $angkatan);
+            $result = $this->db->resultSet();
+            
+            // Tambahkan status terakhir untuk setiap mahasiswa
+            if ($matkul_id > 0) {
+                foreach ($result as &$row) {
+                    $row['status_terakhir'] = $this->getLastStatus($row['id'], $matkul_id);
+                }
+            }
+            
+            return $result;
+        } catch (Exception $e) {
+            error_log("Error in getMahasiswaByProdiAngkatan: " . $e->getMessage());
+            return [];
+        }
+    }
+
+    /**
+     * Assign mahasiswa ke mata kuliah
+     * @param int $mahasiswa_id
+     * @param int $matkul_id
+     * @return array
+     */
+    public function assignToMatkul($mahasiswa_id, $matkul_id) {
+        try {
+            // Cek apakah sudah terdaftar
+            $sql = "SELECT id FROM matkul_mahasiswa 
+                    WHERE mahasiswa_id = :mahasiswa_id 
+                      AND matkul_id = :matkul_id";
+            $this->db->query($sql);
+            $this->db->bind(':mahasiswa_id', $mahasiswa_id);
+            $this->db->bind(':matkul_id', $matkul_id);
+            
+            if ($this->db->single()) {
+                return ['success' => false, 'message' => 'Mahasiswa sudah terdaftar di mata kuliah ini'];
+            }
+
+            // Insert ke matkul_mahasiswa
+            $sql = "INSERT INTO matkul_mahasiswa (mahasiswa_id, matkul_id) 
+                    VALUES (:mahasiswa_id, :matkul_id)";
+            $this->db->query($sql);
+            $this->db->bind(':mahasiswa_id', $mahasiswa_id);
+            $this->db->bind(':matkul_id', $matkul_id);
+            
+            if ($this->db->execute()) {
+                return ['success' => true, 'message' => 'Mahasiswa berhasil ditambahkan ke mata kuliah'];
+            }
+            
+            return ['success' => false, 'message' => 'Gagal menambahkan mahasiswa ke mata kuliah'];
+            
+        } catch (Exception $e) {
+            return ['success' => false, 'message' => 'Terjadi kesalahan: ' . $e->getMessage()];
+        }
+    }
+
+    /**
+     * Hapus mahasiswa dari mata kuliah
+     * @param int $mahasiswa_id
+     * @param int $matkul_id
+     * @return array
+     */
+    public function removeFromMatkul($mahasiswa_id, $matkul_id) {
+        try {
+            $sql = "DELETE FROM matkul_mahasiswa 
+                    WHERE mahasiswa_id = :mahasiswa_id 
+                      AND matkul_id = :matkul_id";
+            $this->db->query($sql);
+            $this->db->bind(':mahasiswa_id', $mahasiswa_id);
+            $this->db->bind(':matkul_id', $matkul_id);
+            
+            if ($this->db->execute()) {
+                return ['success' => true, 'message' => 'Mahasiswa berhasil dihapus dari mata kuliah'];
+            }
+            
+            return ['success' => false, 'message' => 'Gagal menghapus mahasiswa dari mata kuliah'];
+            
+        } catch (Exception $e) {
+            return ['success' => false, 'message' => 'Terjadi kesalahan: ' . $e->getMessage()];
+        }
+    }
+
+    /**
+     * Ambil mata kuliah yang diambil oleh mahasiswa
+     * @param int $mahasiswa_id
+     * @return array
+     */
+    public function getMatkulByMahasiswaId($mahasiswa_id) {
+        try {
+            $sql = "SELECT 
+                        mk.id, 
+                        mk.kode, 
+                        mk.nama, 
+                        mk.sks,
+                        mk.semester,
+                        d.nama AS dosen_pengampu
+                    FROM mata_kuliah mk
+                    JOIN matkul_mahasiswa mm ON mk.id = mm.matkul_id
+                    LEFT JOIN dosen d ON mk.dosen_id = d.id
+                    WHERE mm.mahasiswa_id = :mahasiswa_id
+                    ORDER BY mk.semester, mk.nama";
+            $this->db->query($sql);
+            $this->db->bind(':mahasiswa_id', $mahasiswa_id);
+            return $this->db->resultSet();
+        } catch (Exception $e) {
+            error_log("Error in getMatkulByMahasiswaId: " . $e->getMessage());
+            return [];
+        }
+    }
 }
+?>

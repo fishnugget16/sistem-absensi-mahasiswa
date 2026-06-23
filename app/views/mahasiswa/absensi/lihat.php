@@ -31,27 +31,14 @@
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
+            min-height: 60px;
         }
 
         .navbar-left {
             display: flex;
             align-items: center;
             gap: 16px;
-        }
-
-        .navbar-brand {
-            font-size: 18px;
-            font-weight: 500;
-            color: #e8eaed;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .navbar-brand i {
-            color: #4caf50;
-            font-size: 20px;
+            height: 100%;
         }
 
         .toggle-btn {
@@ -62,12 +49,56 @@
             cursor: pointer;
             display: flex;
             align-items: center;
+            justify-content: center;
+            padding: 0;
+            border-radius: 4px;
+            transition: background 0.2s;
+            height: 36px;
+            width: 36px;
+        }
+
+        .toggle-btn:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            cursor: default;
+            pointer-events: none;
+            user-select: none;
+            height: 36px;
+            line-height: 1;
+        }
+
+        .navbar-brand i {
+            color: #4caf50;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            flex-shrink: 0;
+        }
+
+        .navbar-brand span {
+            color: #e8eaed;
+            font-size: 18px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            height: 24px;
+            line-height: 24px;
         }
 
         .navbar-right {
             display: flex;
             align-items: center;
             gap: 16px;
+            height: 100%;
         }
 
         .user-info {
@@ -128,12 +159,46 @@
 
         .side-menu-overlay .nav-menu {
             list-style: none;
-            padding: 20px 16px;
-            margin-top: 60px;
+            padding: 20px 16px 20px 16px;
+            margin-top: 0;
+        }
+
+        .sidebar-brand {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 12px 16px;
+            margin-bottom: 4px;
+            cursor: default;
+            pointer-events: none;
+            user-select: none;
+            min-height: 48px;
+            border-radius: 10px;
+        }
+
+        .sidebar-brand i {
+            color: #4caf50;
+            font-size: 16px;
+            width: 22px;
+            text-align: center;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 1;
+        }
+
+        .sidebar-brand span {
+            color: #e8eaed;
+            font-size: 14px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            line-height: 1;
         }
 
         .side-menu-overlay .nav-item {
-            margin-bottom: 8px;
+            margin-bottom: 4px;
         }
 
         .side-menu-overlay .nav-link {
@@ -148,11 +213,18 @@
             border-radius: 10px;
             transition: all 0.2s;
             cursor: pointer;
+            min-height: 48px;
         }
 
         .side-menu-overlay .nav-link i {
             width: 22px;
             font-size: 16px;
+            text-align: center;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 1;
         }
 
         .side-menu-overlay .nav-link:hover {
@@ -200,7 +272,7 @@
             margin: 16px 0 24px 0;
         }
 
-        /* Filter Semester - Custom Select seperti create.php */
+        /* Filter Semester - Custom Select */
         .filter-semester {
             margin-bottom: 24px;
             display: flex;
@@ -226,7 +298,7 @@
             font-size: 14px;
         }
 
-        /* Custom Select Styles - SAMA dengan create.php mahasiswa */
+        /* Custom Select Styles */
         .custom-select-container {
             position: relative;
             width: 220px;
@@ -381,6 +453,17 @@
             margin-left: 5px;
         }
 
+        .rekap-angkatan {
+            color: #4caf50;
+            font-size: 11px;
+            margin-left: 8px;
+            display: inline-block;
+        }
+
+        .rekap-angkatan i {
+            margin-right: 3px;
+        }
+
         .rekap-info {
             color: #9aa0a6;
             font-size: 11px;
@@ -423,6 +506,12 @@
             display: block;
         }
 
+        .empty-rekap small {
+            color: #5f6368;
+            display: block;
+            margin-top: 8px;
+        }
+
         /* Tabel */
         .table-wrapper {
             overflow-x: auto;
@@ -433,7 +522,7 @@
         .data-table {
             width: 100%;
             border-collapse: collapse;
-            min-width: 500px;
+            min-width: 550px;
         }
 
         .data-table thead tr {
@@ -462,15 +551,40 @@
             background: rgba(255, 255, 255, 0.03);
         }
 
-        .badge-status {
+        /* ===== CLASS BADGE ===== */
+        .class-badge {
             display: inline-block;
+            padding: 3px 10px;
+            background: rgba(76, 175, 80, 0.1);
+            border-radius: 4px;
+            color: #4caf50;
+            font-size: 12px;
+            font-weight: 500;
+            font-family: 'Roboto', sans-serif;
+            border: 1px solid rgba(76, 175, 80, 0.12);
+            white-space: nowrap;
+            letter-spacing: 0.2px;
+        }
+
+        /* ===== BADGE STATUS - UKURAN SERAGAM ===== */
+        .badge-status {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
             padding: 5px 14px;
             border-radius: 20px;
             font-size: 12px;
             font-weight: 600;
             text-align: center;
-            min-width: 70px;
+            min-width: 85px;
+            min-height: 30px;
             letter-spacing: 0.3px;
+            white-space: nowrap;
+        }
+
+        .badge-status i {
+            font-size: 12px;
         }
 
         .badge-hadir {
@@ -651,6 +765,7 @@
         @media (max-width: 768px) {
             .navbar-custom {
                 padding: 10px 16px;
+                min-height: 56px;
             }
 
             .content-card {
@@ -693,7 +808,7 @@
             }
 
             .data-table {
-                min-width: 550px;
+                min-width: 480px;
             }
 
             .data-table th {
@@ -709,7 +824,17 @@
             .badge-status {
                 padding: 4px 10px;
                 font-size: 10px;
-                min-width: 60px;
+                min-width: 75px;
+                min-height: 26px;
+            }
+
+            .badge-status i {
+                font-size: 10px;
+            }
+
+            .class-badge {
+                font-size: 10px;
+                padding: 2px 8px;
             }
 
             .user-info span {
@@ -742,6 +867,29 @@
             }
         }
 
+        @media (max-width: 576px) {
+            .badge-status {
+                padding: 3px 8px;
+                font-size: 9px;
+                min-width: 65px;
+                min-height: 22px;
+                gap: 4px;
+            }
+
+            .badge-status i {
+                font-size: 9px;
+            }
+
+            .class-badge {
+                font-size: 9px;
+                padding: 2px 6px;
+            }
+
+            .data-table {
+                min-width: 400px;
+            }
+        }
+
         @media (min-width: 769px) and (max-width: 992px) {
             .content-card {
                 margin: 20px;
@@ -764,10 +912,10 @@
         <button class="toggle-btn" id="toggleSidebar">
             <i class="fas fa-bars"></i>
         </button>
-        <a href="#" class="navbar-brand" id="brandToggle">
+        <div class="navbar-brand">
             <i class="fas fa-graduation-cap"></i>
-            <span>Absensi OOP</span>
-        </a>
+            <span>SENMA</span>
+        </div>
     </div>
     <div class="navbar-right">
         <span class="user-info">
@@ -785,6 +933,12 @@
 <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
 <div class="side-menu-overlay" id="sideMenuOverlay">
     <ul class="nav-menu">
+        <!-- ===== BRANDING SEBAGAI ITEM MENU PERTAMA ===== -->
+        <li class="sidebar-brand">
+            <i class="fas fa-graduation-cap"></i>
+            <span>SENMA</span>
+        </li>
+
         <li class="nav-item">
             <a href="<?= BASEURL; ?>/MahasiswaController/index" class="nav-link">
                 <i class="fas fa-home"></i> Home
@@ -842,7 +996,7 @@
         </h3>
         <hr>
 
-        <!-- Filter Semester - CUSTOM SELECT SAMA SEPERTI CREATE.PHP -->
+        <!-- Filter Semester - CUSTOM SELECT -->
         <div class="filter-semester">
             <label><i class="fas fa-layer-group"></i> Filter Mata Kuliah:</label>
             <div class="custom-select-container" id="semesterSelectContainer">
@@ -907,6 +1061,11 @@
                     <div>
                         <span class="rekap-matkul"><?= htmlspecialchars($rekap['nama']); ?></span>
                         <span class="rekap-code">(<?= htmlspecialchars($rekap['kode']); ?>)</span>
+                        <?php if (isset($rekap['angkatan']) && !empty($rekap['angkatan'])): ?>
+                        <span class="rekap-angkatan">
+                            <i class="fas fa-calendar-alt"></i> Angkatan <?= $rekap['angkatan']; ?>
+                        </span>
+                        <?php endif; ?>
                         <div class="rekap-info">
                             <i class="fas fa-star"></i> <?= $rekap['sks']; ?> SKS
                         </div>
@@ -928,12 +1087,28 @@
             <?php if ($selected_semester != 'semua'): ?>
                 Belum ada mata kuliah untuk Semester <?= $selected_semester; ?>
             <?php else: ?>
-                Belum ada data mata kuliah
+                <?php 
+                // Ambil data mahasiswa untuk menampilkan informasi angkatan
+                $mahasiswaModel = $this->model('Mahasiswa');
+                $userId = $_SESSION['user_id'];
+                $dataMahasiswa = $mahasiswaModel->getMahasiswaByUserId($userId);
+                $mahasiswaId = $dataMahasiswa['id'] ?? 0;
+                
+                $matkulModel = $this->model('MataKuliah');
+                $matkul_list = $matkulModel->getMahasiswaByMatkulId($mahasiswaId);
+                ?>
+                <?php if (empty($matkul_list)): ?>
+                    Belum ada mata kuliah yang terdaftar untuk angkatan Anda (<?= $dataMahasiswa['angkatan'] ?? 'Tahun tidak diketahui'; ?>)
+                    <small><i class="fas fa-info-circle"></i> Silakan hubungi admin untuk mendaftarkan mata kuliah.</small>
+                <?php else: ?>
+                    Belum ada data absensi untuk mata kuliah Anda
+                    <small><i class="fas fa-info-circle"></i> Silakan hubungi dosen untuk mengisi absensi.</small>
+                <?php endif; ?>
             <?php endif; ?>
         </div>
         <?php endif; ?>
 
-        <!-- Tabel Riwayat Absensi (TANPA FILTER, TAMPIL SEMUA) -->
+        <!-- Tabel Riwayat Absensi -->
         <div class="rekap-title" style="margin-top: 30px;">
             <i class="fas fa-history"></i> Histori Absensi
         </div>
@@ -945,13 +1120,13 @@
                         <th>No</th>
                         <th>Tanggal</th>
                         <th>Mata Kuliah</th>
+                        <th>Kelas</th>
                         <th>Status</th>
-                        <th>Keterangan</th>
-                    </td>
+                    </tr>
                 </thead>
                 <tbody>
                     <?php 
-                    // PAGINATION: 10 data per halaman (TANPA FILTER SEMESTER)
+                    // PAGINATION: 10 data per halaman
                     $limit = 10;
                     $total_data = count($data['absensi']);
                     $total_pages = ceil($total_data / $limit);
@@ -972,10 +1147,37 @@
                     </tr>
                     <?php else: ?>
                         <?php $no = $start_index + 1; foreach ($display_data as $abs): ?>
+                        <?php 
+                        // ===== FORMAT KELAS =====
+                        // Format: [PRODI]-[KODE_KELAS]-[TANGGAL_YYMMDD]
+                        
+                        // 1. Ambil PRODI dari kode mata kuliah (2 huruf pertama)
+                        $prodi = isset($abs['kode']) ? substr($abs['kode'], 0, 2) : 'XX';
+                        
+                        // 2. Ambil KODE_KELAS dari data kelas atau generate
+                        $kelas_raw = $abs['kelas'] ?? '';
+                        if (!empty($kelas_raw)) {
+                            $parts = explode('-', $kelas_raw);
+                            if (count($parts) >= 2) {
+                                $kode_kelas = $parts[1] . '-' . ($parts[2] ?? '00');
+                            } else {
+                                $kode_kelas = '001';
+                            }
+                        } else {
+                            $kode_kelas = '001';
+                        }
+                        
+                        // 3. Ambil TANGGAL format YYMMDD
+                        $tanggal_kelas = date('ymd', strtotime($abs['tanggal']));
+                        
+                        // 4. Gabungkan menjadi format kelas
+                        $kelas_format = $prodi . '-' . $kode_kelas . '-' . $tanggal_kelas;
+                        ?>
                         <tr>
                             <td><?= $no++; ?></td>
                             <td><?= date('d-m-Y', strtotime($abs['tanggal'])); ?></td>
                             <td><?= htmlspecialchars($abs['mata_kuliah']); ?> (<?= $abs['kode']; ?>)<?= isset($abs['sks']) ? ' - ' . $abs['sks'] . ' SKS' : ''; ?></td>
+                            <td><span class="class-badge"><?= htmlspecialchars($kelas_format); ?></span></td>
                             <td>
                                 <?php 
                                 if ($abs['status'] == 'Hadir') {
@@ -989,7 +1191,6 @@
                                 }
                                 ?>
                             </td>
-                            <td><?= htmlspecialchars($abs['keterangan'] ?? '-'); ?></td>
                         </tr>
                         <?php endforeach; ?>
                     <?php endif; ?>
@@ -1078,7 +1279,6 @@
 
     // Toggle Sidebar
     const toggleBtn = document.getElementById('toggleSidebar');
-    const brandToggle = document.getElementById('brandToggle');
     const sideMenu = document.getElementById('sideMenuOverlay');
     const backdrop = document.getElementById('sidebarBackdrop');
 
@@ -1103,7 +1303,6 @@
     }
 
     toggleBtn.addEventListener('click', toggleSidebar);
-    brandToggle.addEventListener('click', toggleSidebar);
     backdrop.addEventListener('click', closeSidebar);
 
     window.addEventListener('resize', function() {
@@ -1125,7 +1324,6 @@
     function selectSemesterOption(value, text) {
         semesterSelectedText.textContent = text;
         
-        // Update selected class
         semesterOptionsContainer.querySelectorAll('.option-item').forEach(opt => {
             opt.classList.remove('selected');
         });
@@ -1138,7 +1336,6 @@
         semesterOptionsContainer.classList.remove('show');
         semesterTrigger.classList.remove('open');
         
-        // Redirect to URL with semester parameter
         let url = '<?= BASEURL; ?>/MahasiswaController/absensi';
         if (value !== 'semua') {
             url += '?semester=' + value;
@@ -1156,7 +1353,6 @@
         });
     });
 
-    // Tutup dropdown saat klik di luar
     document.addEventListener('click', function(event) {
         const container = document.getElementById('semesterSelectContainer');
         if (!container.contains(event.target)) {

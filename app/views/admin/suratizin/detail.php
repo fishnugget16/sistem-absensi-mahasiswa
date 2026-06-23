@@ -23,15 +23,99 @@
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
+            min-height: 60px;
         }
-        .navbar-left { display: flex; align-items: center; gap: 16px; }
-        .navbar-brand { font-size: 18px; font-weight: 500; color: #e8eaed; text-decoration: none; display: flex; align-items: center; gap: 10px; }
-        .navbar-brand i { color: #4caf50; font-size: 20px; }
-        .toggle-btn { background: transparent; border: none; color: #e8eaed; font-size: 20px; cursor: pointer; display: flex; align-items: center; }
-        .navbar-right { display: flex; align-items: center; gap: 16px; }
-        .user-info { color: #9aa0a6; font-size: 14px; display: flex; align-items: center; gap: 8px; }
-        .user-info i { color: #4caf50; font-size: 16px; }
-        .logout-link { color: #dc3545 !important; font-size: 14px; text-decoration: none; display: flex; align-items: center; gap: 6px; cursor: pointer; }
+
+        .navbar-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            height: 100%;
+        }
+
+        .toggle-btn {
+            background: transparent;
+            border: none;
+            color: #e8eaed;
+            font-size: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            border-radius: 4px;
+            transition: background 0.2s;
+            height: 36px;
+            width: 36px;
+        }
+
+        .toggle-btn:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            cursor: default;
+            pointer-events: none;
+            user-select: none;
+            height: 36px;
+            line-height: 1;
+        }
+
+        .navbar-brand i {
+            color: #4caf50;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            flex-shrink: 0;
+        }
+
+        .navbar-brand span {
+            color: #e8eaed;
+            font-size: 18px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            height: 24px;
+            line-height: 24px;
+        }
+
+        .navbar-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            height: 100%;
+        }
+
+        .user-info {
+            color: #9aa0a6;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .user-info i {
+            color: #4caf50;
+            font-size: 16px;
+        }
+
+        .logout-link {
+            color: #dc3545 !important;
+            font-size: 14px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+        }
+        .logout-link:hover { color: #ef5350 !important; }
 
         /* ========== OVERLAY SIDEBAR ========== */
         .side-menu-overlay {
@@ -48,15 +132,102 @@
             overflow-y: auto;
         }
         .side-menu-overlay.open { transform: translateX(0); }
-        .sidebar-backdrop { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 1040; display: none; }
+
+        .sidebar-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 1040;
+            display: none;
+        }
         .sidebar-backdrop.show { display: block; }
-        .side-menu-overlay .nav-menu { list-style: none; padding: 20px 16px; margin-top: 60px; }
-        .side-menu-overlay .nav-item { margin-bottom: 8px; }
-        .side-menu-overlay .nav-link { display: flex; align-items: center; gap: 14px; padding: 12px 16px; color: #9aa0a6; text-decoration: none; font-size: 14px; font-weight: 500; border-radius: 10px; transition: all 0.2s; }
-        .side-menu-overlay .nav-link i { width: 22px; font-size: 16px; }
-        .side-menu-overlay .nav-link:hover { background: rgba(255,255,255,0.05); color: #e8eaed; }
-        .side-menu-overlay .nav-link.active { background: rgba(76,175,80,0.15); color: #4caf50; }
-        .side-menu-overlay .nav-link.logout { color: #ef5350; margin-top: 30px; cursor: pointer; }
+
+        .side-menu-overlay .nav-menu {
+            list-style: none;
+            padding: 20px 16px 20px 16px;
+            margin-top: 0;
+        }
+
+        .sidebar-brand {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 12px 16px;
+            margin-bottom: 4px;
+            cursor: default;
+            pointer-events: none;
+            user-select: none;
+            min-height: 48px;
+            border-radius: 10px;
+        }
+
+        .sidebar-brand i {
+            color: #4caf50;
+            font-size: 16px;
+            width: 22px;
+            text-align: center;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 1;
+        }
+
+        .sidebar-brand span {
+            color: #e8eaed;
+            font-size: 14px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            line-height: 1;
+        }
+
+        .side-menu-overlay .nav-item {
+            margin-bottom: 4px;
+        }
+
+        .side-menu-overlay .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 12px 16px;
+            color: #9aa0a6;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            border-radius: 10px;
+            transition: all 0.2s;
+            cursor: pointer;
+            min-height: 48px;
+        }
+
+        .side-menu-overlay .nav-link i {
+            width: 22px;
+            font-size: 16px;
+            text-align: center;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 1;
+        }
+
+        .side-menu-overlay .nav-link:hover {
+            background: rgba(255,255,255,0.05);
+            color: #e8eaed;
+        }
+        .side-menu-overlay .nav-link.active {
+            background: rgba(76,175,80,0.15);
+            color: #4caf50;
+        }
+        .side-menu-overlay .nav-link.logout {
+            color: #ef5350;
+            margin-top: 30px;
+            cursor: pointer;
+        }
 
         /* ========== MAIN CONTENT ========== */
         .main-content { width: 100%; min-height: calc(100vh - 60px); }
@@ -182,7 +353,7 @@
         }
 
         @media (max-width: 768px) {
-            .navbar-custom { padding: 10px 16px; }
+            .navbar-custom { padding: 10px 16px; min-height: 56px; }
             .content-card { margin: 16px; padding: 20px; }
             .page-title { font-size: 20px; }
             .info-grid { grid-template-columns: 1fr; gap: 12px; }
@@ -209,7 +380,10 @@
 <div class="navbar-custom">
     <div class="navbar-left">
         <button class="toggle-btn" id="toggleSidebar"><i class="fas fa-bars"></i></button>
-        <a href="#" class="navbar-brand" id="brandToggle"><i class="fas fa-graduation-cap"></i> <span>Absensi OOP</span></a>
+        <div class="navbar-brand">
+            <i class="fas fa-graduation-cap"></i>
+            <span>SENMA</span>
+        </div>
     </div>
     <div class="navbar-right">
         <span class="user-info"><i class="fas fa-user-circle"></i> <span><?= $_SESSION['nama'] ?? 'Admin'; ?></span></span>
@@ -221,6 +395,12 @@
 <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
 <div class="side-menu-overlay" id="sideMenuOverlay">
     <ul class="nav-menu">
+        <!-- ===== BRANDING SEBAGAI ITEM MENU PERTAMA ===== -->
+        <li class="sidebar-brand">
+            <i class="fas fa-graduation-cap"></i>
+            <span>SENMA</span>
+        </li>
+
         <li class="nav-item"><a href="<?= BASEURL; ?>/AuthController/dashboard" class="nav-link"><i class="fas fa-home"></i> Home</a></li>
         <li class="nav-item"><a href="<?= BASEURL; ?>/AdminController/mahasiswa" class="nav-link"><i class="fas fa-user-graduate"></i> Kelola Mahasiswa</a></li>
         <li class="nav-item"><a href="<?= BASEURL; ?>/AdminController/dosen" class="nav-link"><i class="fas fa-chalkboard-user"></i> Kelola Dosen</a></li>
@@ -395,14 +575,14 @@
 
     // Toggle Sidebar
     const toggleBtn = document.getElementById('toggleSidebar');
-    const brandToggle = document.getElementById('brandToggle');
     const sideMenu = document.getElementById('sideMenuOverlay');
     const backdrop = document.getElementById('sidebarBackdrop');
+
     function openSidebar() { sideMenu.classList.add('open'); backdrop.classList.add('show'); document.body.style.overflow = 'hidden'; }
     function closeSidebar() { sideMenu.classList.remove('open'); backdrop.classList.remove('show'); document.body.style.overflow = ''; }
     function toggleSidebar() { sideMenu.classList.contains('open') ? closeSidebar() : openSidebar(); }
+
     toggleBtn.addEventListener('click', toggleSidebar);
-    brandToggle.addEventListener('click', toggleSidebar);
     backdrop.addEventListener('click', closeSidebar);
     window.addEventListener('resize', () => { if (window.innerWidth > 768 && sideMenu.classList.contains('open')) closeSidebar(); });
 </script>

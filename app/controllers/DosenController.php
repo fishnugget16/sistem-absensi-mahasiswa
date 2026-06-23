@@ -1,5 +1,7 @@
 <?php
 
+use Dompdf\Dompdf;
+
 class DosenController extends Controller {
 
     public function __construct() {
@@ -9,250 +11,304 @@ class DosenController extends Controller {
         }
     }
 
+    // ==========================================
+    // DASHBOARD DOSEN
+    // ==========================================
+
     public function index() {
         $dosenModel = $this->model('Dosen');
-        $absensiModel = $this->model('AbsensiDosen');
-        $pengajaranModel = $this->model('Pengajaran');
+        $absensiModel = $this->model('Absensi');
+        $matkulModel = $this->model('MataKuliah');
 
         $userId = $_SESSION['user_id'];
         $dataDosen = $dosenModel->getDosenByUserId($userId);
         $dosenId = $dataDosen['id'] ?? 0;
 
-        // Total kehadiran dosen
-        $totalHadir = $absensiModel->countHadir($dosenId);
+        // Total mata kuliah yang diampu
+        $totalMatkul = $matkulModel->countByDosenId($dosenId);
 
-        // Rekap per mata kuliah
-        $rekapMatkul = $absensiModel->getRekapPerMatkul($dosenId);
+        // Total absensi yang sudah diinput
+        $totalAbsensi = $absensiModel->countByDosenId($dosenId);
 
-        $totalPertemuan = 0;
-        $totalMengajar = 0;
-
-        foreach ($rekapMatkul as $matkul) {
-            $totalPertemuan += (int)$matkul['total_pertemuan'];
-            $totalMengajar += (int)$matkul['hadir'];
-        }
-
-        if ($totalPertemuan > 0) {
-            $persentase = round(($totalMengajar / $totalPertemuan) * 100, 2);
-        } else {
-            $persentase = 0;
-        }
-
-        $totalPengajaran = $pengajaranModel->countByDosenId($dosenId);
+        // Total mahasiswa yang diajar (distinct)
+        $totalMahasiswa = $absensiModel->countDistinctMahasiswaByDosenId($dosenId);
 
         $data = [
             'nama' => $_SESSION['nama'] ?? $_SESSION['username'],
-            'nidn' => $_SESSION['nidn'] ?? '-',
+            'nidn' => $dataDosen['nidn'] ?? '-',
             'prodi' => $dataDosen['prodi'] ?? 'Belum diisi',
-            'total_hadir' => $totalHadir,
-            'persentase' => $persentase,
-            'total_pengajaran' => $totalPengajaran
+            'total_matkul' => $totalMatkul,
+            'total_absensi' => $totalAbsensi,
+            'total_mahasiswa' => $totalMahasiswa,
+            'rekap_matkul' => $absensiModel->getRekapPerMatkulByDosenId($dosenId)
         ];
 
         $this->view('dosen/dashboard', $data);
     }
 
-    public function inputAbsensiMahasiswa() {
+    // ==========================================
+    // INPUT ABSENSI - DIPERBAIKI
+    // ==========================================
 
-    $dosenModel = $this->model('Dosen');
-    $absensiModel = $this->model('Absensi');
-
-    $userId = $_SESSION['user_id'];
-    $dataDosen = $dosenModel->getDosenByUserId($userId);
-    $dosenId = $dataDosen['id'] ?? 0;
-
-    $data = [
-        'matkul_list' => $absensiModel->getMatkulByDosenId($dosenId)
-    ];
-
-    $this->view('app/views/dosen/absensi/input', $data);
-}
-
-    public function absensi() {
+    public function inputAbsensi() {
         $dosenModel = $this->model('Dosen');
-        $absensiModel = $this->model('AbsensiDosen');
+        $matkulModel = $this->model('MataKuliah');
+        $mahasiswaModel = $this->model('Mahasiswa');
 
         $userId = $_SESSION['user_id'];
         $dataDosen = $dosenModel->getDosenByUserId($userId);
         $dosenId = $dataDosen['id'] ?? 0;
 
-        $data = [
-            'absensi' => $absensiModel->getByDosenId($dosenId),
-            'rekap_matkul' => $absensiModel->getRekapPerMatkul($dosenId)
-        ];
+        // Ambil mata kuliah yang diampu dosen
+        $matkul_list = $matkulModel->getByDosenId($dosenId);
 
-        $this->view('app/views/dosen/absensi/rekap', $data);
-    }
-
-    
-    public function inputAbsensiMahasiswaStore() {
-
-    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
-
-        $absensiModel = $this->model('Absensi');
-
-        $mahasiswa_id = $_POST['mahasiswa_id'] ?? 0;
-        $matkul_id = $_POST['matkul_id'] ?? 0;
-        $status = $_POST['status'] ?? '';
-        $tanggal = date('Y-m-d');
-
-        if (empty($mahasiswa_id) || empty($matkul_id) || empty($status)) {
-
-            $_SESSION['error'] = 'Semua field wajib diisi';
-
-            header('Location: ' . BASEURL . '/DosenController/inputAbsensiMahasiswa');
-            exit;
+        // Jika ada matkul_id di GET, ambil daftar mahasiswa
+        $mahasiswa_list = [];
+        $selected_matkul = isset($_GET['matkul_id']) ? $_GET['matkul_id'] : 0;
+        $prodi_display = '';
+        $angkatan_display = '';
+        
+        if ($selected_matkul) {
+            // Ambil data mata kuliah
+            $matkul = $matkulModel->getMataKuliahById($selected_matkul);
+            
+            if ($matkul) {
+                // Ambil prodi dari kode mata kuliah (2 huruf pertama)
+                $prodi = substr($matkul['kode'], 0, 2);
+                $angkatan = $matkul['angkatan'] ?? date('Y');
+                
+                $prodi_display = $prodi;
+                $angkatan_display = $angkatan;
+                
+                // Ambil mahasiswa berdasarkan prodi dan angkatan
+                $mahasiswa_list = $mahasiswaModel->getMahasiswaByProdiAngkatan($prodi, $angkatan, $selected_matkul);
+            }
         }
 
-        $dataAbsensi = [
-            'mahasiswa_id' => $mahasiswa_id,
-            'matkul_id' => $matkul_id,
-            'tanggal' => $tanggal,
-            'status' => $status
-        ];
-
-        $result = $absensiModel->createAbsensi($dataAbsensi);
-
-        if ($result['success']) {
-            $_SESSION['success'] = 'Absensi berhasil disimpan';
-        } else {
-            $_SESSION['error'] = 'Absensi gagal disimpan';
-        }
-
-        header('Location: ' . BASEURL . '/DosenController/inputAbsensiMahasiswa');
-        exit;
-    }
-}
-
-public function getMahasiswaByMatkul($matkulId)
-{
-    $mahasiswaModel = $this->model('Mahasiswa');
-
-    return $mahasiswaModel->getByMatkul($matkulId);
-}
-
-public function createAbsensi($data)
-{
-    $query = "INSERT INTO absensi
-              (mahasiswa_id, matkul_id, tanggal, status)
-              VALUES
-              (:mahasiswa_id, :matkul_id, :tanggal, :status)";
-
-    $this->db->query($query);
-
-    $this->db->bind('mahasiswa_id', $data['mahasiswa_id']);
-    $this->db->bind('matkul_id', $data['matkul_id']);
-    $this->db->bind('tanggal', $data['tanggal']);
-    $this->db->bind('status', $data['status']);
-
-    if ($this->db->execute()) {
-        return [
-            'success' => true,
-            'message' => 'Absensi berhasil disimpan'
-        ];
-    }
-
-    return [
-        'success' => false,
-        'message' => 'Absensi gagal disimpan'
-    ];
-}
-
-    public function uploadPengajaran() {
-        $dosenModel = $this->model('Dosen');
-        $absensiModel = $this->model('AbsensiDosen');
-
-        $userId = $_SESSION['user_id'];
-        $dataDosen = $dosenModel->getDosenByUserId($userId);
-        $dosenId = $dataDosen['id'] ?? 0;
-
         $data = [
-            'matkul_list' => $absensiModel->getMatkulByDosenId($dosenId)
+            'matkul_list' => $matkul_list,
+            'mahasiswa_list' => $mahasiswa_list,
+            'selected_matkul' => $selected_matkul,
+            'prodi_display' => $prodi_display,
+            'angkatan_display' => $angkatan_display
         ];
 
-        $this->view('dosen/pengajaran/upload', $data);
+        $this->view('dosen/absensi/input', $data);
     }
 
-    public function uploadPengajaranStore() {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
+    // ==========================================
+    // PROSES SIMPAN ABSENSI (MASSAL) - DIPERBAIKI
+    // ==========================================
 
-            $dosenModel = $this->model('Dosen');
-            $absensiModel = $this->model('AbsensiDosen');
-            $pengajaranModel = $this->model('Pengajaran');
-
-            $userId = $_SESSION['user_id'];
-            $dataDosen = $dosenModel->getDosenByUserId($userId);
-            $dosenId = $dataDosen['id'] ?? 0;
+    public function inputAbsensiStore() {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $absensiModel = $this->model('Absensi');
 
             $matkul_id = $_POST['matkul_id'] ?? 0;
-            $materi = $_POST['materi'] ?? '';
-            $keterangan = $_POST['keterangan'] ?? '';
+            $tanggal = $_POST['tanggal'] ?? date('Y-m-d');
+            $statuses = $_POST['status'] ?? [];
+            $mahasiswa_ids = $_POST['mahasiswa_id'] ?? [];
 
-            if (empty($matkul_id) || empty($materi)) {
-                $_SESSION['error'] = 'Semua field wajib diisi';
-                header('Location: ' . BASEURL . '/DosenController/uploadPengajaran');
+            if (empty($matkul_id) || empty($mahasiswa_ids)) {
+                $_SESSION['toast'] = [
+                    'type' => 'error',
+                    'title' => 'Gagal',
+                    'message' => 'Pilih mata kuliah dan mahasiswa terlebih dahulu'
+                ];
+                header('Location: ' . BASEURL . '/DosenController/inputAbsensi');
                 exit;
             }
 
-            // Ambil absensi terakhir dosen pada matkul tersebut
-            $absensi = $absensiModel->getLatestAbsensiByDosenAndMatkul($dosenId, $matkul_id);
+            $success_count = 0;
+            $error_count = 0;
 
-            if (!$absensi) {
-                $_SESSION['error'] = 'Belum ada data absensi untuk mata kuliah ini';
-                header('Location: ' . BASEURL . '/DosenController/uploadPengajaran');
-                exit;
-            }
-
-            // Upload file materi / laporan pengajaran
-            $targetDir = $_SERVER['DOCUMENT_ROOT'] . '/aplikasi-absensi-dosen/public/uploads/pengajaran/';
-
-            if (!file_exists($targetDir)) {
-                mkdir($targetDir, 0777, true);
-            }
-
-            $fileName = time() . '_' . $_FILES['file_pengajaran']['name'];
-            $targetFile = $targetDir . $fileName;
-
-            $fileType = strtolower(pathinfo($targetFile, PATHINFO_EXTENSION));
-            $allowedTypes = ['pdf', 'doc', 'docx', 'ppt', 'pptx'];
-
-            if (!in_array($fileType, $allowedTypes)) {
-                $_SESSION['error'] = 'Hanya file PDF, DOC, DOCX, PPT, PPTX yang diperbolehkan';
-                header('Location: ' . BASEURL . '/DosenController/uploadPengajaran');
-                exit;
-            }
-
-            if ($_FILES['file_pengajaran']['size'] > 5 * 1024 * 1024) {
-                $_SESSION['error'] = 'File maksimal 5MB';
-                header('Location: ' . BASEURL . '/DosenController/uploadPengajaran');
-                exit;
-            }
-
-            if (move_uploaded_file($_FILES['file_pengajaran']['tmp_name'], $targetFile)) {
-
-                $filePath = 'uploads/pengajaran/' . $fileName;
-
-                $result = $pengajaranModel->createPengajaran(
-                    $absensi['id'],
-                    $filePath,
-                    $materi,
-                    $keterangan
-                );
-
-                if ($result['success']) {
-                    $_SESSION['success'] = $result['message'];
+            foreach ($mahasiswa_ids as $index => $mahasiswa_id) {
+                $status = $statuses[$index] ?? 'Hadir';
+                
+                // Cek apakah sudah ada absensi untuk hari ini
+                $existing = $absensiModel->getByMahasiswaMatkulTanggal($mahasiswa_id, $matkul_id, $tanggal);
+                if ($existing) {
+                    // Update jika sudah ada
+                    $result = $absensiModel->updateStatus($existing['id'], $status);
                 } else {
-                    $_SESSION['error'] = $result['message'];
+                    // Insert baru
+                    $result = $absensiModel->createAbsensi($mahasiswa_id, $matkul_id, $tanggal, $status);
                 }
 
-            } else {
-                $_SESSION['error'] = 'Gagal mengupload file';
+                if ($result['success']) {
+                    $success_count++;
+                } else {
+                    $error_count++;
+                }
             }
 
-            header('Location: ' . BASEURL . '/DosenController/uploadPengajaran');
+            // Set toast notification
+            if ($success_count > 0) {
+                $_SESSION['toast'] = [
+                    'type' => 'success',
+                    'title' => 'Berhasil',
+                    'message' => "Berhasil menyimpan $success_count absensi"
+                ];
+            } else {
+                $_SESSION['toast'] = [
+                    'type' => 'error',
+                    'title' => 'Gagal',
+                    'message' => "Gagal menyimpan absensi"
+                ];
+            }
+
+            // Redirect ke halaman input absensi dengan matkul_id yang sama
+            header('Location: ' . BASEURL . '/DosenController/inputAbsensi?matkul_id=' . $matkul_id);
             exit;
         }
     }
+
+    // ==========================================
+    // LIHAT REKAP ABSENSI
+    // ==========================================
+
+    public function rekapAbsensi() {
+        $dosenModel = $this->model('Dosen');
+        $absensiModel = $this->model('Absensi');
+        $matkulModel = $this->model('MataKuliah');
+
+        $userId = $_SESSION['user_id'];
+        $dataDosen = $dosenModel->getDosenByUserId($userId);
+        $dosenId = $dataDosen['id'] ?? 0;
+
+        // Ambil parameter filter
+        $filter_matkul = isset($_GET['filter_matkul']) ? $_GET['filter_matkul'] : '';
+        $filter_tanggal = isset($_GET['filter_tanggal']) ? $_GET['filter_tanggal'] : '';
+        $filter_kelas = isset($_GET['filter_kelas']) ? $_GET['filter_kelas'] : '';
+        $filter_nim = isset($_GET['filter_nim']) ? $_GET['filter_nim'] : '';
+        $filter_nama = isset($_GET['filter_nama']) ? $_GET['filter_nama'] : '';
+
+        // Ambil data absensi dengan filter
+        $absensi_list = $absensiModel->getByDosenIdWithFilters(
+            $dosenId, 
+            $filter_matkul, 
+            $filter_tanggal, 
+            $filter_kelas, 
+            $filter_nim, 
+            $filter_nama
+        );
+
+        // Ambil daftar mata kuliah untuk dropdown filter
+        $matkul_list = $matkulModel->getByDosenId($dosenId);
+
+        $data = [
+            'absensi' => $absensi_list,
+            'matkul_list' => $matkul_list,
+            'filter_matkul' => $filter_matkul,
+            'filter_tanggal' => $filter_tanggal,
+            'filter_kelas' => $filter_kelas,
+            'filter_nim' => $filter_nim,
+            'filter_nama' => $filter_nama,
+            'judul_halaman' => 'Rekap Absensi'
+        ];
+
+        $this->view('dosen/absensi/rekap', $data);
+    }
+
+    // ==========================================
+    // EXPORT PDF
+    // ==========================================
+
+    public function exportPDF() {
+        // Load DOMPDF
+        require_once __DIR__ . '/../../vendor/autoload.php';
+        
+        $dosenModel = $this->model('Dosen');
+        $absensiModel = $this->model('Absensi');
+
+        $userId = $_SESSION['user_id'];
+        $dataDosen = $dosenModel->getDosenByUserId($userId);
+        $dosenId = $dataDosen['id'] ?? 0;
+
+        // Ambil parameter filter
+        $filter_matkul = isset($_GET['filter_matkul']) ? $_GET['filter_matkul'] : '';
+        $filter_tanggal = isset($_GET['filter_tanggal']) ? $_GET['filter_tanggal'] : '';
+        $filter_kelas = isset($_GET['filter_kelas']) ? $_GET['filter_kelas'] : '';
+
+        $absensi_list = $absensiModel->getByDosenIdWithFilters(
+            $dosenId, 
+            $filter_matkul, 
+            $filter_tanggal, 
+            $filter_kelas, 
+            '', 
+            ''
+        );
+
+        // Generate HTML untuk PDF
+        $html = '
+        <html>
+        <head>
+            <style>
+                body { font-family: Arial, sans-serif; }
+                h1 { color: #333; text-align: center; }
+                table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+                th { background: #4caf50; color: white; padding: 10px; }
+                td { padding: 8px; border-bottom: 1px solid #ddd; }
+                .footer { margin-top: 30px; text-align: center; color: #999; font-size: 12px; }
+            </style>
+        </head>
+        <body>
+            <h1>Laporan Rekap Absensi</h1>
+            <p>Dosen: ' . $_SESSION['nama'] . '</p>
+            <p>Tanggal Cetak: ' . date('d-m-Y H:i') . '</p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>NIM</th>
+                        <th>Nama</th>
+                        <th>Mata Kuliah</th>
+                        <th>Tanggal</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>';
+
+        if (empty($absensi_list)) {
+            $html .= '<tr><td colspan="6" style="text-align:center;">Tidak ada data absensi</td></tr>';
+        } else {
+            $no = 1;
+            foreach ($absensi_list as $abs) {
+                $status_color = '#4caf50';
+                if ($abs['status'] == 'Sakit') $status_color = '#ff9800';
+                if ($abs['status'] == 'Izin') $status_color = '#2196f3';
+                if ($abs['status'] == 'Alpa') $status_color = '#dc3545';
+
+                $html .= '<tr>
+                    <td>' . $no++ . '</td>
+                    <td>' . ($abs['nim'] ?? '-') . '</td>
+                    <td>' . ($abs['mahasiswa_nama'] ?? '-') . '</td>
+                    <td>' . ($abs['mata_kuliah'] ?? '-') . '</td>
+                    <td>' . date('d-m-Y', strtotime($abs['tanggal'])) . '</td>
+                    <td style="color:' . $status_color . ';">' . ($abs['status'] ?? '-') . '</td>
+                </tr>';
+            }
+        }
+
+        $html .= '
+                </tbody>
+            </table>
+            <div class="footer">Dicetak dari Sistem Absensi Mahasiswa</div>
+        </body>
+        </html>';
+
+        // Generate PDF
+        $dompdf = new Dompdf();
+        $dompdf->loadHtml($html);
+        $dompdf->setPaper('A4', 'landscape');
+        $dompdf->render();
+        $dompdf->stream('laporan_absensi_' . date('Y-m-d') . '.pdf');
+        exit;
+    }
+
+    // ==========================================
+    // LOGOUT
+    // ==========================================
 
     public function logout() {
         session_destroy();
@@ -260,4 +316,3 @@ public function createAbsensi($data)
         exit;
     }
 }
-

@@ -4,6 +4,11 @@ class AdminController extends Controller {
     
     // Constructor untuk keamanan: cek login dan role admin
     public function __construct() {
+        // Pastikan session dimulai
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+        
         if (!isset($_SESSION['logged_in']) || $_SESSION['role'] !== 'admin') {
             header('Location: ' . BASEURL . '/AuthController');
             exit;
@@ -49,6 +54,7 @@ class AdminController extends Controller {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $nama = trim($_POST['nama'] ?? '');
             $nim = trim($_POST['nim'] ?? '');
+            $prodi = trim($_POST['prodi'] ?? '');
             $angkatan = trim($_POST['angkatan'] ?? '');
             $kelas = trim($_POST['kelas'] ?? '');
             $email = trim($_POST['email'] ?? '');
@@ -61,7 +67,7 @@ class AdminController extends Controller {
             }
             
             $mahasiswaModel = $this->model('Mahasiswa');
-            $result = $mahasiswaModel->createMahasiswa($nama, $nim, $angkatan, $kelas, $email, $password);
+            $result = $mahasiswaModel->createMahasiswa($nama, $nim, $prodi, $angkatan, $kelas, $email, $password);
             
             if ($result['success']) {
                 $_SESSION['success'] = $result['message'];
@@ -95,6 +101,7 @@ class AdminController extends Controller {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $nama = trim($_POST['nama'] ?? '');
             $nim = trim($_POST['nim'] ?? '');
+            $prodi = trim($_POST['prodi'] ?? '');
             $angkatan = trim($_POST['angkatan'] ?? '');
             $kelas = trim($_POST['kelas'] ?? '');
             $email = trim($_POST['email'] ?? '');
@@ -106,7 +113,7 @@ class AdminController extends Controller {
             }
             
             $mahasiswaModel = $this->model('Mahasiswa');
-            $result = $mahasiswaModel->updateMahasiswa($id, $nama, $nim, $angkatan, $kelas, $email);
+            $result = $mahasiswaModel->updateMahasiswa($id, $nama, $nim, $prodi, $angkatan, $kelas, $email);
             
             if ($result['success']) {
                 $_SESSION['success'] = $result['message'];
@@ -249,10 +256,294 @@ class AdminController extends Controller {
     }
     
     // ==========================================
-    // CRUD MATA KULIAH (DENGAN FILTER)
+    // ASSIGN MATA KULIAH KE DOSEN
     // ==========================================
     
-    // Menampilkan daftar semua mata kuliah dengan filter
+    /**
+     * Get mata kuliah untuk dosen berdasarkan prodi (AJAX)
+     * @param int $dosen_id ID dosen
+     */
+    public function getMatkulByDosen($dosen_id) {
+        // ✅ Bersihkan output buffer
+        ob_clean();
+        
+        // ✅ Mulai session jika belum
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+        
+        // ✅ Cek login dan role
+        if (!isset($_SESSION['logged_in']) || $_SESSION['role'] !== 'admin') {
+            header('Content-Type: application/json');
+            echo json_encode([
+                'success' => false,
+                'message' => 'Unauthorized. Silakan login sebagai admin.'
+            ]);
+            exit;
+        }
+        
+        // Matikan error reporting supaya tidak mengganggu JSON
+        error_reporting(0);
+        ini_set('display_errors', 0);
+        
+        // Set header JSON
+        header('Content-Type: application/json');
+        
+        try {
+            // Cek apakah dosen_id valid
+            if (empty($dosen_id) || !is_numeric($dosen_id)) {
+                echo json_encode([
+                    'success' => false,
+                    'message' => 'ID dosen tidak valid'
+                ]);
+                exit;
+            }
+            
+            $dosenModel = $this->model('Dosen');
+            $matkulModel = $this->model('MataKuliah');
+            
+            // Cek apakah model berhasil di-load
+            if (!$dosenModel || !$matkulModel) {
+                echo json_encode([
+                    'success' => false,
+                    'message' => 'Gagal memuat model'
+                ]);
+                exit;
+            }
+            
+            // Ambil data dosen
+            $dosen = $dosenModel->getDosenById($dosen_id);
+            
+            if (!$dosen) {
+                echo json_encode([
+                    'success' => false,
+                    'message' => 'Dosen tidak ditemukan'
+                ]);
+                exit;
+            }
+            
+            $prodi = $dosen['prodi'] ?? '';
+            
+            if (empty($prodi)) {
+                echo json_encode([
+                    'success' => false,
+                    'message' => 'Dosen belum memiliki program studi'
+                ]);
+                exit;
+            }
+            
+            // Ambil semua mata kuliah sesuai prodi dosen (prefix kode)
+            $all_matkul = $matkulModel->getByProdi($prodi);
+            
+            // Ambil mata kuliah yang sudah diampu dosen ini
+            $assigned = $matkulModel->getByDosenId($dosen_id);
+            $assigned_ids = array_column($assigned, 'id');
+            
+            // Hitung jumlah matkul yang sudah diampu
+            $current_count = count($assigned_ids);
+            $max = 4;
+            
+            echo json_encode([
+                'success' => true,
+                'matkul' => $all_matkul,
+                'assigned' => $assigned_ids,
+                'prodi' => $prodi,
+                'dosen_nama' => $dosen['nama'],
+                'current_count' => $current_count,
+                'max' => $max,
+                'is_full' => $current_count >= $max
+            ]);
+            exit;
+            
+        } catch (Exception $e) {
+            error_log("Error in getMatkulByDosen: " . $e->getMessage());
+            echo json_encode([
+                'success' => false,
+                'message' => 'Terjadi kesalahan: ' . $e->getMessage()
+            ]);
+            exit;
+        }
+    }
+    
+    /**
+     * Assign mata kuliah ke dosen (AJAX)
+     */
+    public function assignMatkul() {
+        // ✅ Bersihkan output buffer
+        ob_clean();
+        
+        // ✅ Mulai session jika belum
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+        
+        // ✅ Cek login dan role
+        if (!isset($_SESSION['logged_in']) || $_SESSION['role'] !== 'admin') {
+            header('Content-Type: application/json');
+            echo json_encode([
+                'success' => false,
+                'message' => 'Unauthorized'
+            ]);
+            exit;
+        }
+        
+        // Matikan error reporting
+        error_reporting(0);
+        ini_set('display_errors', 0);
+        
+        header('Content-Type: application/json');
+        
+        try {
+            if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+                echo json_encode(['success' => false, 'message' => 'Method tidak diizinkan']);
+                exit;
+            }
+            
+            $dosen_id = isset($_POST['dosen_id']) ? (int)$_POST['dosen_id'] : 0;
+            $matkul_id = isset($_POST['matkul_id']) ? (int)$_POST['matkul_id'] : 0;
+            
+            if (!$dosen_id || !$matkul_id) {
+                echo json_encode(['success' => false, 'message' => 'Data tidak valid']);
+                exit;
+            }
+            
+            $matkulModel = $this->model('MataKuliah');
+            
+            // Cek apakah dosen sudah punya 4 matkul
+            $current = $matkulModel->countByDosenId($dosen_id);
+            if ($current >= 4) {
+                echo json_encode(['success' => false, 'message' => 'Maksimal 4 mata kuliah per dosen']);
+                exit;
+            }
+            
+            // Cek apakah matkul sudah punya dosen lain
+            $matkul = $matkulModel->getMataKuliahById($matkul_id);
+            if ($matkul && $matkul['dosen_id'] && $matkul['dosen_id'] != $dosen_id) {
+                echo json_encode(['success' => false, 'message' => 'Mata kuliah ini sudah diampu dosen lain']);
+                exit;
+            }
+            
+            // Cek apakah matkul sudah diampu oleh dosen ini
+            if ($matkul && $matkul['dosen_id'] == $dosen_id) {
+                echo json_encode(['success' => false, 'message' => 'Mata kuliah ini sudah diampu oleh dosen ini']);
+                exit;
+            }
+            
+            // Assign matkul ke dosen
+            $result = $matkulModel->assignDosen($matkul_id, $dosen_id);
+            
+            // Pastikan response selalu dalam format yang sama
+            if ($result['success']) {
+                echo json_encode([
+                    'success' => true,
+                    'message' => 'Mata kuliah berhasil diassign'
+                ]);
+            } else {
+                echo json_encode([
+                    'success' => false,
+                    'message' => $result['message'] ?? 'Gagal mengassign mata kuliah'
+                ]);
+            }
+            exit;
+            
+        } catch (Exception $e) {
+            error_log("Error in assignMatkul: " . $e->getMessage());
+            echo json_encode([
+                'success' => false,
+                'message' => 'Terjadi kesalahan: ' . $e->getMessage()
+            ]);
+            exit;
+        }
+    }
+    
+    /**
+     * Remove mata kuliah dari dosen (AJAX)
+     */
+    public function removeMatkul() {
+        // ✅ Bersihkan output buffer
+        ob_clean();
+        
+        // ✅ Mulai session jika belum
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+        
+        // ✅ Cek login dan role
+        if (!isset($_SESSION['logged_in']) || $_SESSION['role'] !== 'admin') {
+            header('Content-Type: application/json');
+            echo json_encode([
+                'success' => false,
+                'message' => 'Unauthorized'
+            ]);
+            exit;
+        }
+        
+        // Matikan error reporting
+        error_reporting(0);
+        ini_set('display_errors', 0);
+        
+        header('Content-Type: application/json');
+        
+        try {
+            if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+                echo json_encode(['success' => false, 'message' => 'Method tidak diizinkan']);
+                exit;
+            }
+            
+            $dosen_id = isset($_POST['dosen_id']) ? (int)$_POST['dosen_id'] : 0;
+            $matkul_id = isset($_POST['matkul_id']) ? (int)$_POST['matkul_id'] : 0;
+            
+            if (!$dosen_id || !$matkul_id) {
+                echo json_encode(['success' => false, 'message' => 'Data tidak valid']);
+                exit;
+            }
+            
+            $matkulModel = $this->model('MataKuliah');
+            
+            // Cek apakah matkul memang diampu dosen ini
+            $matkul = $matkulModel->getMataKuliahById($matkul_id);
+            if (!$matkul) {
+                echo json_encode(['success' => false, 'message' => 'Mata kuliah tidak ditemukan']);
+                exit;
+            }
+            
+            if ($matkul['dosen_id'] != $dosen_id) {
+                echo json_encode(['success' => false, 'message' => 'Mata kuliah tidak diampu oleh dosen ini']);
+                exit;
+            }
+            
+            // ✅ LANGSUNG LEPAS - TANPA VALIDASI MINIMAL
+            $result = $matkulModel->removeDosen($matkul_id);
+            
+            // Pastikan response selalu dalam format yang sama
+            if ($result['success']) {
+                echo json_encode([
+                    'success' => true,
+                    'message' => 'Mata kuliah berhasil dilepas'
+                ]);
+            } else {
+                echo json_encode([
+                    'success' => false,
+                    'message' => $result['message'] ?? 'Gagal melepas mata kuliah'
+                ]);
+            }
+            exit;
+            
+        } catch (Exception $e) {
+            error_log("Error in removeMatkul: " . $e->getMessage());
+            echo json_encode([
+                'success' => false,
+                'message' => 'Terjadi kesalahan: ' . $e->getMessage()
+            ]);
+            exit;
+        }
+    }
+    
+    // ==========================================
+    // CRUD MATA KULIAH (DENGAN FILTER) - DIPERBAIKI
+    // ==========================================
+    
+    // Menampilkan daftar semua mata kuliah dengan filter - TAMBAH FILTER ANGKATAN
     public function matakuliah() {
         $matkulModel = $this->model('MataKuliah');
         
@@ -260,9 +551,10 @@ class AdminController extends Controller {
         $filter_semester = isset($_GET['filter_semester']) ? $_GET['filter_semester'] : '';
         $filter_prodi = isset($_GET['filter_prodi']) ? $_GET['filter_prodi'] : '';
         $filter_sks = isset($_GET['filter_sks']) ? $_GET['filter_sks'] : '';
+        $filter_angkatan = isset($_GET['filter_angkatan']) ? $_GET['filter_angkatan'] : '';
         
         $data['judul_halaman'] = 'Manajemen Data Mata Kuliah';
-        $data['matakuliah'] = $matkulModel->getAllWithFilters($filter_semester, $filter_prodi, $filter_sks);
+        $data['matakuliah'] = $matkulModel->getAllWithFilters($filter_semester, $filter_prodi, $filter_sks, $filter_angkatan);
         $data['total'] = count($data['matakuliah']);
         
         $this->view('admin/matakuliah/index', $data);
@@ -274,7 +566,7 @@ class AdminController extends Controller {
         $this->view('admin/matakuliah/create', $data);
     }
     
-    // Proses simpan mata kuliah baru
+    // Proses simpan mata kuliah baru - TAMBAH ANGKATAN
     public function matakuliahStore() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $kode = trim($_POST['kode'] ?? '');
@@ -282,6 +574,7 @@ class AdminController extends Controller {
             $sks = trim($_POST['sks'] ?? 3);
             $semester = trim($_POST['semester'] ?? 1);
             $jumlah_pertemuan = trim($_POST['jumlah_pertemuan'] ?? 14);
+            $angkatan = isset($_POST['angkatan']) && $_POST['angkatan'] != 'Semua' ? trim($_POST['angkatan']) : null;
             
             if (empty($kode) || empty($nama)) {
                 $_SESSION['error'] = 'Kode dan Nama Mata Kuliah wajib diisi';
@@ -290,7 +583,7 @@ class AdminController extends Controller {
             }
             
             $matkulModel = $this->model('MataKuliah');
-            $result = $matkulModel->createMataKuliah($kode, $nama, $sks, $semester, $jumlah_pertemuan);
+            $result = $matkulModel->createMataKuliah($kode, $nama, $sks, $semester, $jumlah_pertemuan, null, $angkatan);
             
             if ($result['success']) {
                 $_SESSION['success'] = $result['message'];
@@ -319,7 +612,7 @@ class AdminController extends Controller {
         $this->view('admin/matakuliah/edit', $data);
     }
     
-    // Proses update mata kuliah
+    // Proses update mata kuliah - TAMBAH ANGKATAN
     public function matakuliahUpdate($id) {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $kode = trim($_POST['kode'] ?? '');
@@ -327,6 +620,7 @@ class AdminController extends Controller {
             $sks = trim($_POST['sks'] ?? 3);
             $semester = trim($_POST['semester'] ?? 1);
             $jumlah_pertemuan = trim($_POST['jumlah_pertemuan'] ?? 14);
+            $angkatan = isset($_POST['angkatan']) && $_POST['angkatan'] != 'Semua' ? trim($_POST['angkatan']) : null;
             
             if (empty($kode) || empty($nama)) {
                 $_SESSION['error'] = 'Kode dan Nama Mata Kuliah wajib diisi';
@@ -335,7 +629,7 @@ class AdminController extends Controller {
             }
             
             $matkulModel = $this->model('MataKuliah');
-            $result = $matkulModel->updateMataKuliah($id, $kode, $nama, $sks, $semester, $jumlah_pertemuan);
+            $result = $matkulModel->updateMataKuliah($id, $kode, $nama, $sks, $semester, $jumlah_pertemuan, null, $angkatan);
             
             if ($result['success']) {
                 $_SESSION['success'] = $result['message'];

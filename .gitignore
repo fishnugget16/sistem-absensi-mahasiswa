@@ -1,6 +1,5 @@
 /vendor/
 /.env/
-/public/uploads/
 /.vscode/
 /.DS_Store/
 composer.lock

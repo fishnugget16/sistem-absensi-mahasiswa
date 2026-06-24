@@ -8,9 +8,7 @@ class User {
         $this->db = Database::getInstance();
     }
     
-    /**
-     * Cek kredensial login dari database
-     */
+    // Cek kredensial
     public function checkAdminCredentials($email, $password) {
         
         // Validasi password maksimal 8 karakter
@@ -64,9 +62,7 @@ class User {
         return false;
     }
     
-    /**
-     * Registrasi user baru
-     */
+    // Registrasi user baru
     public function register($email, $password, $nama, $role, $nim = null, $nidn = null) {
         
         // Validasi password
@@ -119,9 +115,7 @@ class User {
         return ['success' => false, 'message' => 'Registrasi gagal'];
     }
     
-    /**
-     * Buat record mahasiswa setelah registrasi
-     */
+    // Buat record mahasiswa setelah registrasi
     private function createMahasiswaRecord($userId, $nim, $nama) {
         $sql = "INSERT INTO mahasiswa (user_id, nim, nama) VALUES (:user_id, :nim, :nama)";
         $this->db->query($sql);
@@ -131,9 +125,7 @@ class User {
         $this->db->execute();
     }
     
-    /**
-     * Buat record dosen setelah registrasi
-     */
+    // Buat record dosen setelah registrasi
     private function createDosenRecord($userId, $nidn, $nama) {
         $sql = "INSERT INTO dosen (user_id, nidn, nama) VALUES (:user_id, :nidn, :nama)";
         $this->db->query($sql);
@@ -143,9 +135,7 @@ class User {
         $this->db->execute();
     }
     
-    /**
-     * Ambil role dari email berdasarkan domain
-     */
+    // Ambil role dari email berdasarkan domain
     public function getRoleFromEmail($email) {
         if (strpos($email, '@mhs.kampus.ac.id') !== false) {
             return 'mahasiswa';
@@ -159,26 +149,21 @@ class User {
         return null;
     }
     
-    /**
-     * Validasi format email
-     */
+    // Validasi format email
     public function validateEmailFormat($email) {
         $role = $this->getRoleFromEmail($email);
         return $role !== null;
     }
     
-    /**
-     * Ambil semua user
-     */
+    // Ambil semua user
+
     public function getAllUsers() {
         $sql = "SELECT id, email, role, username as nama, created_at FROM users ORDER BY id ASC";
         $this->db->query($sql);
         return $this->db->resultSet();
     }
     
-    /**
-     * Ambil user berdasarkan email
-     */
+    // Ambil user berdasarkan email
     public function getUserByEmail($email) {
         $sql = "SELECT * FROM users WHERE email = :email";
         $this->db->query($sql);
@@ -186,9 +171,7 @@ class User {
         return $this->db->single();
     }
     
-    /**
-     * Ambil user berdasarkan ID
-     */
+    // Ambil user berdasarkan ID
     public function getUserById($id) {
         $sql = "SELECT * FROM users WHERE id = :id";
         $this->db->query($sql);
@@ -196,9 +179,7 @@ class User {
         return $this->db->single();
     }
     
-    /**
-     * Ambil data mahasiswa berdasarkan user_id
-     */
+    // Ambil data mahasiswa berdasarkan user_id
     public function getMahasiswaByUserId($userId) {
         $sql = "SELECT * FROM mahasiswa WHERE user_id = :user_id";
         $this->db->query($sql);
@@ -206,9 +187,7 @@ class User {
         return $this->db->single();
     }
     
-    /**
-     * Ambil data dosen berdasarkan user_id
-     */
+    // Ambil data dosen berdasarkan user_id
     public function getDosenByUserId($userId) {
         $sql = "SELECT * FROM dosen WHERE user_id = :user_id";
         $this->db->query($sql);
@@ -216,9 +195,7 @@ class User {
         return $this->db->single();
     }
     
-    /**
-     * Update password user
-     */
+    // Update Password User
     public function updatePassword($email, $newPassword) {
         if (strlen($newPassword) > 8) {
             return ['success' => false, 'message' => 'Password maksimal 8 karakter'];
@@ -242,9 +219,7 @@ class User {
         return ['success' => false, 'message' => 'Gagal mengubah password'];
     }
     
-    /**
-     * Hapus user
-     */
+    // Hapus User
     public function deleteUser($id) {
         $sql = "DELETE FROM users WHERE id = :id";
         $this->db->query($sql);
@@ -252,9 +227,7 @@ class User {
         return $this->db->execute();
     }
     
-    /**
-     * Hitung total user
-     */
+    // Hitung total User
     public function getTotalUsers() {
         $sql = "SELECT COUNT(*) as total FROM users";
         $this->db->query($sql);
@@ -262,9 +235,7 @@ class User {
         return $result['total'];
     }
     
-    /**
-     * Hitung user berdasarkan role
-     */
+    // Hitung user berdasarkan role
     public function getUserCountByRole($role) {
         $sql = "SELECT COUNT(*) as total FROM users WHERE role = :role";
         $this->db->query($sql);

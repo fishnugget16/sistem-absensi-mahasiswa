@@ -365,9 +365,7 @@ class AdminController extends Controller {
         }
     }
     
-    /**
-     * Assign mata kuliah ke dosen (AJAX)
-     */
+    // Assign mata kuliah ke dosen (AJAX)
     public function assignMatkul() {
         // ✅ Bersihkan output buffer
         ob_clean();
@@ -456,9 +454,7 @@ class AdminController extends Controller {
         }
     }
     
-    /**
-     * Remove mata kuliah dari dosen (AJAX)
-     */
+    // Remove mata kuliah dari dosen (AJAX)
     public function removeMatkul() {
         // ✅ Bersihkan output buffer
         ob_clean();
@@ -512,7 +508,7 @@ class AdminController extends Controller {
                 exit;
             }
             
-            // ✅ LANGSUNG LEPAS - TANPA VALIDASI MINIMAL
+          
             $result = $matkulModel->removeDosen($matkul_id);
             
             // Pastikan response selalu dalam format yang sama
@@ -731,9 +727,7 @@ class AdminController extends Controller {
         }
     }
     
-    /**
-     * Hapus surat izin
-     */
+    // Hapus surat izin
     public function surat_izin_delete($id) {
         $suratModel = $this->model('SuratIzin');
         $result = $suratModel->deleteSuratIzin($id);
@@ -748,9 +742,7 @@ class AdminController extends Controller {
         exit;
     }
     
-    /**
-     * Download file surat izin
-     */
+    // Download file surat izin
     public function surat_izin_download($id) {
         $suratModel = $this->model('SuratIzin');
         $surat = $suratModel->getById($id);

@@ -2,9 +2,5 @@
 /.env/
 /.vscode/
 /.DS_Store/
+/public/uploads/surat/
 composer.lock
-desktop.ini
-/public/.debug_upload.php
-/public/debug_filter_histori.php
-/public/.test.session.php
-/config/debug_admin_controller.php

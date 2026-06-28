@@ -9,6 +9,7 @@ Sistem informasi manajemen absensi mahasiswa berbasis web yang dibangun dengan *
 - [Struktur Database](#struktur-database)
 - [Konsep OOP yang Diimplementasikan](#konsep-oop-yang-diimplementasikan)
 - [Instalasi](#cara-instalasi)
+- [Authors](#-authors)
 
 ## Fitur Utama
 
@@ -108,3 +109,37 @@ define('DB_NAME', 'db_absensi_oop');
 
 ### 5. Jalankan Aplikasi
 Akses URL ini dibrowser `http://localhost/aplikasi-absensi-mahasiswa/public`
+
+## 👥 Authors
+
+<table>
+  <tr>
+    <td align="center">
+      <a href="https://github.com/aldoajaa123">
+        <img src="https://github.com/aldoajaa123.png" width="80" height="80" style="border-radius:50%;"/>
+        <br />
+        <b>Aldo Wijaya</b>
+      </a>
+      <br />
+      <sub>422025007</sub>
+    </td>
+    <td align="center">
+      <a href="https://github.com/fishnugget16">
+        <img src="https://github.com/fishnugget16.png" width="80" height="80" style="border-radius:50%;"/>
+        <br />
+        <b>Federico Josephan</b>
+      </a>
+      <br />
+      <sub>422025017</sub>
+    </td>
+    <td align="center">
+      <a href="https://github.com/lachowskirell">
+        <img src="https://github.com/lachowskirell.png" width="80" height="80" style="border-radius:50%;"/>
+        <br />
+        <b>Farrel Anandra</b>
+      </a>
+      <br />
+      <sub>422025014</sub>
+    </td>
+  </tr>
+</table>

@@ -113,38 +113,33 @@ Akses URL ini dibrowser `http://localhost/aplikasi-absensi-mahasiswa/public`
 ## 👥 Authors
 
 <div align="center">
-  <table>
-    <tr>
-      <td align="center" style="padding: 0 16px;">
-        <a href="https://github.com/aldoajaa123">
-          <img src="https://github.com/aldoajaa123.png" width="90" height="90"
-            style="border-radius: 50%; border: 2px solid #e2e8f0;" />
-          <br /><br />
-          <strong>Aldo Wijaya</strong>
-        </a>
-        <br />
-        <code>422025007</code>
-      </td>
-      <td align="center" style="padding: 0 16px;">
-        <a href="https://github.com/fishnugget16">
-          <img src="https://github.com/fishnugget16.png" width="90" height="90"
-            style="border-radius: 50%; border: 2px solid #e2e8f0;" />
-          <br /><br />
-          <strong>Federico Josephan</strong>
-        </a>
-        <br />
-        <code>422025017</code>
-      </td>
-      <td align="center" style="padding: 0 16px;">
-        <a href="https://github.com/lachowskirell">
-          <img src="https://github.com/lachowskirell.png" width="90" height="90"
-            style="border-radius: 50%; border: 2px solid #e2e8f0;" />
-          <br /><br />
-          <strong>Farrel Anandra</strong>
-        </a>
-        <br />
-        <code>422025014</code>
-      </td>
-    </tr>
-  </table>
+
+## 👥 Tim Pengembang
+
+<table>
+  <tr>
+    <td align="center">
+      <a href="https://github.com/aldoajaa123">
+        <img src="https://github.com/aldoajaa123.png?size=100" width="100px" style="border-radius:50%"/><br/>
+        <sub><b>Aldo Wijaya</b></sub>
+      </a><br/>
+      <img src="https://img.shields.io/badge/NIM-422025007-blue?style=flat-square"/>
+    </td>
+    <td align="center">
+      <a href="https://github.com/fishnugget16">
+        <img src="https://github.com/fishnugget16.png?size=100" width="100px" style="border-radius:50%"/><br/>
+        <sub><b>Federico Josephan</b></sub>
+      </a><br/>
+      <img src="https://img.shields.io/badge/NIM-422025017-blue?style=flat-square"/>
+    </td>
+    <td align="center">
+      <a href="https://github.com/lachowskirell">
+        <img src="https://github.com/lachowskirell.png?size=100" width="100px" style="border-radius:50%"/><br/>
+        <sub><b>Farrel Anandra</b></sub>
+      </a><br/>
+      <img src="https://img.shields.io/badge/NIM-422025014-blue?style=flat-square"/>
+    </td>
+  </tr>
+</table>
+
 </div>

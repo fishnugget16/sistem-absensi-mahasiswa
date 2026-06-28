@@ -112,32 +112,40 @@ Akses URL ini dibrowser `http://localhost/aplikasi-absensi-mahasiswa/public`
 
 ## 👥 Authors
 
-<div align="center" style="margin: 30px 0;">
-  <div style="display: flex; flex-direction: row; justify-content: space-around; align-items: center; background: #1e1e1e; border: 1px solid #2a2a2a; border-radius: 12px; padding: 15px 25px; max-width: 750px; flex-wrap: nowrap; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
-    
-    <div style="display: flex; align-items: center; gap: 12px;">
-      <img src="https://github.com/aldoajaa123.png" width="55" height="55" style="border-radius: 50%; border: 2px solid #2a2a2a;" />
-      <div style="text-align: left;">
-        <a href="https://github.com/aldoajaa123" style="text-decoration: none; font-weight: 600; color: #4caf50; font-size: 14px; display: block;">Aldo Wijaya</a>
-        <span style="color: #8b949e; font-size: 11px; font-weight: 500;">NIM 422025007</span>
-      </div>
+<div align="center" style="display: flex; flex-direction: row; justify-content: center; align-items: center; gap: 30px; flex-wrap: nowrap; margin: 30px 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
+  
+  <div style="display: flex; flex-direction: row; align-items: center; gap: 15px;">
+    <a href="https://github.com/aldoajaa123" style="text-decoration: none;">
+      <img src="https://github.com/aldoajaa123.png" width="70" height="70" style="border-radius: 50%; border: 2px solid #4caf50; box-shadow: 0 4px 10px rgba(0,0,0,0.15);" />
+    </a>
+    <div style="text-align: left;">
+      <a href="https://github.com/aldoajaa123" style="text-decoration: none; font-weight: 600; font-size: 15px; color: #e8eaed; display: block; margin-bottom: 2px;">Aldo Wijaya</a>
+      <span style="font-size: 12px; color: #8b949e; background: rgba(255,255,255,0.05); padding: 2px 8px; border-radius: 4px;">NIM 422025007</span>
     </div>
-
-    <div style="display: flex; align-items: center; gap: 12px;">
-      <img src="https://github.com/fishnugget16.png" width="55" height="55" style="border-radius: 50%; border: 2px solid #2a2a2a;" />
-      <div style="text-align: left;">
-        <a href="https://github.com/fishnugget16" style="text-decoration: none; font-weight: 600; color: #4caf50; font-size: 14px; display: block;">Federico J.</a>
-        <span style="color: #8b949e; font-size: 11px; font-weight: 500;">NIM 422025017</span>
-      </div>
-    </div>
-
-    <div style="display: flex; align-items: center; gap: 12px;">
-      <img src="https://github.com/lachowskirell.png" width="55" height="55" style="border-radius: 50%; border: 2px solid #2a2a2a;" />
-      <div style="text-align: left;">
-        <a href="https://github.com/lachowskirell" style="text-decoration: none; font-weight: 600; color: #4caf50; font-size: 14px; display: block;">Farrel Anandra</a>
-        <span style="color: #8b949e; font-size: 11px; font-weight: 500;">NIM 422025014</span>
-      </div>
-    </div>
-
   </div>
+
+  <div style="width: 1px; height: 40px; background-color: #30363d;"></div>
+
+  <div style="display: flex; flex-direction: row; align-items: center; gap: 15px;">
+    <a href="https://github.com/fishnugget16" style="text-decoration: none;">
+      <img src="https://github.com/fishnugget16.png" width="70" height="70" style="border-radius: 50%; border: 2px solid #4caf50; box-shadow: 0 4px 10px rgba(0,0,0,0.15);" />
+    </a>
+    <div style="text-align: left;">
+      <a href="https://github.com/fishnugget16" style="text-decoration: none; font-weight: 600; font-size: 15px; color: #e8eaed; display: block; margin-bottom: 2px;">Federico Josephan</a>
+      <span style="font-size: 12px; color: #8b949e; background: rgba(255,255,255,0.05); padding: 2px 8px; border-radius: 4px;">NIM 422025017</span>
+    </div>
+  </div>
+
+  <div style="width: 1px; height: 40px; background-color: #30363d;"></div>
+
+  <div style="display: flex; flex-direction: row; align-items: center; gap: 15px;">
+    <a href="https://github.com/lachowskirell" style="text-decoration: none;">
+      <img src="https://github.com/lachowskirell.png" width="70" height="70" style="border-radius: 50%; border: 2px solid #4caf50; box-shadow: 0 4px 10px rgba(0,0,0,0.15);" />
+    </a>
+    <div style="text-align: left;">
+      <a href="https://github.com/lachowskirell" style="text-decoration: none; font-weight: 600; font-size: 15px; color: #e8eaed; display: block; margin-bottom: 2px;">Farrel Anandra</a>
+      <span style="font-size: 12px; color: #8b949e; background: rgba(255,255,255,0.05); padding: 2px 8px; border-radius: 4px;">NIM 422025014</span>
+    </div>
+  </div>
+
 </div>

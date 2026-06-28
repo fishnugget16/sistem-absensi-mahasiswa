@@ -112,4 +112,34 @@ Akses URL ini dibrowser `http://localhost/aplikasi-absensi-mahasiswa/public`
 
 ## 👥 Authors
 
-<div align="center"> <a href="https://github.com/aldoajaa123"> <img src="https://github.com/aldoajaa123.png" width="80" height="80" style="border-radius:50%;"/> <br /> <b>Aldo Wijaya</b> <br /> <sub>422025007</sub> </a> &nbsp;&nbsp;&nbsp; <a href="https://github.com/fishnugget16"> <img src="https://github.com/fishnugget16.png" width="80" height="80" style="border-radius:50%;"/> <br /> <b>Federico Josephan</b> <br /> <sub>422025017</sub> </a> &nbsp;&nbsp;&nbsp; <a href="https://github.com/lachowskirell"> <img src="https://github.com/lachowskirell.png" width="80" height="80" style="border-radius:50%;"/> <br /> <b>Farrel Anandra Nathaniel</b> <br /> <sub>422025014</sub> </a> </div>
+<table>
+  <tr>
+    <td align="center">
+      <a href="https://github.com/aldoajaa123">
+        <img src="https://github.com/aldoajaa123.png" width="80" height="80" style="border-radius:50%;"/>
+        <br />
+        <b>Aldo Wijaya</b>
+      </a>
+      <br />
+      <sub>422025007</sub>
+    </td>
+    <td align="center">
+      <a href="https://github.com/fishnugget16">
+        <img src="https://github.com/fishnugget16.png" width="80" height="80" style="border-radius:50%;"/>
+        <br />
+        <b>Federico Josephan</b>
+      </a>
+      <br />
+      <sub>422025017</sub>
+    </td>
+    <td align="center">
+      <a href="https://github.com/lachowskirell">
+        <img src="https://github.com/lachowskirell.png" width="80" height="80" style="border-radius:50%;"/>
+        <br />
+        <b>Farrel Anandra</b>
+      </a>
+      <br />
+      <sub>422025014</sub>
+    </td>
+  </tr>
+</table>

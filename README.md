@@ -112,30 +112,32 @@ Akses URL ini dibrowser `http://localhost/aplikasi-absensi-mahasiswa/public`
 
 ## 👥 Authors
 
-<div align="center" style="display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin: 30px 0;">
+<div align="center" style="margin: 30px 0;">
+  <div style="display: flex; flex-direction: row; justify-content: space-around; align-items: center; background: #1e1e1e; border: 1px solid #2a2a2a; border-radius: 12px; padding: 15px 25px; max-width: 750px; flex-wrap: nowrap; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
+    
+    <div style="display: flex; align-items: center; gap: 12px;">
+      <img src="https://github.com/aldoajaa123.png" width="55" height="55" style="border-radius: 50%; border: 2px solid #2a2a2a;" />
+      <div style="text-align: left;">
+        <a href="https://github.com/aldoajaa123" style="text-decoration: none; font-weight: 600; color: #4caf50; font-size: 14px; display: block;">Aldo Wijaya</a>
+        <span style="color: #8b949e; font-size: 11px; font-weight: 500;">NIM 422025007</span>
+      </div>
+    </div>
 
-  <div style="background: #1e1e1e; border: 1px solid #2a2a2a; border-radius: 12px; padding: 20px; width: 180px; text-align: center;">
-    <a href="https://github.com/aldoajaa123" style="text-decoration: none;">
-      <img src="https://github.com/aldoajaa123.png" width="80" height="80" style="border-radius: 50%; border: 2px solid #2a2a2a;" />
-      <h4 style="margin: 12px 0 4px 0; color: #4caf50; font-size: 15px; font-weight: 600;">Aldo Wijaya</h4>
-    </a>
-    <span style="background: rgba(76, 175, 80, 0.15); color: #4caf50; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; display: inline-block;">422025007</span>
+    <div style="display: flex; align-items: center; gap: 12px;">
+      <img src="https://github.com/fishnugget16.png" width="55" height="55" style="border-radius: 50%; border: 2px solid #2a2a2a;" />
+      <div style="text-align: left;">
+        <a href="https://github.com/fishnugget16" style="text-decoration: none; font-weight: 600; color: #4caf50; font-size: 14px; display: block;">Federico J.</a>
+        <span style="color: #8b949e; font-size: 11px; font-weight: 500;">NIM 422025017</span>
+      </div>
+    </div>
+
+    <div style="display: flex; align-items: center; gap: 12px;">
+      <img src="https://github.com/lachowskirell.png" width="55" height="55" style="border-radius: 50%; border: 2px solid #2a2a2a;" />
+      <div style="text-align: left;">
+        <a href="https://github.com/lachowskirell" style="text-decoration: none; font-weight: 600; color: #4caf50; font-size: 14px; display: block;">Farrel Anandra</a>
+        <span style="color: #8b949e; font-size: 11px; font-weight: 500;">NIM 422025014</span>
+      </div>
+    </div>
+
   </div>
-
-  <div style="background: #1e1e1e; border: 1px solid #2a2a2a; border-radius: 12px; padding: 20px; width: 180px; text-align: center;">
-    <a href="https://github.com/fishnugget16" style="text-decoration: none;">
-      <img src="https://github.com/fishnugget16.png" width="80" height="80" style="border-radius: 50%; border: 2px solid #2a2a2a;" />
-      <h4 style="margin: 12px 0 4px 0; color: #4caf50; font-size: 15px; font-weight: 600;">Federico Josephan</h4>
-    </a>
-    <span style="background: rgba(76, 175, 80, 0.15); color: #4caf50; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; display: inline-block;">422025017</span>
-  </div>
-
-  <div style="background: #1e1e1e; border: 1px solid #2a2a2a; border-radius: 12px; padding: 20px; width: 180px; text-align: center;">
-    <a href="https://github.com/lachowskirell" style="text-decoration: none;">
-      <img src="https://github.com/lachowskirell.png" width="80" height="80" style="border-radius: 50%; border: 2px solid #2a2a2a;" />
-      <h4 style="margin: 12px 0 4px 0; color: #4caf50; font-size: 15px; font-weight: 600;">Farrel Anandra</h4>
-    </a>
-    <span style="background: rgba(76, 175, 80, 0.15); color: #4caf50; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; display: inline-block;">422025014</span>
-  </div>
-
 </div>

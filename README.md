@@ -89,8 +89,7 @@ Copy folder `aplikasi-absensi-mahasiswa` ke dalam folder `htdocs` (XAMPP) atau `
 
 ### 3. Import Database
 - Buka **phpMyAdmin** `http://localhost/phpmyadmin`
-- Buat database baru dengan nama `absensi_oop`
-- Pilih tab **Import**
+- Klik **New** Lalu Pilih tab **Import**
 - Pilih file `sql/database.sql` dari folder proyek
 - Klik **Go** / **Execute**
 

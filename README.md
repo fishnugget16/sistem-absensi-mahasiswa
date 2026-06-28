@@ -113,9 +113,6 @@ Akses URL ini dibrowser `http://localhost/aplikasi-absensi-mahasiswa/public`
 ## 👥 Authors
 
 <div align="center">
-
-## 👥 Tim Pengembang
-
 <table>
   <tr>
     <td align="center">
@@ -141,5 +138,4 @@ Akses URL ini dibrowser `http://localhost/aplikasi-absensi-mahasiswa/public`
     </td>
   </tr>
 </table>
-
 </div>

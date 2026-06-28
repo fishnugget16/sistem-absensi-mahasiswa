@@ -112,35 +112,39 @@ Akses URL ini dibrowser `http://localhost/aplikasi-absensi-mahasiswa/public`
 
 ## 👥 Authors
 
-<div align="center" style="margin: 35px 0;">
-  <div style="display: flex; flex-direction: row; justify-content: center; gap: 20px; flex-wrap: nowrap; max-width: 850px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
-
-    <div style="flex: 1; background: #1e1e1e; border: 1px solid #2a2a2a; border-radius: 14px; padding: 24px 16px; text-align: center; box-shadow: 0 8px 24px rgba(0,0,0,0.2); transition: transform 0.2s;">
-      <a href="https://github.com/aldoajaa123" style="text-decoration: none;">
-        <img src="https://github.com/aldoajaa123.png" width="85" height="85" style="border-radius: 50%; border: 3px solid #4caf50; margin-bottom: 14px;" />
-        <div style="font-weight: 700; font-size: 16px; color: #e8eaed; margin-bottom: 4px;">Aldo Wijaya</div>
-      </a>
-      <div style="font-size: 12px; color: #8b949e; letter-spacing: 0.5px; margin-bottom: 12px;">Lead Developer</div>
-      <span style="background: rgba(76, 175, 80, 0.12); color: #4caf50; padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: 600; border: 1px solid rgba(76, 175, 80, 0.2);">422025007</span>
-    </div>
-
-    <div style="flex: 1; background: #1e1e1e; border: 1px solid #2a2a2a; border-radius: 14px; padding: 24px 16px; text-align: center; box-shadow: 0 8px 24px rgba(0,0,0,0.2); transition: transform 0.2s;">
-      <a href="https://github.com/fishnugget16" style="text-decoration: none;">
-        <img src="https://github.com/fishnugget16.png" width="85" height="85" style="border-radius: 50%; border: 3px solid #4caf50; margin-bottom: 14px;" />
-        <div style="font-weight: 700; font-size: 16px; color: #e8eaed; margin-bottom: 4px;">Federico Josephan</div>
-      </a>
-      <div style="font-size: 12px; color: #8b949e; letter-spacing: 0.5px; margin-bottom: 12px;">UI/UX Designer</div>
-      <span style="background: rgba(76, 175, 80, 0.12); color: #4caf50; padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: 600; border: 1px solid rgba(76, 175, 80, 0.2);">422025017</span>
-    </div>
-
-    <div style="flex: 1; background: #1e1e1e; border: 1px solid #2a2a2a; border-radius: 14px; padding: 24px 16px; text-align: center; box-shadow: 0 8px 24px rgba(0,0,0,0.2); transition: transform 0.2s;">
-      <a href="https://github.com/lachowskirell" style="text-decoration: none;">
-        <img src="https://github.com/lachowskirell.png" width="85" height="85" style="border-radius: 50%; border: 3px solid #4caf50; margin-bottom: 14px;" />
-        <div style="font-weight: 700; font-size: 16px; color: #e8eaed; margin-bottom: 4px;">Farrel Anandra</div>
-      </a>
-      <div style="font-size: 12px; color: #8b949e; letter-spacing: 0.5px; margin-bottom: 12px;">Database Engineer</div>
-      <span style="background: rgba(76, 175, 80, 0.12); color: #4caf50; padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: 600; border: 1px solid rgba(76, 175, 80, 0.2);">422025014</span>
-    </div>
-
-  </div>
+<div align="center">
+  <table>
+    <tr>
+      <td align="center" style="padding: 0 16px;">
+        <a href="https://github.com/aldoajaa123">
+          <img src="https://github.com/aldoajaa123.png" width="90" height="90"
+            style="border-radius: 50%; border: 2px solid #e2e8f0;" />
+          <br /><br />
+          <strong>Aldo Wijaya</strong>
+        </a>
+        <br />
+        <code>422025007</code>
+      </td>
+      <td align="center" style="padding: 0 16px;">
+        <a href="https://github.com/fishnugget16">
+          <img src="https://github.com/fishnugget16.png" width="90" height="90"
+            style="border-radius: 50%; border: 2px solid #e2e8f0;" />
+          <br /><br />
+          <strong>Federico Josephan</strong>
+        </a>
+        <br />
+        <code>422025017</code>
+      </td>
+      <td align="center" style="padding: 0 16px;">
+        <a href="https://github.com/lachowskirell">
+          <img src="https://github.com/lachowskirell.png" width="90" height="90"
+            style="border-radius: 50%; border: 2px solid #e2e8f0;" />
+          <br /><br />
+          <strong>Farrel Anandra</strong>
+        </a>
+        <br />
+        <code>422025014</code>
+      </td>
+    </tr>
+  </table>
 </div>

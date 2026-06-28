@@ -103,7 +103,7 @@ define('BASEURL', 'http://localhost/aplikasi-absensi-mahasiswa/public');
 define('DB_HOST', 'localhost');
 define('DB_USER', 'root');
 define('DB_PASS', '');
-define('DB_NAME', 'absensi_oop');
+define('DB_NAME', 'db_absensi_oop');
 ```
 
 ### 5. Jalankan Aplikasi

@@ -69,7 +69,20 @@ Sistem informasi manajemen absensi mahasiswa berbasis web yang dibangun dengan *
 ## Cara Instalasi
 
 ### 1. Persiapan
-Pastikan Anda memiliki **XAMPP** atau **Laragon** terinstal di komputer Anda.
+- Pastikan Anda memiliki **XAMPP** atau **Laragon** terinstal di pc / laptop Anda.
+- Pastikan **Composer** dan **DomPDF** terinstall di pc / laptop anda
+
+Jika Composer dan DomPDF belum terinstall silahkan install melalui instalasi dibawah ini
+
+Windows
+
+`https://getcomposer.org/download/`
+
+Linux (Sebagai contoh saya pakai Arch Linux)
+
+`sudo pacman -S composer`
+
+Jika **Composer** sudah terinstall buka terminal di folder proyeknya lalu jalankan `composer update`
 
 ### 2. Copy Project
 Copy folder `aplikasi-absensi-mahasiswa` ke dalam folder `htdocs` (XAMPP) atau `www` (Laragon).

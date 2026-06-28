@@ -72,13 +72,13 @@ Sistem informasi manajemen absensi mahasiswa berbasis web yang dibangun dengan *
 - Pastikan Anda memiliki **XAMPP** atau **Laragon** terinstal di pc / laptop Anda.
 - Pastikan **Composer** dan **DomPDF** terinstall di pc / laptop anda
 
-Jika Composer dan DomPDF belum terinstall silahkan install melalui instalasi dibawah ini
+Jika **Composer** dan **DomPDF** belum terinstall silahkan install melalui instalasi dibawah ini
 
-Windows
+**Windows**
 
 `https://getcomposer.org/download/`
 
-Linux (Sebagai contoh saya pakai Arch Linux)
+**Linux (Sebagai contoh saya pakai Arch Linux)**
 
 `sudo pacman -S composer`
 
